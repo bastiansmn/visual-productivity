@@ -7,6 +7,7 @@
 /bazel-out
 /node-installation-dir
 .angular
+/target
 
 # npm
 package-lock.json

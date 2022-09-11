@@ -2,9 +2,15 @@ package com.bastiansmn.vp.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
 
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserDAO, Long> {
+
+    Optional<UserDAO> findByEmail(String email);
+
+    Optional<UserDAO> findByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    boolean existsByUsername(String username);
 }

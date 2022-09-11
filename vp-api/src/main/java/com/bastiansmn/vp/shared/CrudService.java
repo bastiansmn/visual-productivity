@@ -11,7 +11,7 @@ public interface CrudService<T, U> {
 
     T update(T t);
 
-    boolean delete(U id);
+    void delete(U id);
 
     Collection<T> fetchAll();
 
