@@ -1,6 +1,7 @@
 package com.bastiansmn.vp.user;
 
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository underTest;
+
+    @AfterEach
+    void tearDown() {
+        underTest.deleteAll();
+    }
 
     @Test
     void itShouldFindByEmail() {
