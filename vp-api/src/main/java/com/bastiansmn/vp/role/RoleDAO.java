@@ -7,12 +7,6 @@ import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
-class DefaultRoles {
-    static List<String> DEFAULT_ROLES = List.of(
-            "ROLE_USER"
-    );
-}
-
 @Table(name = "role")
 @Entity
 @Getter

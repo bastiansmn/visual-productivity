@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.AUTO;
 @Setter
 @Builder
 @ToString
-public class UserDAO {
+public class   UserDAO {
 
     @Id
     @GeneratedValue(strategy = AUTO)

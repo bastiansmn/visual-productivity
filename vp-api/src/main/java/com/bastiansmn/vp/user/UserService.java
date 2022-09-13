@@ -1,75 +1,22 @@
 package com.bastiansmn.vp.user;
 
-import com.bastiansmn.vp.shared.CrudService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.user.dto.UserCreationDTO;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-@Transactional
-@Slf4j
-public class UserService implements UserDetailsService {
+public interface UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    UserDAO create(UserCreationDTO user) throws FunctionalException;
 
-    public UserDAO create(UserDAO u) {
-        log.info("Creating user: {}", u);
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
-        return userRepository.save(u);
-    }
+    UserDAO fetchByID(Long id) throws FunctionalException;
 
-    public Optional<UserDAO> fetchById(Long id) {
-        log.info("Fetching user by id: {}", id);
-        return userRepository.findById(id);
-    }
+    void delete(Long id) throws FunctionalException;
 
-    public UserDAO update(UserDAO u) {
-        log.info("Updating user: {}", u);
-        return userRepository.save(u);
-    }
+    List<UserDAO> fetchAll();
 
-    public void delete(Long id) {
-        if (userRepository.existsById(id)) {
-            log.info("Deleting user by id: {}", id);
-            userRepository.deleteById(id);
-            return;
-        }
-        log.info("Delete user: User with id {} does not exist", id);
-    }
+    boolean emailExists(String email);
 
-    public List<UserDAO> fetchAll() {
-        log.info("Fetching all users");
-        return userRepository.findAll();
-    }
-
-    public boolean emailExists(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    public boolean usernameExists(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDAO userDAO = userRepository
-                .findByUsername(username)
-                .orElseThrow();
-        return User
-                .withUsername(userDAO.getUsername())
-                .password(userDAO.getPassword())
-                .build();
-    }
+    boolean usernameExists(String username);
 
 }

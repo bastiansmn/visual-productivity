@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,11 +36,13 @@ class RoleRepositoryTest {
         this.underTest.save(roleAdmin);
 
         // When
-        RoleDAO userExpected = this.underTest.findByName("ROLE_USER");
-        RoleDAO adminExpected = this.underTest.findByName("ROLE_ADMIN");
+        Optional<RoleDAO> userExpected = this.underTest.findByName("ROLE_USER");
+        Optional<RoleDAO> adminExpected = this.underTest.findByName("ROLE_ADMIN");
 
         // Then
-        assertThat(userExpected.getName()).isEqualTo(roleUser.getName());
-        assertThat(adminExpected.getName()).isEqualTo(roleAdmin.getName());
+        assertThat(userExpected).isNotEmpty();
+        assertThat(adminExpected).isNotEmpty();
+        assertThat(userExpected.get().getName()).isEqualTo(roleUser.getName());
+        assertThat(adminExpected.get().getName()).isEqualTo(roleAdmin.getName());
     }
 }

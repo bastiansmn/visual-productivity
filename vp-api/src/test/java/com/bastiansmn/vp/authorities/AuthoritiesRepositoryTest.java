@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,15 +48,20 @@ class AuthoritiesRepositoryTest {
         this.underTest.save(deleteAuth);
 
         // When
-        AuthoritiesDAO expectedCreate = this.underTest.findByName("create");
-        AuthoritiesDAO expectedRead = this.underTest.findByName("read");
-        AuthoritiesDAO expectedUpdate = this.underTest.findByName("update");
-        AuthoritiesDAO expectedDelete = this.underTest.findByName("delete");
+        Optional<AuthoritiesDAO> expectedCreate = this.underTest.findByName("create");
+        Optional<AuthoritiesDAO> expectedRead = this.underTest.findByName("read");
+        Optional<AuthoritiesDAO> expectedUpdate = this.underTest.findByName("update");
+        Optional<AuthoritiesDAO> expectedDelete = this.underTest.findByName("delete");
 
         // Then
-        assertThat(expectedCreate.getName()).isEqualTo(createAuth.getName());
-        assertThat(expectedRead.getName()).isEqualTo(readAuth.getName());
-        assertThat(expectedUpdate.getName()).isEqualTo(updateAuth.getName());
-        assertThat(expectedDelete.getName()).isEqualTo(deleteAuth.getName());
+
+        assertThat(expectedCreate).isNotEmpty();
+        assertThat(expectedRead).isNotEmpty();
+        assertThat(expectedUpdate).isNotEmpty();
+        assertThat(expectedDelete).isNotEmpty();
+        assertThat(expectedCreate.get().getName()).isEqualTo(createAuth.getName());
+        assertThat(expectedRead.get().getName()).isEqualTo(readAuth.getName());
+        assertThat(expectedUpdate.get().getName()).isEqualTo(updateAuth.getName());
+        assertThat(expectedDelete.get().getName()).isEqualTo(deleteAuth.getName());
     }
 }

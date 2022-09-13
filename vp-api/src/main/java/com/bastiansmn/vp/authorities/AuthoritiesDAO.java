@@ -7,11 +7,6 @@ import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
-class DefaultAuthorities {
-    static List<String> DEFAULT_AUTH = List.of(
-            "read"
-    );
-}
 @Table(name = "authorities")
 @Entity
 @Getter
