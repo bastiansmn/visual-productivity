@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.user;
 
+import com.bastiansmn.vp.role.RoleDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
@@ -17,8 +16,9 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getAuthorities().stream()
-                .map(authoritiesDAO -> new SimpleGrantedAuthority(authoritiesDAO.getName()))
+        return this.user.getRoles().stream()
+                .map(RoleDAO::getName)
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 

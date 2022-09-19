@@ -11,6 +11,8 @@ public interface UserService {
 
     UserDAO fetchByID(Long id) throws FunctionalException;
 
+    UserDAO fetchByUsername(String username) throws FunctionalException;
+
     void delete(Long id) throws FunctionalException;
 
     List<UserDAO> fetchAll();

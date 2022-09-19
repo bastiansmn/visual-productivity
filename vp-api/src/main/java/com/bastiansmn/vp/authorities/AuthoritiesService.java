@@ -19,6 +19,6 @@ public interface AuthoritiesService {
 
     List<AuthoritiesDAO> fetchAll();
 
-    List<AuthoritiesDAO> getDefaultAuthorities();
+    boolean existsByID(Long id);
 
 }

@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.role;
 
+import com.bastiansmn.vp.authorities.AuthoritiesDAO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,5 +33,18 @@ public class RoleDAO {
             unique = true
     )
     private String name;
+
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinTable(name = "link_role_auths",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "auth_id"))
+    @ToString.Exclude
+    private List<AuthoritiesDAO> authorities;
 
 }

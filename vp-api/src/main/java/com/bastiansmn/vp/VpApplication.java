@@ -1,14 +1,11 @@
 package com.bastiansmn.vp;
 
 import com.bastiansmn.vp.authorities.AuthoritiesService;
-import com.bastiansmn.vp.authorities.dto.AuthoritiesCreationDTO;
 import com.bastiansmn.vp.role.RoleService;
-import com.bastiansmn.vp.role.dto.RoleCreationDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -25,9 +22,12 @@ public class VpApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-//	@Bean
-//	CommandLineRunner run(AuthoritiesService authoritiesService, RoleService roleService) {
-//		return args -> {
+	@Bean
+	CommandLineRunner run(
+			AuthoritiesService authoritiesService,
+			RoleService roleService
+	) {
+		return args -> {
 //			try {
 //				authoritiesService.create(new AuthoritiesCreationDTO("create"));
 //				authoritiesService.create(new AuthoritiesCreationDTO("read"));
@@ -36,9 +36,12 @@ public class VpApplication {
 //
 //				roleService.create(new RoleCreationDTO("ROLE_ADMIN"));
 //				roleService.create(new RoleCreationDTO("ROLE_USER"));
+//
+//				roleService.addAuthorityToRole("ROLE_USER", "create");
+//				roleService.addAuthorityToRole("ROLE_ADMIN", "create", "read", "update", "delete");
 //			} catch (DataIntegrityViolationException ignore) {}
-//		};
-//	}
+		};
+	}
 
 
 }

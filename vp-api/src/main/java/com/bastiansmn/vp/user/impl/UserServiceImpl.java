@@ -1,19 +1,18 @@
 package com.bastiansmn.vp.user.impl;
 
-import com.bastiansmn.vp.authorities.AuthoritiesDAO;
 import com.bastiansmn.vp.authorities.AuthoritiesService;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.user.UserDAO;
+import com.bastiansmn.vp.user.UserPrincipal;
 import com.bastiansmn.vp.user.UserRepository;
 import com.bastiansmn.vp.user.UserService;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,7 +48,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new FunctionalException(FunctionalRule.USER_0004);
 
         List<RoleDAO> defaultRoles = this.roleService.getDefaultRoles();
-        List<AuthoritiesDAO> defaultAuthorities = this.authoritiesService.getDefaultAuthorities();
 
         UserDAO user = UserDAO.builder()
                 .email(userDTO.getEmail())
@@ -58,7 +56,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .lastname(userDTO.getLastname())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .roles(defaultRoles)
-                .authorities(defaultAuthorities)
                 .isEnabled(true)
                 .isNotLocked(true)
                 .build();
@@ -75,6 +72,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
 
         log.info("Fetching user by id: {}", id);
+        return user.get();
+    }
+
+    public UserDAO fetchByUsername(String username) throws FunctionalException {
+        var user = this.userRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            throw new FunctionalException(
+                    FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
+
+        log.info("Fetching user by username: {}", username);
         return user.get();
     }
 
@@ -105,10 +113,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserDAO userDAO = userRepository
                 .findByUsername(username)
                 .orElseThrow();
-        return User
-                .withUsername(userDAO.getUsername())
-                .password(userDAO.getPassword())
-                .build();
+        return new UserPrincipal(userDAO);
     }
 
     private boolean validatePassword(String password) {

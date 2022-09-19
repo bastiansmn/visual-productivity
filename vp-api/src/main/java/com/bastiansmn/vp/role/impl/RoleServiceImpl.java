@@ -1,5 +1,8 @@
 package com.bastiansmn.vp.role.impl;
 
+import com.bastiansmn.vp.authorities.AuthoritiesDAO;
+import com.bastiansmn.vp.authorities.AuthoritiesRepository;
+import com.bastiansmn.vp.authorities.AuthoritiesService;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.role.DefaultRoles;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final AuthoritiesService authoritiesService;
 
     public RoleDAO create(RoleCreationDTO roleCreationDTO) {
         RoleDAO role = RoleDAO.builder()
@@ -55,6 +60,37 @@ public class RoleServiceImpl implements RoleService {
         return role.get();
     }
 
+    public RoleDAO addAuthorityToRole(Long roleId, Long authId) throws FunctionalException {
+        RoleDAO role = this.fetchByID(roleId);
+        AuthoritiesDAO authority = this.authoritiesService.fetchByID(authId);
+
+        role.getAuthorities().add(authority);
+
+        return this.roleRepository.save(role);
+    }
+
+    public RoleDAO addAuthorityToRole(String roleName, String authName) throws FunctionalException {
+        RoleDAO role = this.fetchByName(roleName);
+        AuthoritiesDAO authority = this.authoritiesService.fetchByName(authName);
+
+        role.getAuthorities().add(authority);
+
+        return this.roleRepository.save(role);
+    }
+
+    public RoleDAO addAuthorityToRole(String roleName, String... authName) throws FunctionalException {
+        RoleDAO role = this.fetchByName(roleName);
+        Arrays.stream(authName).forEach(auth -> {
+            try {
+                AuthoritiesDAO authority = this.authoritiesService.fetchByName(auth);
+                role.getAuthorities().add(authority);
+            } catch (FunctionalException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return this.roleRepository.save(role);
+    }
+
     public void delete(Long id) throws FunctionalException {
         Optional<RoleDAO> role = this.roleRepository.findById(id);
         if (role.isEmpty())
@@ -82,5 +118,9 @@ public class RoleServiceImpl implements RoleService {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    public boolean existsByID(Long id) {
+        return this.roleRepository.existsById(id);
     }
 }

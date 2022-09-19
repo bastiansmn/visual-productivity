@@ -3,7 +3,6 @@ package com.bastiansmn.vp.authorities.impl;
 import com.bastiansmn.vp.authorities.AuthoritiesDAO;
 import com.bastiansmn.vp.authorities.AuthoritiesRepository;
 import com.bastiansmn.vp.authorities.AuthoritiesService;
-import com.bastiansmn.vp.authorities.DefaultAuthorities;
 import com.bastiansmn.vp.authorities.dto.AuthoritiesCreationDTO;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
@@ -14,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,15 +70,8 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
         return this.authoritiesRepository.findAll();
     }
 
-    public List<AuthoritiesDAO> getDefaultAuthorities() {
-        return DefaultAuthorities.DEFAULT_AUTH.stream()
-                .map(role -> {
-                    Optional<AuthoritiesDAO> optRole = this.authoritiesRepository.findByName(role);
-                    if (optRole.isEmpty()) return null;
-                    return optRole.get();
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public boolean existsByID(Long id) {
+        return this.authoritiesRepository.existsById(id);
     }
 
 }

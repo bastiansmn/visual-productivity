@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.AUTO;
 @Setter
 @Builder
 @ToString
-public class   UserDAO {
+public class UserDAO {
 
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -53,19 +53,14 @@ public class   UserDAO {
     @JsonIgnore
     private String password;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
     @JoinTable(name = "link_user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
     private List<RoleDAO> roles;
-
-    @ManyToMany
-    @JoinTable(name = "link_user_auths",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "auth_id"))
-    @ToString.Exclude
-    private List<AuthoritiesDAO> authorities;
 
     private boolean isEnabled;
 

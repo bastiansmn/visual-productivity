@@ -1,8 +1,9 @@
 package com.bastiansmn.vp.config;
 
-import com.bastiansmn.vp.shared.filter.CustomAuthFilter;
+import com.bastiansmn.vp.filter.CustomAuthenticationFilter;
+import com.bastiansmn.vp.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,10 +11,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -22,23 +27,50 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+    @Value("${corsConfiguration.allowedOrigins}")
+    private List<String> allowedOrigins;
+    @Value("${corsConfiguration.allowedMethods}")
+    private List<String> allowedMethods;
+    @Value("${corsConfiguration.allowedHeaders}")
+    private List<String> allowedHeaders;
+    @Value("${corsConfiguration.registrerPattern}")
+    private String registrerPattern;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests().anyRequest().permitAll();
-        http
-                .sessionManagement().sessionCreationPolicy(STATELESS);
-        http
-                .addFilter(new CustomAuthFilter(authenticationManagerBean()));
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        System.out.println("allowedOrigins = " + allowedOrigins);
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedMethods(allowedMethods);
+        configuration.setAllowedHeaders(allowedHeaders);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration(registrerPattern, configuration);
+        return source;
     }
+
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+
+        http
+                .cors().and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(STATELESS);
+        http
+                .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
+        http
+                .authorizeRequests().anyRequest().authenticated();
+        http
+                .addFilter(customAuthenticationFilter)
+                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
