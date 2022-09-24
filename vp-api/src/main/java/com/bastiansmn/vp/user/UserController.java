@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/${api.prefix}/${api.version}/user")
+@RequestMapping("${api.prefix}/user")
 @RequiredArgsConstructor
 public class UserController {
 

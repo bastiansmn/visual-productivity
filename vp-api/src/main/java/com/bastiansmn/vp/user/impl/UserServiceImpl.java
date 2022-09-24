@@ -108,6 +108,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.existsByUsername(username);
     }
 
+    public boolean isEnabled(String username) throws FunctionalException {
+        return this.fetchByUsername(username).isEnabled();
+    }
+
+    public boolean isNotLocked(String username) throws FunctionalException {
+        return this.fetchByUsername(username).isNotLocked();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDAO userDAO = userRepository

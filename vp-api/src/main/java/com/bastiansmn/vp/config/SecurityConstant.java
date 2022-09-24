@@ -1,12 +1,19 @@
 package com.bastiansmn.vp.config;
 
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class SecurityConstant {
 
-    public static final long EXPIRATION_TIME = 864_000_000; // 10 Days in milliseconds
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String JWT_TOKEN_HEADER = HttpHeaders.AUTHORIZATION;
+    // 10 Days in seconds
+    public static final long ACCESS_EXPIRATION_TIME = 864_000;
+    // 30 minutes in seconds
+    public static final long REFRESH_EXPIRATION_TIME = 1_800;
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+    public static final String ACCESS_TOKEN_URI = "/api/v1";
+    public static final String REFRESH_TOKEN_URI = "/api/v1/token/refresh";
+    public static final String JWT_SECRET = System.getenv("JWT_SECRET");
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Le token n'a pas pu être vérifié";
     public static final String VP_LLC = "VisualProductivity, LLC";
     public static final String AUTHORITIES = "Authorities";

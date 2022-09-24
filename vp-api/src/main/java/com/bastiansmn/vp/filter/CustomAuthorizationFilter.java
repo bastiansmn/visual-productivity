@@ -5,15 +5,26 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bastiansmn.vp.config.SecurityConstant;
+import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.exception.FunctionalRule;
+import com.bastiansmn.vp.user.UserDAO;
+import com.bastiansmn.vp.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,52 +41,81 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    private final String secret = System.getenv("JWT_SECRET");
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // Page doesn't requires authentication
         if (Arrays.stream(SecurityConstant.PUBLIC_URLS).toList().contains(request.getServletPath())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String authorizationHeader = request.getHeader(SecurityConstant.JWT_TOKEN_HEADER);
-        if(authorizationHeader != null && authorizationHeader.startsWith(SecurityConstant.TOKEN_PREFIX)) {
-            String token = authorizationHeader.substring(SecurityConstant.TOKEN_PREFIX.length());
-            try {
-                Algorithm algorithm = Algorithm.HMAC256(this.secret.getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
-                String username = decodedJWT.getSubject();
-                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-                Collection<SimpleGrantedAuthority> authorities =
-                        stream(roles)
-                                .map(SimpleGrantedAuthority::new)
-                                .collect(Collectors.toList());
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        username,
-                        null,
-                        authorities
-                );
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                filterChain.doFilter(request, response);
-            }catch (Exception exception) {
-                log.error(
-                        "{} ({}): {}",
-                        SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
-                        token,
-                        exception.getMessage()
-                );
-                response.setHeader("x-error", exception.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message", exception.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
-        } else {
+        // No cookie found in request
+        Cookie authorizationHeaderCookie = WebUtils.getCookie(request, SecurityConstant.ACCESS_TOKEN_COOKIE_NAME);
+        log.debug("Authorization header cookie: {}", authorizationHeaderCookie);
+        if (authorizationHeaderCookie == null) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        String token = authorizationHeaderCookie.getValue();
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            String username = decodedJWT.getSubject();
+            if (!this.userService.isEnabled(username))
+                throw new FunctionalException(
+                        FunctionalRule.USER_0007,
+                        FORBIDDEN
+                );
+
+            if (!this.userService.isNotLocked(username))
+                throw new FunctionalException(
+                        FunctionalRule.USER_0006,
+                        FORBIDDEN
+                );
+
+            String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+            Collection<SimpleGrantedAuthority> authorities =
+                    stream(roles)
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        } catch (FunctionalException e) {
+            log.error(
+                    "{}: {}",
+                    SecurityConstant.ACCESS_DENIED_MESSAGE,
+                    e.getMessage()
+            );
+            response.setStatus(e.getHttpStatus().value());
+            Map<String, String> error = Map.of(
+                    "error", e.getClientMessage()
+            );
+            response.setContentType(APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), error);
+        } catch (Exception exception) {
+            log.error(
+                    "{} ({}): {}",
+                    SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
+                    token,
+                    exception.getMessage()
+            );
+            response.setStatus(FORBIDDEN.value());
+            Map<String, String> error = Map.of(
+                    "error", exception.getMessage()
+            );
+            response.setContentType(APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
     }
 

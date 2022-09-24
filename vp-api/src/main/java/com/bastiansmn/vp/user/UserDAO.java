@@ -54,7 +54,7 @@ public class UserDAO {
     private String password;
 
     @ManyToMany(
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     @JoinTable(name = "link_user_roles",
         joinColumns = @JoinColumn(name = "user_id"),

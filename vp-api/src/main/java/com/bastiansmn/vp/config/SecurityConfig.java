@@ -3,7 +3,9 @@ package com.bastiansmn.vp.config;
 import com.bastiansmn.vp.filter.CustomAuthenticationFilter;
 import com.bastiansmn.vp.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -35,11 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private List<String> allowedHeaders;
     @Value("${corsConfiguration.registrerPattern}")
     private String registrerPattern;
+    @Value("${api.prefix}")
+    private String apiPrefix;
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        System.out.println("allowedOrigins = " + allowedOrigins);
         CorsConfiguration configuration = new CorsConfiguration();
+        log.info("Allowed origins: {}", allowedOrigins);
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(allowedMethods);
         configuration.setAllowedHeaders(allowedHeaders);
@@ -70,12 +75,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest().authenticated();
         http
                 .addFilter(customAuthenticationFilter)
-                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(customAuthorizationFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public CustomAuthorizationFilter customAuthorizationFilterBean() {
+        return new CustomAuthorizationFilter();
+    }
+
+    @Bean
+    public FilterRegistrationBean<CustomAuthorizationFilter> myFilterRegistrationBean() {
+        FilterRegistrationBean<CustomAuthorizationFilter> frb = new FilterRegistrationBean<>(customAuthorizationFilterBean());
+        frb.setEnabled(false);
+        return frb;
     }
 }
