@@ -1,12 +1,10 @@
 package com.bastiansmn.vp.user;
 
-import com.bastiansmn.vp.authorities.AuthoritiesDAO;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
