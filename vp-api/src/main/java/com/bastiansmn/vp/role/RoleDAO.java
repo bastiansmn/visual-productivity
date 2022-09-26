@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Table(name = "role")
 @Entity
@@ -19,7 +20,7 @@ import static javax.persistence.GenerationType.AUTO;
 public class RoleDAO {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(
             nullable = false,
             unique = true,

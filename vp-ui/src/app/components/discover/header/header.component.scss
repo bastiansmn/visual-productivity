@@ -1,0 +1,29 @@
+@import "src/variables";
+
+header.discover__header {
+  height: $header-size;
+
+  & mat-toolbar {
+    padding-inline: 1.5rem;
+    height: 100%;
+
+    background: $dark;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & mat-icon {
+      color: $light;
+    }
+
+    & > .logo {
+      height: 40%;
+    }
+
+    h1.mat-title {
+      margin: 0 auto 0 1rem;
+      color: $light;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import "src/variables";
+
+.indigo-to-purple {
+  background: $indigo;
+  background: -moz-linear-gradient(124deg, $indigo 0%, $purple 100%);
+  background: -webkit-linear-gradient(124deg, $indigo 0%, $purple 100%);
+  background: linear-gradient(124deg, $indigo 0%, $purple 100%);
+}
+
+.text-gradient {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

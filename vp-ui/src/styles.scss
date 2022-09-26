@@ -3,6 +3,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
+@use './app/components/discover/discover-theme.component.scss' as discover;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -12,20 +13,209 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$ui-primary: mat.define-palette(mat.$indigo-palette);
-$ui-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$md-purple: (
+  50 : #efeeff,
+  100 : #d8d4ff,
+  200 : #beb8ff,
+  300 : #a49bff,
+  400 : #9185ff,
+  500 : #7d70ff,
+  600 : #7568ff,
+  700 : #6a5dff,
+  800 : #6053ff,
+  900 : #4d41ff,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #eae9ff,
+  A700 : #d2cfff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-green: (
+  50 : #eaf6e4,
+  100 : #cae8bd,
+  200 : #a6d991,
+  300 : #82c964,
+  400 : #68be43,
+  500 : #4db222,
+  600 : #46ab1e,
+  700 : #3da219,
+  800 : #349914,
+  900 : #258a0c,
+  A100 : #c4ffb9,
+  A200 : #99ff86,
+  A400 : #6eff53,
+  A700 : #59ff3a,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-indigo: (
+  50 : #e4f8ff,
+  100 : #bdedfe,
+  200 : #91e1fd,
+  300 : #64d4fc,
+  400 : #43cbfc,
+  500 : #22c2fb,
+  600 : #1ebcfa,
+  700 : #19b4fa,
+  800 : #14acf9,
+  900 : #0c9ff8,
+  A100 : #ffffff,
+  A200 : #eff8ff,
+  A400 : #bce3ff,
+  A700 : #a2d9ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-orange: (
+  50 : #ffede6,
+  100 : #fed3c1,
+  200 : #feb697,
+  300 : #fe996d,
+  400 : #fd834e,
+  500 : #fd6d2f,
+  600 : #fd652a,
+  700 : #fc5a23,
+  800 : #fc501d,
+  900 : #fc3e12,
+  A100 : #ffffff,
+  A200 : #fff7f6,
+  A400 : #ffccc3,
+  A700 : #ffb7a9,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-red: (
+  50 : #fae7e7,
+  100 : #f4c3c3,
+  200 : #ec9b9b,
+  300 : #e47272,
+  400 : #df5454,
+  500 : #d93636,
+  600 : #d53030,
+  700 : #cf2929,
+  800 : #ca2222,
+  900 : #c01616,
+  A100 : #fff2f2,
+  A200 : #ffbfbf,
+  A400 : #ff8c8c,
+  A700 : #ff7373,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$ui-purple: mat.define-palette($md-purple);
+$ui-green: mat.define-palette($md-green);
+$ui-indigo: mat.define-palette($md-indigo);
+$ui-orange: mat.define-palette($md-orange);
+
+$ui-primary: $ui-purple;
+$ui-accent: $ui-orange;
 
 // The warn palette is optional (defaults to red).
-$ui-warn: mat.define-palette(mat.$red-palette);
+$ui-warn: $md-red;
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+
+$font-name: "Mukta";
+
+$ui-typography: mat.define-typography-config(
+  $headline: mat.define-typography-level(36px, 48px, 700, $font-name),
+  $title: mat.define-typography-level(24px, 32px, 700, $font-name),
+  $subheading-2: mat.define-typography-level(22px, 1.2em, 400, $font-name),
+  $subheading-1: mat.define-typography-level(18px, 1.2em, 400, $font-name),
+  $body-2: mat.define-typography-level(16px, 1.25em, 600, $font-name),
+  $body-1: mat.define-typography-level(16px, 1.25em, 400, $font-name),
+  $caption: mat.define-typography-level(12px, 16px, 400, $font-name),
+  $button: mat.define-typography-level(15px, 1.25em, 500, $font-name),
+  $input: mat.define-typography-level(15px, 1.25em, 400, $font-name),
+);
+
+@include mat.core($ui-typography);
+
 $ui-theme: mat.define-light-theme((
   color: (
     primary: $ui-primary,
     accent: $ui-accent,
     warn: $ui-warn,
-  )
+  ),
+  typography: $ui-typography,
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -33,7 +223,20 @@ $ui-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($ui-theme);
 
+// App specific themes:
+@include discover.theme($ui-theme);
+
 /* You can add global styles to this file, and also import other style files */
+@import "gradients";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; }
+
+// All text
+h1, h2, h3, h4, h5, h6, p, span, a, li, ul, ol, button, input, textarea {
+  color: var(--dark);
+}
+
+* {
+  scroll-behavior: smooth;
+}

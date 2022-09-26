@@ -1,0 +1,11 @@
+mat-sidenav-content {
+  position: relative;
+}
+
+app-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  z-index: 100;
+}

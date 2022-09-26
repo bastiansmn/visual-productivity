@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Table(name = "users")
 @Entity
@@ -20,7 +20,7 @@ import static javax.persistence.GenerationType.AUTO;
 public class UserDAO {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(
             nullable = false,
             unique = true,
@@ -52,7 +52,7 @@ public class UserDAO {
     private String password;
 
     @ManyToMany(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinTable(name = "link_user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
