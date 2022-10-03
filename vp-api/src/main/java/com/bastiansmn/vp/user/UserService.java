@@ -21,8 +21,8 @@ public interface UserService {
 
     boolean usernameExists(String username);
 
-    boolean isEnabled(String username) throws FunctionalException;
+    boolean isEnabled(String email) throws FunctionalException;
 
-    boolean isNotLocked(String username) throws FunctionalException;
+    boolean isNotLocked(String email) throws FunctionalException;
 
 }

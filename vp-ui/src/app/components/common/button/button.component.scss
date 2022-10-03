@@ -1,0 +1,136 @@
+@import "src/variables";
+
+.vp__button {
+  border: none;
+  border-radius: 9px;
+  height: 100%;
+  padding-inline: 1rem;
+
+  cursor: pointer;
+
+  transition: all .3s ease-in-out;
+
+  &:active {
+    border: none;
+  }
+
+  &::ng-deep * {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+
+  &.hov-scale:hover {
+    transform: scale(1.05);
+  }
+
+  &.hov-border:hover {
+    outline: 1px solid $light-grey;
+  }
+
+  &:not([disabled]) {
+    &.hovBG-light:hover {
+      background: $light;
+    }
+
+    &.hovBG-grey:hover {
+      background: $light-grey;
+    }
+
+    &.hovBG-dark:hover {
+      background: $dark;
+    }
+
+    &.hovBG-purple:hover {
+      background: $purple;
+    }
+
+    &.hovBG-indigo:hover {
+      background: $indigo;
+    }
+
+    &.hovBG-green:hover {
+      background: $green;
+    }
+
+    &.hov-light:hover {
+      color: $light;
+    }
+
+    &.hov-grey:hover {
+      color: $light-grey;
+    }
+
+    &.hov-dark:hover {
+      color: $dark;
+    }
+
+    &.hov-purple:hover {
+      color: $purple;
+    }
+
+    &.hov-indigo:hover {
+      color: $indigo;
+    }
+
+    &.hov-green:hover {
+      color: $green;
+    }
+  }
+}
+
+.border {
+  border: 1px solid $light-grey;
+  height: calc(100% - 2px);
+}
+
+.text-light {
+  color: $light;
+}
+
+.text-grey {
+  color: $light-grey;
+}
+
+.text-dark {
+  color: $dark;
+}
+
+.text-purple {
+  color: $purple;
+}
+
+.text-indigo {
+  color: $indigo;
+}
+
+.text-green {
+  color: $green;
+}
+
+.bg-light {
+  background: $light;
+}
+
+.bg-grey {
+  background: $light-grey;
+}
+
+.bg-dark {
+  background: $dark;
+}
+
+.bg-purple {
+  background: $purple;
+}
+
+.bg-indigo {
+  background: $indigo;
+}
+
+.bg-green {
+  background: $green;
+}

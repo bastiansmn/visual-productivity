@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(allowedMethods);
         configuration.setAllowedHeaders(allowedHeaders);
+        configuration.setAllowCredentials(Boolean.TRUE);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration(registrerPattern, configuration);
         return source;
@@ -67,13 +69,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
 
         http
-                .cors().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(STATELESS);
-        http
-                .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
-        http
-                .authorizeRequests().anyRequest().authenticated();
-        http
+                .csrf().disable().cors().and()
+                .sessionManagement().sessionCreationPolicy(STATELESS)
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
+                .and()
+                .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
                 .addFilter(customAuthenticationFilter)
                 .addFilterBefore(customAuthorizationFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }

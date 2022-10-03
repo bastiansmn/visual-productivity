@@ -1,0 +1,65 @@
+<div class="login__page">
+  <form class="login__form" [formGroup]="formGroup" (submit)="loginWithVP()">
+    <h1 class="mat-subheading-2">Se connecter</h1>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="email"
+      type="email"
+      placeholder="Votre mail"
+      name="email"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <mat-icon
+        icon
+        color="primary"
+      >alternate_email</mat-icon>
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('email') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="password"
+      type="password"
+      placeholder="Votre mot de passe"
+      name="password"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <mat-icon
+        icon
+        color="primary"
+      >vpn_key</mat-icon>
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('password') }}
+      </small>
+    </vp-input>
+
+    <vp-check
+      [parentForm]="formGroup"
+      parentFormControlName="remember"
+      name="remember"
+      tabulationIndex="3"
+    >
+      Rester connecter
+    </vp-check>
+
+    <a
+      routerLink="/register"
+      routerLinkActive="active"
+      tabindex="-1"
+    >
+      <small>Pas de compte ? Inscrivez-vous</small>
+    </a>
+
+    <div class="controls">
+      <vp-button
+        tabulationIndex="4"
+      >
+        Se connecter
+      </vp-button>
+      <asl-google-signin-button></asl-google-signin-button>
+    </div>
+  </form>
+</div>

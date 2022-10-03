@@ -3,9 +3,7 @@ package com.bastiansmn.vp.authorities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
-import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Table(name = "authorities")

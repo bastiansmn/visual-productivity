@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {forwardRef, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,23 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import { HeaderComponent } from './components/discover/header/header.component';
 import { DiscoverMainComponent } from './components/discover/discover-main/discover-main.component';
+import { NavbarComponent } from './components/discover/navbar/navbar.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+
+// Google auth
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from '@abacritt/angularx-social-login';
+import { InputComponent } from './components/common/input/input.component';
+import { CheckComponent } from './components/common/check/check.component';
+import { ButtonComponent } from './components/common/button/button.component';
+import {NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {CookieSetterInterceptor} from "./interceptor/cookie-setter.interceptor";
+import {CookieService} from "ngx-cookie-service";
 
 @NgModule({
   declarations: [
@@ -23,7 +40,13 @@ import { DiscoverMainComponent } from './components/discover/discover-main/disco
     DiscoverComponent,
     LogoComponent,
     HeaderComponent,
-    DiscoverMainComponent
+    DiscoverMainComponent,
+    NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
+    InputComponent,
+    CheckComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -40,9 +63,30 @@ import { DiscoverMainComponent } from './components/discover/discover-main/disco
     MatIconModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    SocialLoginModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('1052954350067-sersub6hdqgbl01nq0fhohnsodrhelcc.apps.googleusercontent.com')
+          }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: CookieSetterInterceptor, multi: true },
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

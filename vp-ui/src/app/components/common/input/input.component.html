@@ -1,0 +1,17 @@
+<div class="vp__input" [formGroup]="parentForm">
+  <ng-content select="[icon]"></ng-content>
+  <input
+    [id]="name"
+    [type]="type"
+    [placeholder]="placeholder"
+    [name]="name"
+    [spellcheck]="spellcheck"
+    [pattern]="pattern"
+    [required]="required"
+    [autocomplete]="autocomplete ? 'on' : 'off'"
+
+    [formControlName]="parentFormControlName"
+    [tabindex]="tabulationIndex"
+  >
+  <ng-content select="[errorMessage]"></ng-content>
+</div>

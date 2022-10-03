@@ -1,0 +1,32 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($ui-theme) {
+  $color-config: mat.get-color-config($ui-theme);
+  $primary: map.get($color-config, 'primary');
+  $accent: map.get($color-config, 'accent');
+  $warn: map.get($color-config, 'warn');
+
+  .vp__input input {
+    &:focus {
+      border:
+        2px solid
+        mat.get-color-from-palette($primary, 500)
+        !important;
+    }
+
+    &.ng-touched.ng-invalid {
+      border:
+        2px solid
+        mat.get-color-from-palette($warn, 300)
+        !important;
+    }
+  }
+}
+
+@mixin theme($ui-theme) {
+  $color-config: mat.get-color-config($ui-theme);
+  @if $color-config != null {
+    @include color($ui-theme);
+  }
+}

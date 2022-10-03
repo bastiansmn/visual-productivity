@@ -1,0 +1,9 @@
+<button
+  class="vp__button"
+  [disabled]="disabled"
+  #button
+  (click)="handleClick()"
+  [tabindex]="tabulationIndex"
+>
+  <ng-content></ng-content>
+</button>

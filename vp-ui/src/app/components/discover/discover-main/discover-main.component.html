@@ -7,11 +7,15 @@
     <p>
       Parmis les fonctionnalitées que vous pourrez retrouver: l'organisation automatique de projet, la création de TODO lists par projets ou personnelles, suivi visuel de votre projet, cloud de fichier partagé et bien d'autres encore...
     </p>
-    <button mat-raised-button color="primary">
-      <a href="#features">
+    <vp-button
+      [scaleOnHover]="true"
+      routerLink="/discover" fragment="features"
+      (click)="fetchAll()"
+    >
+      <a>
         Voir les fonctionnalitées
       </a>
-    </button>
+    </vp-button>
   </div>
   <div id="features">
 <!--    TODO -->

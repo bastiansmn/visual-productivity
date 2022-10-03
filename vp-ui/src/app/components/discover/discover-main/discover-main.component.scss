@@ -29,12 +29,13 @@
       font-weight: 500;
       margin-bottom: 2rem;
     }
+
     & > h1, p {
       text-align: center;
     }
 
-    & > button {
-     margin-block-start: 1.5rem;
+    & > vp-button {
+      margin-block-start: 1.5rem;
 
       & a {
         text-decoration: none;

@@ -1,0 +1,60 @@
+@import "src/variables";
+
+.vp__input {
+  position: relative;
+  margin-bottom: .8rem;
+
+  display: flex;
+  flex-direction: column;
+
+  &::ng-deep {
+    mat-icon {
+      position: absolute;
+      z-index: 1;
+      top: 8px;
+      right: .7rem
+    }
+
+    & input.ng-touched.ng-invalid + small.errorMessage {
+      height: 16px;
+      visibility: visible;
+    }
+
+    & input.ng-touched.ng-valid + small.errorMessage {
+      height: 0;
+      visibility: hidden;
+    }
+
+    small.errorMessage {
+      width: calc(100% - .7rem - 2px);
+      margin-top: .2rem;
+      margin-left: calc(.7rem + 2px);
+      height: 0;
+      visibility: hidden;
+      transition: height .3s ease-in-out;
+
+      color: #e47272;
+    }
+  }
+
+  & input {
+    $padding: .7rem;
+    position: relative;
+    $border-size: 2px;
+    padding-inline: $padding;
+    width: calc(100% - 2*$padding - 2*$border-size);
+    height: calc(40px - 2*$border-size - 2px);
+    border: $border-size solid $light-grey;
+
+    border-radius: 12px;
+    transition: border .3s ease-in-out;
+    outline: none;
+
+    &.ng-touched.ng-valid {
+      border:
+        2px solid
+        $green-light
+      !important;
+    }
+  }
+}

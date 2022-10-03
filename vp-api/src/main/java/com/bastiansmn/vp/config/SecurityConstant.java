@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 public class SecurityConstant {
 
     // 10 Days in seconds
-    public static final long ACCESS_EXPIRATION_TIME = 864_000;
+    public static final Integer ACCESS_EXPIRATION_TIME = 864_000;
     // 30 minutes in seconds
-    public static final long REFRESH_EXPIRATION_TIME = 1_800;
+    public static final Integer REFRESH_EXPIRATION_TIME = 1_800;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     public static final String ACCESS_TOKEN_URI = "/api/v1";

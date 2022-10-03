@@ -2,10 +2,26 @@ mat-sidenav-content {
   position: relative;
 }
 
+mat-sidenav {
+  width: 30%;
+  min-width: 220px;
+}
+
 app-header {
   position: fixed;
   top: 0;
   width: 100%;
 
   z-index: 100;
+}
+
+app-navbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.menu__wrapper {
+  height: 100%;
 }

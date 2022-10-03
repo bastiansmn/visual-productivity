@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from "./services/responsive.service";
+import {ResponsiveService} from "./services/responsive/responsive.service";
 import {Subscription} from "rxjs";
+import {AuthService} from "./services/auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -13,13 +14,15 @@ export class AppComponent implements OnInit, OnDestroy {
   isMobile: boolean = false;
 
   constructor(
-    private responsiveService: ResponsiveService
+    private responsiveService: ResponsiveService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.responsiveSubscription = this.responsiveService.getMobileStatus().subscribe(isMobile => {
       this.isMobile = isMobile;
     });
+    this.authService.retrieveUserInfos();
     this.onResize();
   }
 

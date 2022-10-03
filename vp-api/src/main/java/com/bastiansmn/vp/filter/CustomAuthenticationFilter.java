@@ -3,12 +3,12 @@ package com.bastiansmn.vp.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
-import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,9 +40,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
             AuthenticationException {
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -72,7 +73,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // If user is not active or locked, send error
         if (!user.isEnabled() || !user.isAccountNonLocked()) {
             Map<String, String> error = new HashMap<>();
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             error.put("error", SecurityConstant.ACCESS_DENIED_MESSAGE);
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
@@ -96,10 +97,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.addHeader(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
 
         // Put user in response
-        Map<String, UserDAO> body = new HashMap<>();
-        body.put("user", user.getUser());
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        new ObjectMapper().writeValue(response.getOutputStream(), user.getUser());
     }
 
 //    @Override
@@ -107,12 +106,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 //
 //    }
 
-    private ResponseCookie generateCookie(String name, String value, String path, Long maxAge) {
+    private ResponseCookie generateCookie(String name, String value, String path, Integer maxAge) {
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
                 .path(path)
                 .maxAge(maxAge)
-                .secure(profile.equals("prod"))
+                .secure(this.profile.equals("prod"))
+                .sameSite("Strict")
                 .build();
     }
 }

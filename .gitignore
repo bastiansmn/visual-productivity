@@ -2,3 +2,4 @@
 **/.idea
 **/*.iml
 .jpb
+.DS_Store

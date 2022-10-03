@@ -60,14 +60,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(token);
-            String username = decodedJWT.getSubject();
-            if (!this.userService.isEnabled(username))
+            String email = decodedJWT.getSubject();
+            if (!this.userService.isEnabled(email))
                 throw new FunctionalException(
                         FunctionalRule.USER_0007,
                         FORBIDDEN
                 );
 
-            if (!this.userService.isNotLocked(username))
+            if (!this.userService.isNotLocked(email))
                 throw new FunctionalException(
                         FunctionalRule.USER_0006,
                         FORBIDDEN
@@ -79,7 +79,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    username,
+                    email,
                     null,
                     authorities
             );

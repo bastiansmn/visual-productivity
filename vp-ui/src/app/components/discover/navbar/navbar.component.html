@@ -1,0 +1,33 @@
+<div class="menu__content">
+  <div class="menu__list-wrapper">
+    <mat-list class="menu__list">
+      <mat-list-item class="logo">
+        <app-logo theme="dark"></app-logo>
+        <h1 class="mat-subheading-2">VisualProductivity</h1>
+      </mat-list-item>
+      <mat-list-item>
+        <a
+          routerLink="/discover"
+          routerLinkActive="active"
+          (click)="toggleNav()"
+        >
+          <mat-icon color="primary">explore</mat-icon>
+          <span>Découvrir</span>
+        </a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item *ngIf="!isLoggedIn">
+        <a
+          routerLink="/login"
+          routerLinkActive="active"
+        >
+          <mat-icon color="primary">account_circle</mat-icon>
+          <span>Se connecter</span>
+        </a>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+<div class="menu__footer">
+  <span class="mat-body">VisualProductivity</span>
+</div>

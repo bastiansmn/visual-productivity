@@ -4,6 +4,7 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 @use './app/components/discover/discover-theme.component.scss' as discover;
+@use './app/components/common/input/input-theme.component' as login;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -191,7 +192,10 @@ $ui-warn: $md-red;
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Mukta';
+  src: url('assets/fonts/Mukta-Regular.ttf') format("truetype");
+}
 
 $font-name: "Mukta";
 
@@ -225,16 +229,26 @@ $ui-theme: mat.define-light-theme((
 
 // App specific themes:
 @include discover.theme($ui-theme);
+@include login.theme($ui-theme);
 
 /* You can add global styles to this file, and also import other style files */
 @import "gradients";
+@import "variables";
 
 html, body { height: 100%; }
 body { margin: 0; }
 
+vp-button {
+  height: 36px;
+}
+
+a, button {
+  color: unset;
+}
+
 // All text
-h1, h2, h3, h4, h5, h6, p, span, a, li, ul, ol, button, input, textarea {
-  color: var(--dark);
+h1, h2, h3, h4, h5, h6, p, span, li, ul, ol, button, input, textarea {
+  color: $dark;
 }
 
 * {

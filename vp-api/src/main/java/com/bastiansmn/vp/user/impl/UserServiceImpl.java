@@ -86,6 +86,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user.get();
     }
 
+    public UserDAO fetchByEmail(String email) throws FunctionalException {
+        var user = this.userRepository.findByEmail(email);
+
+        if (user.isEmpty())
+            throw new FunctionalException(
+                    FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
+
+        log.info("Fetching user by email: {}", email);
+
+        return user.get();
+    }
+
     public List<UserDAO> fetchAll() {
         log.info("Fetching all users");
         return this.userRepository.findAll();
@@ -108,18 +120,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.existsByUsername(username);
     }
 
-    public boolean isEnabled(String username) throws FunctionalException {
-        return this.fetchByUsername(username).isEnabled();
+    public boolean isEnabled(String email) throws FunctionalException {
+        return this.fetchByEmail(email).isEnabled();
     }
 
-    public boolean isNotLocked(String username) throws FunctionalException {
-        return this.fetchByUsername(username).isNotLocked();
+    public boolean isNotLocked(String email) throws FunctionalException {
+        return this.fetchByEmail(email).isNotLocked();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.debug(email);
         UserDAO userDAO = userRepository
-                .findByUsername(username)
+                .findByEmail(email)
                 .orElseThrow();
         return new UserPrincipal(userDAO);
     }

@@ -1,0 +1,42 @@
+@import "src/variables";
+
+.login__page {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: $light-grey;
+
+  & .login__form {
+    width: 60%;
+    $padding: 2rem;
+    padding: $padding;
+    max-width: calc(550px - 2*$padding);
+    border-radius: 6px;
+
+    background: $light;
+
+    & > a {
+      color: darkgray;
+      text-decoration: none;
+    }
+
+    .controls {
+      margin-top: .5rem;
+      display: flex;
+      justify-content: space-between;
+
+      asl-google-signin-button {
+        width: 36px;
+        height: 36px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

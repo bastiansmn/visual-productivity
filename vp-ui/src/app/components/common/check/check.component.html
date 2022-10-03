@@ -1,0 +1,12 @@
+<div class="vp__check" [formGroup]="parentForm">
+  <label [tabindex]="tabulationIndex">
+    <input
+      type="checkbox"
+      [name]="name"
+      [required]="required"
+
+      [formControlName]="parentFormControlName"
+    >
+    <ng-content></ng-content>
+  </label>
+</div>
