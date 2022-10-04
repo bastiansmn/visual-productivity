@@ -25,6 +25,15 @@
           <span>Se connecter</span>
         </a>
       </mat-list-item>
+      <mat-list-item *ngIf="!isLoggedIn">
+        <a
+          routerLink="/register"
+          routerLinkActive="active"
+        >
+          <mat-icon color="primary">account_circle</mat-icon>
+          <span>S'inscrire</span>
+        </a>
+      </mat-list-item>
     </mat-list>
   </div>
 </div>

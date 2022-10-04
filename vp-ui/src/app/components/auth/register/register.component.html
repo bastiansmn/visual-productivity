@@ -1,1 +1,93 @@
-<p>register works!</p>
+<div class="register__page">
+  <form class="register__form" [formGroup]="formGroup" (submit)="register()">
+    <h1 class="mat-subheading-2">S'inscrire</h1>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="firstname"
+      type="firstname"
+      placeholder="Votre nom"
+      name="firstname"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('firstname') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="lastname"
+      type="lastname"
+      placeholder="Votre prénom"
+      name="lastname"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('lastname') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="email"
+      type="email"
+      placeholder="Votre mail"
+      name="email"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('email') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="password"
+      type="password"
+      placeholder="Votre mot de passe"
+      name="password"
+      [required]="true"
+      tabulationIndex="3"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('password') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="formGroup"
+      parentFormControlName="passwordConfirm"
+      type="password"
+      placeholder="Confirmez votre mot de passe"
+      name="passwordConfirm"
+      [required]="true"
+      tabulationIndex="4"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('passwordConfirm') }}
+      </small>
+    </vp-input>
+
+    <vp-check
+      [parentForm]="formGroup"
+      parentFormControlName="remember"
+      name="remember"
+      tabulationIndex="5"
+    >
+      Rester connecter
+    </vp-check>
+
+    <a
+      routerLink="/login"
+      routerLinkActive="active"
+      tabindex="-1"
+    >
+      <small>Déjà un compte ? Connectez-vous</small>
+    </a>
+
+    <div class="controls">
+      <vp-button tabulationIndex="6">
+        S'inscrire
+      </vp-button>
+    </div>
+  </form>
+</div>

@@ -30,9 +30,30 @@
     &:hover {
       background: $light !important;
       outline: 1px solid $light-grey !important;
-      & > .app__alert__close, .app__alert__message {
-        color: $purple !important;
+      &.success {
+        & > .app__alert__close, .app__alert__message {
+          color: $green !important;
+        }
       }
+
+      &.warning {
+        & > .app__alert__close, .app__alert__message {
+          color: $orange !important;
+        }
+      }
+
+      &.info {
+        & > .app__alert__close, .app__alert__message {
+          color: $indigo !important;
+        }
+      }
+
+      &.error {
+        & > .app__alert__close, .app__alert__message {
+          color: $red !important;
+        }
+      }
+
     }
 
     & .app__alert__message{

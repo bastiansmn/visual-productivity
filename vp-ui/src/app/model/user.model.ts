@@ -6,6 +6,14 @@ export interface UserLogin {
   remember: boolean
 }
 
+export interface UserRegister {
+  email: string,
+  password: string,
+  passwordConfirm: string,
+  firstname: string,
+  lastname: string
+}
+
 export enum LoginProvider {
   VP = "VP",
   GOOGLE = "GOOGLE"

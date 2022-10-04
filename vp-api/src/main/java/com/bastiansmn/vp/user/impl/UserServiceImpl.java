@@ -38,9 +38,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (this.emailExists(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0001);
 
-        if (this.usernameExists(userDTO.getUsername()))
-            throw new FunctionalException(FunctionalRule.USER_0002);
-
         if (!this.validateMail(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0003);
 
@@ -51,16 +48,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         UserDAO user = UserDAO.builder()
                 .email(userDTO.getEmail())
-                .username(userDTO.getUsername())
                 .name(userDTO.getName())
                 .lastname(userDTO.getLastname())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .roles(defaultRoles)
-                .isEnabled(true)
+                .isEnabled(false)
                 .isNotLocked(true)
                 .build();
 
         log.info("Creating user: {}", user);
+        // TODO: Send activation email
         return this.userRepository.save(user);
     }
 
@@ -72,17 +69,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
 
         log.info("Fetching user by id: {}", id);
-        return user.get();
-    }
-
-    public UserDAO fetchByUsername(String username) throws FunctionalException {
-        var user = this.userRepository.findByUsername(username);
-
-        if (user.isEmpty())
-            throw new FunctionalException(
-                    FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
-
-        log.info("Fetching user by username: {}", username);
         return user.get();
     }
 
@@ -114,10 +100,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    public boolean usernameExists(String username) {
-        return userRepository.existsByUsername(username);
     }
 
     public boolean isEnabled(String email) throws FunctionalException {

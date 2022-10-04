@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {LoginProvider, User, UserLogin} from "../../model/user.model";
+import {LoginProvider, User, UserLogin, UserRegister} from "../../model/user.model";
 import {SocialUser} from "@abacritt/angularx-social-login";
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {environment, environment as env} from "../../../environments/environment";
 import {catchError, EMPTY, retry} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {AlertService, AlertType} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
+import {Error} from "../../model/error.model";
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,42 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
+  registerUser(userCredentials: UserRegister) {
+    return new Promise((resolve, reject) => {
+      const user = {
+        email: userCredentials.email,
+        name: userCredentials.firstname,
+        lastname: userCredentials.lastname,
+        password: userCredentials.password
+      }
+
+      this.loaderService.show();
+      this.http.post<User>(`${env.apiBaseLink}/user/register`, user, { observe: 'response', withCredentials: true })
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+            const error = err.error as Error;
+            if (!environment.production) {
+              console.error(error.devMessage);
+              console.error(error.httpStatus, error.httpStatusString);
+            }
+            this.alertService.show(
+              error.message,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject(err);
+
+            return EMPTY
+          })
+        )
+        .subscribe(
+          (response: HttpResponse<User>) => {
+            this.loaderService.hide();
+            resolve(response);
+        });
+    })
+  }
+
   loginWithVP(userCredentials: UserLogin) {
     return new Promise((resolve, reject) => {
       const formData = new FormData();
@@ -34,15 +71,13 @@ export class AuthService {
       this.loaderService.show();
       this.http.post<User>(`${env.apiBaseLink}/login`, formData, { observe: 'response', withCredentials: true })
         .pipe(
-          retry({ count: 3, delay: 1_000 }),
+          retry({ count: 1, delay: 1_000 }),
           catchError(err => {
-            console.log(err);
-            this.loaderService.hide();
             this.alertService.show(
-              "Impossible de vous connecter, votre compte est peut-être désactivé ou bloqué",
+              err.error,
               { duration: 5000, type: AlertType.ERROR }
             )
-            this.logout();
+            this.loaderService.hide();
             reject(err);
 
             return EMPTY
@@ -53,7 +88,7 @@ export class AuthService {
             if (!response.body) return;
             // Saving user in session storage or local storage
             // TODO: Try to encrypt user infos for privacy reasons
-            this.setConnection(response.body);
+            this.setConnection(response.body, userCredentials.remember);
             this.alertService.show(
               "Connecté",
               { duration: 3000, type: AlertType.SUCCESS }
@@ -81,7 +116,7 @@ export class AuthService {
           this.alertService.show(
             "Vous avez été déconnecté",
             { duration: 3000, type: AlertType.ERROR }
-          )
+          );
           this.logout();
 
           return EMPTY;
@@ -90,7 +125,10 @@ export class AuthService {
       .subscribe(response => {
         if (!response.body) return;
         if (response.ok) {
-          this.setConnection(response.body);
+          this.setConnection(
+            response.body,
+            !!localStorage.getItem(this.SAVE_FIELD)
+          );
           this.alertService.show("Connecté automatiquement", {
             duration: 5000,
             type: AlertType.INFO
@@ -101,13 +139,18 @@ export class AuthService {
       })
   }
 
-  setConnection(user: User) {
+  setConnection(user: User, stayLogged: boolean) {
     this.loggedUser = user;
     this.isLoggedIn = true;
-    if (sessionStorage.getItem(this.SAVE_FIELD))
-      sessionStorage.setItem(this.SAVE_FIELD, JSON.stringify(user));
-    else if (localStorage.getItem(this.SAVE_FIELD))
-      localStorage.setItem(this.SAVE_FIELD, JSON.stringify(user));
+    this.clearConnection();
+    if (stayLogged)
+      localStorage.setItem("loggedUser", JSON.stringify(user));
+    else
+      sessionStorage.setItem("loggedUser", JSON.stringify(user));
+    this.alertService.show(
+      "Impossible de vous connecter, votre compte est peut-être désactivé ou bloqué",
+      { duration: 5000, type: AlertType.ERROR }
+    );
   }
 
   clearConnection() {

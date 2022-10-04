@@ -1,5 +1,12 @@
 @import "src/variables";
 
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) {
+  .vp__input::ng-deep [icon] {
+    display: none;
+  }
+}}
+
 .vp__input {
   position: relative;
   margin-bottom: .8rem;
@@ -8,24 +15,24 @@
   flex-direction: column;
 
   &::ng-deep {
-    mat-icon {
+    [icon] {
       position: absolute;
       z-index: 1;
       top: 8px;
-      right: .7rem
+      right: .7rem;
     }
 
-    & input.ng-touched.ng-invalid + small.errorMessage {
+    & input.ng-touched.ng-invalid + [errorMessage] {
       height: 16px;
       visibility: visible;
     }
 
-    & input.ng-touched.ng-valid + small.errorMessage {
+    & input.ng-touched.ng-valid + [errorMessage] {
       height: 0;
       visibility: hidden;
     }
 
-    small.errorMessage {
+    [errorMessage] {
       width: calc(100% - .7rem - 2px);
       margin-top: .2rem;
       margin-left: calc(.7rem + 2px);

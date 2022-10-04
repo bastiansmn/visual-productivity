@@ -19,6 +19,9 @@ public class SecurityConstant {
     public static final String AUTHORITIES = "Authorities";
     public static final String FORBIDDEN_MESSAGE = "Vous devez être identifié pour accéder à cette page";
     public static final String ACCESS_DENIED_MESSAGE = "Vous n'avez pas la permission d'accéder à cette page";
+    public static final String USER_NOT_ENABLED_MESSAGE = "Votre compte n'est pas activé";
+    public static final String USER_BLOCKED_MESSAGE = "Votre compte est bloqué";
+    public static final String INVALID_CREDENTIALS_MESSAGE = "Nom d'utilisateur ou mot de passe invalide";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
             "/api/v1/login",

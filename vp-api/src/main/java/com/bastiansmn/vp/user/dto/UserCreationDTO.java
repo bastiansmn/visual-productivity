@@ -11,8 +11,6 @@ public class UserCreationDTO {
 
     private String email;
 
-    private String username;
-
     private String name;
 
     private String lastname;

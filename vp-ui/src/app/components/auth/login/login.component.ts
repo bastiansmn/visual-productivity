@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     passwordInput?.blur();
 
     // If form is valid call auth service
-    if (this.formGroup.status === 'VALID') {
+    if (this.formGroup.valid) {
       this.authService.loginWithVP(
         {
           email: this.formGroup.controls['email'].value ?? '',
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     this.authService.socialLogin(user, LoginProvider.GOOGLE);
   }
 
-  getErrorMessage(formControlName: string) {
+  getErrorMessage(formControlName: string): string {
     switch (formControlName) {
       case 'email':
         if (this.formGroup.controls[formControlName].errors?.['required'])

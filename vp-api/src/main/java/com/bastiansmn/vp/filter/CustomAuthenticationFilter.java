@@ -73,7 +73,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // If user is not active or locked, send error
         if (!user.isEnabled() || !user.isAccountNonLocked()) {
             Map<String, String> error = new HashMap<>();
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setStatus(HttpStatus.FORBIDDEN.value());
             error.put("error", SecurityConstant.ACCESS_DENIED_MESSAGE);
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
@@ -101,10 +101,29 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         new ObjectMapper().writeValue(response.getOutputStream(), user.getUser());
     }
 
-//    @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-//
-//    }
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+        String reason = failed.getMessage();
+        // TODO: Trouver un autre moyen de savoir pq l'auth est unsuccessful
+        if (reason.equals("User is disabled")) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setContentType(APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.USER_NOT_ENABLED_MESSAGE);
+            return;
+        } else if (reason.equals("User account is locked")) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setContentType(APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.USER_BLOCKED_MESSAGE);
+            return;
+        }
+        // Bad credentials
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType(APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.INVALID_CREDENTIALS_MESSAGE);
+
+        log.error("Authentication failed for user: {} with password: {}", request.getParameter("email"), request.getParameter("password"));
+        // TODO Block user after 3 failed attempts and send mail to unlock it
+    }
 
     private ResponseCookie generateCookie(String name, String value, String path, Integer maxAge) {
         return ResponseCookie.from(name, value)

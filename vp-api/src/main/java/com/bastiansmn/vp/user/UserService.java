@@ -11,15 +11,11 @@ public interface UserService {
 
     UserDAO fetchByID(Long id) throws FunctionalException;
 
-    UserDAO fetchByUsername(String username) throws FunctionalException;
-
     void delete(Long id) throws FunctionalException;
 
     List<UserDAO> fetchAll();
 
     boolean emailExists(String email);
-
-    boolean usernameExists(String username);
 
     boolean isEnabled(String email) throws FunctionalException;
 
