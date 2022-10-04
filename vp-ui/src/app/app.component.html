@@ -1,3 +1,17 @@
 <div class="app__root" (window:resize)="onResize()">
   <router-outlet></router-outlet>
+  <div
+    role="alert"
+    [className]="'app__alert' + ' ' + alert.getOptions.type"
+    *ngIf="alert.isShown"
+  >
+    <div class="app__alert__message">{{ alert.getMessage }}</div>
+    <div class="app__alert__close" (click)="alert.hide()"><mat-icon>cancel</mat-icon></div>
+  </div>
+  <div
+    class="app__loader"
+    *ngIf="loader.isShown"
+  >
+    <mat-spinner color="primary"></mat-spinner>
+  </div>
 </div>

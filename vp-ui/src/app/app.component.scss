@@ -1,5 +1,90 @@
+@import "src/variables";
+@import "src/keyframes";
+
 .app__root {
   width: 100vw;
   height: 100vh;
   position: relative;
+
+  .app__alert {
+    z-index: 40;
+    position: fixed;
+    bottom: 1rem;
+    height: 40px;
+    width: max-content;
+    max-width: 80%;
+    padding-inline: 1rem;
+    padding-block: .2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 9px;
+    user-select: none;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px -10px $dark;
+    outline: none;
+    color: $light;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $light !important;
+      outline: 1px solid $light-grey !important;
+      & > .app__alert__close, .app__alert__message {
+        color: $purple !important;
+      }
+    }
+
+    & .app__alert__message{
+      transition: color .3s ease-in-out;
+      color: $light;
+      margin-right: .5rem;
+    }
+
+    & .app__alert__close {
+      transition: color .3s ease-in-out;
+      cursor: pointer;
+      height: 24px;
+      color: $light;
+    }
+
+    &.success {
+      background: $green;
+    }
+
+    &.warning {
+      background: $orange;
+    }
+
+    &.info {
+      background: $indigo;
+    }
+
+    &.error {
+      background: $red;
+    }
+  }
+
+  .app__loader {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 50;
+
+    /* slightly transparent fallback */
+    background-color: rgba(255, 255, 255, .9);
+
+    /* if backdrop support: very transparent and blurred */
+    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+      background-color: rgba(255, 255, 255, .3);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 }
