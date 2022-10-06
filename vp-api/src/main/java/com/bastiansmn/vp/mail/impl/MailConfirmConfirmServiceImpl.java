@@ -43,6 +43,7 @@ public class MailConfirmConfirmServiceImpl implements MailConfirmService {
 
     @Override
     public void createConfirmation(UserDAO user) throws TechnicalException, FunctionalException {
+        // Remove expired confirmations (if user ask for confirmation but never confirm it for example)
         this.removeExpiredConfirmations();
         if (!this.userRepository.existsById(user.getUser_id()))
             throw new FunctionalException(
@@ -73,11 +74,9 @@ public class MailConfirmConfirmServiceImpl implements MailConfirmService {
         this.mailRepository.save(mailConfirm);
 
         try {
-            // TODO: Send activation email
             MimeMessage message = this.mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
-            // TODO Change infos
             helper.setTo(profile.equals("dev") ? "bastian.somon@gmail.com" : user.getEmail());
             helper.setSubject("Visual Productivity - Activation");
 
@@ -131,7 +130,7 @@ public class MailConfirmConfirmServiceImpl implements MailConfirmService {
             );
         }
 
-        this.mailRepository.delete(mailConfirm.get());
+        this.mailRepository.deleteAllByConcernedUser(user);
         Optional<UserDAO> updatedUser = this.userRepository.findById(user.getUser_id());
         if (updatedUser.isEmpty())
             throw new FunctionalException(

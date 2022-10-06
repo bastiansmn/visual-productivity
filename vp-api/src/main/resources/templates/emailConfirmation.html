@@ -4,19 +4,127 @@
 <head>
     <title th:remove="all">Template for HTML email</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        :root {
+            --dark: #383838;
+            --light: white;
+            --light-grey: #DFDDE4;
+
+            --purple: #7d70ff;
+            --purple-light: #beb8ff;
+            --green: #4db222;
+            --green-light: #a6d991;
+            --indigo: #22c2fb;
+            --indigo-light: #91e1fd;
+            --orange: #fd6d2f;
+            --orange-light: #feb697;
+            --red: #d93636;
+            --red-light: #ec9b9b;
+        }
+
+        .indigo-to-purple {
+            background: var(--indigo);
+            background: -moz-linear-gradient(124deg, var(--indigo) 0%, var(--purple) 100%);
+            background: -webkit-linear-gradient(124deg, var(--indigo) 0%, var(--purple) 100%);
+            background: linear-gradient(124deg, var(--indigo) 0%, var(--purple) 100%);
+        }
+
+        .text-gradient {
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 14px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--purple);
+            color: var(--light);
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            width: 80%;
+            margin: 5% auto auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        main h1 {
+            width: max-content;
+        }
+
+        main p strong#confirmationCode {
+            color: var(--purple);
+            padding-block: .7rem;
+            padding-inline: 1rem;
+            border-radius: 11px;
+            outline: 2px solid var(--purple);
+            cursor: pointer;
+        }
+
+        main p#confirmationCodeContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        main p.copied strong#confirmationCode {
+            outline: 2px solid var(--green);
+            color: var(--green);
+        }
+
+        main p small:not(#confirmationCode) {
+            display: none;
+        }
+
+        main p.copied small:not(#confirmationCode) {
+            display: block;
+        }
+
+        main p small {
+            color: var(--dark);
+            font-size: 12px;
+            margin-top: 1rem;
+        }
+
+        main > small {
+            color: var(--purple);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<p>
-    Bonjour <span th:text="${firstName}">Peter Static</span>!
-</p>
-<p>
-    Merci d'avoir créé un compte sur notre site. Pour activer votre compte, coller le code suivant sur le site web lors de votre connexion.
-</p>
-<p>
-    Notez que votre code expire à <span th:text="${expirationDate}">--h--</span>
-</p>
-<p style="font-size: 30px">
-    <strong th:text="${code}">12345678</strong>
-</p>
+<header>
+    <h1>Bonjour <span th:text="${firstName}">Peter Static</span>!</h1>
+</header>
+<main>
+    <h1 class="text-gradient indigo-to-purple">Bienvenue sur VisualProductivity !</h1>
+    <p>
+        Merci d'avoir créé un compte sur notre site. Pour activer votre compte, coller le code suivant sur le site web lors de votre connexion.
+    </p>
+    <p id="confirmationCodeContainer" style="font-size: 30px">
+        <strong id="confirmationCode" th:text="${code}">12345678</strong>
+        <small>Code copié !</small>
+    </p>
+    <small>Cliquez sur le code pour le copier</small>
+    <p>
+        Notez que votre code expire à <span id="expirationDate" data-expirationDate="22h10" th:attr="data-expirationDate=${expirationDate}" th:text="${expirationDate}">--h--</span>
+    </p>
+</main>
 </body>
 </html>

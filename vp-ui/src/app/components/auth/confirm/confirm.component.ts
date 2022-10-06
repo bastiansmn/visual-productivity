@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../services/auth/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, Validators} from "@angular/forms";
@@ -8,7 +8,7 @@ import {FormBuilder, Validators} from "@angular/forms";
   templateUrl: './confirm.component.html',
   styleUrls: ['./confirm.component.scss']
 })
-export class ConfirmComponent implements OnInit {
+export class ConfirmComponent implements OnInit, AfterViewInit {
 
   formGroup = this.fb.group({
     code: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]]
@@ -42,6 +42,10 @@ export class ConfirmComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+    (document.querySelector('input#code') as HTMLInputElement)?.focus();
   }
 
 }

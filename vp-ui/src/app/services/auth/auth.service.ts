@@ -67,9 +67,7 @@ export class AuthService {
     const user = this.loggedUser;
     return new Promise((resolve, reject) => {
       this.loaderService.show();
-      this.http.post(`${env.apiBaseLink}/mail/revalidate`, {
-        user
-      }, { observe: 'response' })
+      this.http.post(`${env.apiBaseLink}/mail/revalidate`, user, { observe: 'response' })
         .pipe(
           catchError((err: HttpErrorResponse) => {
             const error = err.error as Error;

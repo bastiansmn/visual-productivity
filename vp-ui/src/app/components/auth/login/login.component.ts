@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
@@ -10,15 +10,13 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
   formGroup = this.fb.group({
     email: ['', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]],
     password: ['', Validators.required],
     remember: [false]
   });
-
-  defaultRemember = this.route.snapshot.queryParams['remember'] ?? false;
 
   constructor(
     private socialAuthService: SocialAuthService,
@@ -87,7 +85,11 @@ export class LoginComponent implements OnInit {
       emailInput?.focus();
       emailInput?.blur();
     }
-    this.formGroup.controls['remember'].setValue(this.defaultRemember);
+    this.formGroup.controls['remember'].setValue(!!this.route.snapshot.queryParams['remember']);
+  }
+
+  ngAfterViewInit(): void {
+    (document.querySelector('input#email') as HTMLInputElement)?.focus();
   }
 
 }
