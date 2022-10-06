@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -46,6 +47,6 @@ public class RoleDAO {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "auth_id"))
     @ToString.Exclude
-    private List<AuthoritiesDAO> authorities;
+    private Set<AuthoritiesDAO> authorities;
 
 }

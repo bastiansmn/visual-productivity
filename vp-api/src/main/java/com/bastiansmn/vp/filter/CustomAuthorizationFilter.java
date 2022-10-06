@@ -63,13 +63,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             String email = decodedJWT.getSubject();
             if (!this.userService.isEnabled(email))
                 throw new FunctionalException(
-                        FunctionalRule.USER_0007,
+                        FunctionalRule.USER_0006,
                         FORBIDDEN
                 );
 
             if (!this.userService.isNotLocked(email))
                 throw new FunctionalException(
-                        FunctionalRule.USER_0006,
+                        FunctionalRule.USER_0005,
                         FORBIDDEN
                 );
 

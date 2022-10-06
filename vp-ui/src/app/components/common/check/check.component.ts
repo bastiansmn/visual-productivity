@@ -12,6 +12,7 @@ export class CheckComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
   @Input() tabulationIndex: string =" -1";
+  @Input() checked: boolean = false;
 
   // Form relative Input()
   @Input() parentForm!: FormGroup;

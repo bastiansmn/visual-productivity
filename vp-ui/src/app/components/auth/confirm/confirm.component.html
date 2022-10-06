@@ -1,0 +1,28 @@
+<div class="confirm__page">
+  <form class="confirm__form" [formGroup]="formGroup" (submit)="confirm()">
+    <h1 class="mat-subheading-2">Votre code de validation :</h1>
+
+    <p>Vous avez reçu un code de validation à 8 chiffres par mail. Veuillez vérifier votre boîte mail.</p>
+
+    <div class="digit__container">
+      <vp-input
+        [parentForm]="formGroup"
+        parentFormControlName="code"
+        type="number"
+        placeholder="Votre code"
+        name="firstDigit"
+        [required]="true"
+        tabulationIndex="1"
+      ></vp-input>
+    </div>
+    <p>Rien reçu ? <a (click)="resend()">Renvoyer le mail</a></p>
+    <div class="controls">
+      <vp-button
+        tabulationIndex="2"
+        [disabled]="!formGroup.valid"
+      >
+        Valider mon compte
+      </vp-button>
+    </div>
+  </form>
+</div>

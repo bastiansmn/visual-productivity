@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum TechnicalRule {
 
-
+    MAIL_0001("MAIL_0001", "Impossible d'envoyer le mail de confirmation"),
+    MAIL_0002("MAIL_0002", "Impossible de trouver le code de confirmation"),
     ;
 
     private String name;

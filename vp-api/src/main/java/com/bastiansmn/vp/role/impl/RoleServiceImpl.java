@@ -16,10 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,11 +102,11 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository.deleteAll();
     }
 
-    public List<RoleDAO> fetchAll() {
-        return this.roleRepository.findAll();
+    public Set<RoleDAO> fetchAll() {
+        return new HashSet<>(this.roleRepository.findAll());
     }
 
-    public List<RoleDAO> getDefaultRoles() {
+    public Set<RoleDAO> getDefaultRoles() {
         return DefaultRoles.DEFAULT_ROLES.stream()
                 .map(role -> {
                     Optional<RoleDAO> optRole = this.roleRepository.findByName(role);
@@ -117,7 +114,7 @@ public class RoleServiceImpl implements RoleService {
                     return optRole.get();
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public boolean existsByID(Long id) {

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--TODO: Améliorer le template-->
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p>
+    Bonjour <span th:text="${firstName}">Peter Static</span>!
+</p>
+<p>
+    Merci d'avoir créé un compte sur notre site. Pour activer votre compte, coller le code suivant sur le site web lors de votre connexion.
+</p>
+<p>
+    Notez que votre code expire à <span th:text="${expirationDate}">--h--</span>
+</p>
+<p style="font-size: 30px">
+    <strong th:text="${code}">12345678</strong>
+</p>
+</body>
+</html>

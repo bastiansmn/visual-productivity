@@ -3,7 +3,7 @@ import {SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
 import {LoginProvider} from "../../../model/user.model";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -18,11 +18,14 @@ export class LoginComponent implements OnInit {
     remember: [false]
   });
 
+  defaultRemember = this.route.snapshot.queryParams['remember'] ?? false;
+
   constructor(
     private socialAuthService: SocialAuthService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   loginWithVP(): void {
@@ -77,6 +80,14 @@ export class LoginComponent implements OnInit {
     this.socialAuthService.authState.subscribe((user: SocialUser) => {
       this.loginWithGoogle(user);
     });
+    if (!!this.authService.loggedUser) {
+      this.formGroup.controls['email'].setValue(<string>this.authService.loggedUser.email);
+      const emailInput: HTMLInputElement | null = document.querySelector('input#email');
+
+      emailInput?.focus();
+      emailInput?.blur();
+    }
+    this.formGroup.controls['remember'].setValue(this.defaultRemember);
   }
 
 }

@@ -34,6 +34,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {CookieSetterInterceptor} from "./interceptor/cookie-setter.interceptor";
 import {CookieService} from "ngx-cookie-service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { ConfirmComponent } from './components/auth/confirm/confirm.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     RegisterComponent,
     InputComponent,
     CheckComponent,
-    ButtonComponent
+    ButtonComponent,
+    ConfirmComponent
   ],
     imports: [
         BrowserModule,

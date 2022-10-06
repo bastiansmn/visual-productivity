@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,12 +31,10 @@ class UserRepositoryTest {
         // Given
         UserDAO user = UserDAO.builder()
                 .email("myTestEmail@mail.com")
-                .username("username")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
-                .roles(List.of())
-                .authorities(List.of())
+                .roles(Set.of())
                 .isNotLocked(true)
                 .isEnabled(true)
                 .build();
@@ -54,44 +53,14 @@ class UserRepositoryTest {
     }
 
     @Test
-    void itShouldFindByUsername() {
-        // Given
-        UserDAO user = UserDAO.builder()
-                .email("myTestEmail@mail.com")
-                .username("username")
-                .name("Doe")
-                .lastname("John")
-                .password("notEncryptedPassword")
-                .roles(List.of())
-                .authorities(List.of())
-                .isNotLocked(true)
-                .isEnabled(true)
-                .build();
-        this.underTest.save(user);
-
-        // When
-        Optional<UserDAO> testedUser = this.underTest.findByUsername("username");
-
-        // Then
-        assertThat(testedUser)
-                .isNotEmpty()
-                .is(new Condition<>((u) -> {
-                    if (u.isEmpty()) return false;
-                    return testedUser.get().getUsername().equals(user.getUsername());
-                }, "Test if the method find the user we actually saved before"));
-    }
-
-    @Test
     void itShouldExistsByEmail() {
         // Given
         UserDAO user = UserDAO.builder()
-                .username("username")
                 .email("myTestEmail@mail.com")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
-                .roles(List.of())
-                .authorities(List.of())
+                .roles(Set.of())
                 .isNotLocked(true)
                 .isEnabled(true)
                 .build();
@@ -99,29 +68,6 @@ class UserRepositoryTest {
 
         // When
         boolean expected = this.underTest.existsByEmail("myTestEmail@mail.com");
-
-        // Then
-        assertThat(expected).isTrue();
-    }
-
-    @Test
-    void itShouldExistsByUsername() {
-        // Given
-        UserDAO user = UserDAO.builder()
-                .username("username")
-                .email("myTestEmail@mail.com")
-                .name("Doe")
-                .lastname("John")
-                .password("notEncryptedPassword")
-                .roles(List.of())
-                .authorities(List.of())
-                .isNotLocked(true)
-                .isEnabled(true)
-                .build();
-        this.underTest.save(user);
-
-        // When
-        boolean expected = this.underTest.existsByUsername("username");
 
         // Then
         assertThat(expected).isTrue();

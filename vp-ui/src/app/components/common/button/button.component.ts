@@ -28,26 +28,18 @@ export class ButtonComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.disabled) {
-      this.button.nativeElement.classList.add(
-        'text-grey',
-        'bg-light',
-        'border'
-      )
-    } else {
-      this.button.nativeElement.classList.add(
-        `text-${this.color}`,
-        `bg-${this.background}`,
-        `hovBG-${this.hoverBgColor}`,
-        `hov-${this.hoverColor}`
-      );
-      if (this.border)
-        this.button.nativeElement.classList.add('border')
-      if (this.hoverBorder)
-        this.button.nativeElement.classList.add('hov-border')
-      if (this.scaleOnHover)
-        this.button.nativeElement.classList.add('hov-scale')
-    }
+    this.button.nativeElement.classList.add(
+      `text-${this.color}`,
+      `bg-${this.background}`,
+      `hovBG-${this.hoverBgColor}`,
+      `hov-${this.hoverColor}`
+    );
+    if (this.border)
+      this.button.nativeElement.classList.add('border')
+    if (this.hoverBorder)
+      this.button.nativeElement.classList.add('hov-border')
+    if (this.scaleOnHover)
+      this.button.nativeElement.classList.add('hov-scale')
   }
 
 }

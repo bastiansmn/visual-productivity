@@ -27,6 +27,8 @@ public class SecurityConstant {
             "/api/v1/login",
             "/api/v1/user/register",
             "/api/v1/token/refresh",
+            "/api/v1/mail/confirm",
+            "/api/v1/mail/revalidate"
     };
 
 }

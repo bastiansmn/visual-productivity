@@ -1,8 +1,9 @@
 package com.bastiansmn.vp.user.impl;
 
-import com.bastiansmn.vp.authorities.AuthoritiesService;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
+import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.mail.MailConfirmService;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.user.UserDAO;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +33,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final AuthoritiesService authoritiesService;
     private final PasswordEncoder passwordEncoder;
+    private final MailConfirmService mailConfirmService;
 
-    public UserDAO create(UserCreationDTO userDTO) throws FunctionalException {
+    public UserDAO create(UserCreationDTO userDTO) throws FunctionalException, TechnicalException {
+        // TODO Limiter ler nombre de requêtes par IP (car route publique)
         if (this.emailExists(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0001);
 
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (!this.validatePassword(userDTO.getPassword()))
             throw new FunctionalException(FunctionalRule.USER_0004);
 
-        List<RoleDAO> defaultRoles = this.roleService.getDefaultRoles();
+        Set<RoleDAO> defaultRoles = this.roleService.getDefaultRoles();
 
         UserDAO user = UserDAO.builder()
                 .email(userDTO.getEmail())
@@ -57,19 +60,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
 
         log.info("Creating user: {}", user);
-        // TODO: Send activation email
-        return this.userRepository.save(user);
-    }
 
-    public UserDAO fetchByID(Long id) throws FunctionalException {
-        var user = this.userRepository.findById(id);
-
-        if (user.isEmpty())
-            throw new FunctionalException(
-                    FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
-
-        log.info("Fetching user by id: {}", id);
-        return user.get();
+        UserDAO createdUser = this.userRepository.save(user);
+        this.mailConfirmService.createConfirmation(createdUser);
+        return createdUser;
     }
 
     public UserDAO fetchByEmail(String email) throws FunctionalException {
@@ -77,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if (user.isEmpty())
             throw new FunctionalException(
-                    FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
+                    FunctionalRule.USER_0004, HttpStatus.NOT_FOUND);
 
         log.info("Fetching user by email: {}", email);
 
@@ -89,13 +83,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.findAll();
     }
 
-    public void delete(Long id) throws FunctionalException {
-        Optional<UserDAO> user = this.userRepository.findById(id);
+    public void delete(UserDAO userDAO) throws FunctionalException {
+        Optional<UserDAO> user = this.userRepository.findById(userDAO.getUser_id());
         if (user.isEmpty())
-            throw new FunctionalException(FunctionalRule.USER_0005, HttpStatus.NOT_FOUND);
+            throw new FunctionalException(FunctionalRule.USER_0004, HttpStatus.NOT_FOUND);
 
-        log.info("Deleting user with id={}", id);
-        this.userRepository.deleteById(id);
+        log.info("Deleting user with id={}", user.get().getUser_id());
+        this.userRepository.deleteById(user.get().getUser_id());
     }
 
     public boolean emailExists(String email) {

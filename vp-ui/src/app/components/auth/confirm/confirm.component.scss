@@ -1,0 +1,44 @@
+@import "src/variables";
+
+.confirm__page {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: $light-grey;
+
+  & .confirm__form {
+    width: 60%;
+    $padding: 2rem;
+    padding: $padding;
+    max-width: calc(540px - 2*$padding);
+    border-radius: 6px;
+
+    background: $light;
+
+    & .digit__container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      width: 100%;
+
+      & vp-input {
+        width: 100%;
+      }
+    }
+
+    & p a {
+      color: $purple;
+      cursor: pointer;
+    }
+
+    .controls {
+      margin-top: .5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

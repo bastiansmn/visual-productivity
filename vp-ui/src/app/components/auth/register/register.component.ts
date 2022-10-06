@@ -27,9 +27,8 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.formGroup.valid) {
-      console.log(this.formGroup.value);
-      this.authService.registerUser(this.formGroup.value).then(response => {
-        console.log(response);
+      this.authService.registerUser(this.formGroup.value).then(async () => {
+        await this.router.navigate(['/confirm'], { queryParams: {remember: this.formGroup.value.remember} });
       }).catch(err => {
         console.error(err);
       })

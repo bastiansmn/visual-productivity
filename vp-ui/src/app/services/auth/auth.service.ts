@@ -26,6 +26,77 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
+  validateCode(code: String) {
+    return new Promise((resolve, reject) => {
+      this.loaderService.show();
+      this.http.put(`${env.apiBaseLink}/mail/confirm`, {
+        user: {
+          user_id: this.loggedUser?.user_id,
+        },
+        confirmationCode: code
+      }, { observe: 'response' })
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+            const error = err.error as Error;
+            if (!environment.production) {
+              console.error(error.devMessage);
+              console.error(error.httpStatus, error.httpStatusString);
+            }
+            this.alertService.show(
+              error.message,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject(err);
+            return EMPTY
+          })
+        )
+        .subscribe(
+          (res: HttpResponse<any>) => {
+            this.loaderService.hide();
+            this.alertService.show(
+              "Votre compte a été validé",
+              { duration: 5000, type: AlertType.SUCCESS }
+            );
+            resolve(res);
+        });
+    });
+  }
+
+  resendValidationCode() {
+    const user = this.loggedUser;
+    return new Promise((resolve, reject) => {
+      this.loaderService.show();
+      this.http.post(`${env.apiBaseLink}/mail/revalidate`, {
+        user
+      }, { observe: 'response' })
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+            const error = err.error as Error;
+            if (!environment.production) {
+              console.error(error.devMessage);
+              console.error(error.httpStatus, error.httpStatusString);
+            }
+            this.alertService.show(
+              error.message,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject(err);
+            return EMPTY
+          })
+        )
+        .subscribe((res: HttpResponse<any>) => {
+          this.alertService.show(
+            "Vous allez recevoir un mail de confirmation",
+            { type: AlertType.INFO, duration: 5000 }
+          );
+          this.loaderService.hide();
+          resolve(res);
+        });
+    });
+  }
+
   registerUser(userCredentials: UserRegister) {
     return new Promise((resolve, reject) => {
       const user = {
@@ -36,7 +107,7 @@ export class AuthService {
       }
 
       this.loaderService.show();
-      this.http.post<User>(`${env.apiBaseLink}/user/register`, user, { observe: 'response', withCredentials: true })
+      this.http.post<User>(`${env.apiBaseLink}/user/register`, user, { observe: 'response' })
         .pipe(
           catchError((err: HttpErrorResponse) => {
             const error = err.error as Error;
@@ -57,6 +128,13 @@ export class AuthService {
         .subscribe(
           (response: HttpResponse<User>) => {
             this.loaderService.hide();
+            if (!response.body) return;
+            this.alertService.show(
+              "Vous allez recevoir un mail de confirmation",
+              { type: AlertType.INFO, persistent: true }
+            )
+            this.loggedUser = response.body;
+            this.isLoggedIn = false;
             resolve(response);
         });
     })
@@ -69,7 +147,7 @@ export class AuthService {
       formData.append('password', userCredentials.password);
 
       this.loaderService.show();
-      this.http.post<User>(`${env.apiBaseLink}/login`, formData, { observe: 'response', withCredentials: true })
+      this.http.post<User>(`${env.apiBaseLink}/login`, formData, { observe: 'response' })
         .pipe(
           retry({ count: 1, delay: 1_000 }),
           catchError(err => {
@@ -107,7 +185,7 @@ export class AuthService {
     // Updating user infos
     const foundUser: User = JSON.parse(stringUser);
     this.loaderService.show();
-    this.http.get<User>(`${environment.apiBaseLink}/user/fetchById?id=${foundUser.user_id}`, {observe: "response"})
+    this.http.get<User>(`${environment.apiBaseLink}/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
       .pipe(
         catchError(err => {
           console.error(err);

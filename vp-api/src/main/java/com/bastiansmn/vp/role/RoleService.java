@@ -5,6 +5,7 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.role.dto.RoleCreationDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoleService {
 
@@ -24,9 +25,9 @@ public interface RoleService {
 
     void deleteAll();
 
-    List<RoleDAO> fetchAll();
+    Set<RoleDAO> fetchAll();
 
-    List<RoleDAO> getDefaultRoles();
+    Set<RoleDAO> getDefaultRoles();
 
     boolean existsByID(Long id);
 

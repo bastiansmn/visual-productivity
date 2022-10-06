@@ -6,13 +6,16 @@ import lombok.Getter;
 public enum FunctionalRule {
 
     USER_0001("USER_0001", "Un utilisateur avec cet email existe déjà"),
-    USER_0003("USER_0002", "L'email n'est pas valide"),
-    USER_0004("USER_0003", "Le mot de passe n'est pas valide"),
-    USER_0005("USER_0004", "L'utilisateur n'existe pas"),
-    USER_0006("USER_0005", "L'utilisateur est bloqué"),
-    USER_0007("USER_0006", "L'utilisateur est désactivé"),
+    USER_0002("USER_0002", "L'email n'est pas valide"),
+    USER_0003("USER_0003", "Le mot de passe n'est pas valide"),
+    USER_0004("USER_0004", "L'utilisateur n'existe pas"),
+    USER_0005("USER_0005", "L'utilisateur est bloqué"),
+    USER_0006("USER_0006", "L'utilisateur est désactivé"),
     ROLE_0001("ROLE_0001", "Le rôle n'existe pas"),
     AUTH_0001("AUTH_0001", "L'authorité n'existe pas"),
+    MAIL_0001("MAIL_0001", "Votre compte est déjà activé"),
+    MAIL_0002("MAIL_0002", "Le code est invalide"),
+    MAIL_0003("MAIL_0003", "Le code est expiré"),
     ;
 
     private String name;

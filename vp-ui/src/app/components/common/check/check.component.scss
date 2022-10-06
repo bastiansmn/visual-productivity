@@ -34,12 +34,12 @@
       outline: none;
     }
 
-    &:has(input:checked):before {
+    &:has(input:checked, input[checked]):before {
       border: $border-size solid $purple;
       background: $purple;
     }
 
-    &:has(input:checked):after {
+    &:has(input:checked, input[checked]):after {
       content: '';
       position: absolute;
       left: 5px;
@@ -74,7 +74,7 @@
       background: $light-grey;
     }
 
-    &:checked:before {
+    &:has(:checked, [checked]):before {
       background: $purple;
     }
   }

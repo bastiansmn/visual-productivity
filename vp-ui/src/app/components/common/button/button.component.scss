@@ -21,13 +21,17 @@
 
   &[disabled] {
     cursor: not-allowed;
+    color: $light-grey;
+    background: $light;
+    border: 1px solid $light-grey;
+    height: calc(100% - 2px);
   }
 
   &.hov-scale:hover {
     transform: scale(1.05);
   }
 
-  &.hov-border:hover {
+  &:not([disabled]).hov-border:hover {
     outline: 1px solid $light-grey;
   }
 

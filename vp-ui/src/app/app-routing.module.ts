@@ -4,6 +4,8 @@ import { DiscoverComponent } from "./components/discover/discover.component";
 import { CommonModule } from '@angular/common';
 import {LoginComponent} from "./components/auth/login/login.component";
 import {RegisterComponent} from "./components/auth/register/register.component";
+import {ConfirmComponent} from "./components/auth/confirm/confirm.component";
+import {CanConfirmAccount} from "./guards/can-confirm-account.service";
 
 const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
@@ -27,6 +29,12 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'confirm',
+    component: ConfirmComponent,
+    canActivate: [CanConfirmAccount],
+    canLoad: [CanConfirmAccount]
   }
 ];
 

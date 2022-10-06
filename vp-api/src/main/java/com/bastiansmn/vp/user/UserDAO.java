@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -48,11 +49,15 @@ public class UserDAO {
     @ManyToMany(
             fetch = FetchType.EAGER
     )
-    @JoinTable(name = "link_user_roles",
+    @JoinTable(
+        name = "link_user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     @ToString.Exclude
-    private List<RoleDAO> roles;
+    private Set<RoleDAO> roles;
+
+    // TODO: add confirmation code but not in the db
 
     private boolean isEnabled;
 
