@@ -2,6 +2,8 @@ package com.bastiansmn.vp.user;
 
 import com.bastiansmn.vp.authorities.AuthoritiesService;
 import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.mail.MailConfirmService;
 import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
 import com.bastiansmn.vp.user.impl.UserServiceImpl;
@@ -32,6 +34,7 @@ class UserServiceTest {
     private RoleService roleService;
     @Mock
     private AuthoritiesService authoritiesService;
+    @Mock private MailConfirmService mailConfirmService;
 
     private UserService underTest;
 
@@ -40,17 +43,16 @@ class UserServiceTest {
         this.underTest = new UserServiceImpl(
                 this.userRepository,
                 this.roleService,
-                this.authoritiesService,
-                new BCryptPasswordEncoder()
+                new BCryptPasswordEncoder(),
+                this.mailConfirmService
         );
     }
 
     @Test
-    void canCreateStudent() throws FunctionalException {
+    void canCreateStudent() throws FunctionalException, TechnicalException {
         // Given
         UserCreationDTO user = UserCreationDTO.builder()
                 .email("john.doe@mail.com")
-                .username("johndoe")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -76,7 +78,6 @@ class UserServiceTest {
         // Given
         UserCreationDTO user = UserCreationDTO.builder()
                 .email("john.doe@mail.com")
-                .username("johndoe")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -95,7 +96,6 @@ class UserServiceTest {
         // Given
         UserCreationDTO user = UserCreationDTO.builder()
                 .email("doe.john@mail.com")
-                .username("johndoe")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -114,7 +114,6 @@ class UserServiceTest {
         // Given
         UserCreationDTO userTest1 = UserCreationDTO.builder()
                 .email("doe.johnmail.com")
-                .username("doejohn1")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -122,7 +121,6 @@ class UserServiceTest {
 
         UserCreationDTO userTest2 = UserCreationDTO.builder()
                 .email("doe.john@mail")
-                .username("doejohn2")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -130,7 +128,6 @@ class UserServiceTest {
 
         UserCreationDTO userTest3 = UserCreationDTO.builder()
                 .email("doe.johnmail@mail.")
-                .username("doejohn3")
                 .name("Doe")
                 .lastname("John")
                 .password("notEncryptedPassword")
@@ -157,7 +154,6 @@ class UserServiceTest {
         // Given
         UserCreationDTO user = UserCreationDTO.builder()
                 .email("doe.john@mail.com")
-                .username("doejohn1")
                 .name("Doe")
                 .lastname("John")
                 .password("badpass")

@@ -28,7 +28,10 @@ public class SecurityConstant {
             "/api/v1/user/register",
             "/api/v1/token/refresh",
             "/api/v1/mail/confirm",
-            "/api/v1/mail/revalidate"
+            "/api/v1/mail/revalidate",
+            "/docs/**",
+            "/swagger-ui/**",
+            "/docs.html",
     };
 
 }

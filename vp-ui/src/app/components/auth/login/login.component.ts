@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit {
 
   formGroup = this.fb.group({
     email: ['', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]],
@@ -86,10 +86,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       emailInput?.blur();
     }
     this.formGroup.controls['remember'].setValue(!!this.route.snapshot.queryParams['remember']);
-  }
-
-  ngAfterViewInit(): void {
-    (document.querySelector('input#email') as HTMLInputElement)?.focus();
   }
 
 }
