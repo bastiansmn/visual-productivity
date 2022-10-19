@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
@@ -54,7 +54,8 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle(user: SocialUser): void {
-    this.authService.socialLogin(user, LoginProvider.GOOGLE);
+    this.authService.socialLogin(user, LoginProvider.GOOGLE)
+      .then(() => this.router.navigate(["/discover"]));
   }
 
   getErrorMessage(formControlName: string): string {

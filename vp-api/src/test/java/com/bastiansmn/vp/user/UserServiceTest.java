@@ -5,6 +5,7 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.mail.MailConfirmService;
 import com.bastiansmn.vp.role.RoleService;
+import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
 import com.bastiansmn.vp.user.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,6 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private RoleService roleService;
-    @Mock
-    private AuthoritiesService authoritiesService;
     @Mock private MailConfirmService mailConfirmService;
 
     private UserService underTest;
@@ -54,6 +53,7 @@ class UserServiceTest {
         UserCreationDTO user = UserCreationDTO.builder()
                 .email("john.doe@mail.com")
                 .name("Doe")
+                .provider(UserProvider.LOCAL)
                 .lastname("John")
                 .password("notEncryptedPassword")
                 .build();

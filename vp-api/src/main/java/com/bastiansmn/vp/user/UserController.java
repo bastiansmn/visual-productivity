@@ -3,6 +3,9 @@ package com.bastiansmn.vp.user;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
@@ -25,6 +28,14 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Créé un nouvel utilisateur")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Utilisateur créé"),
+            @ApiResponse(responseCode = "400", description = "Utilisateur déjà connecté via provider externe (Google)"),
+            @ApiResponse(responseCode = "400", description = "L'utilisateur existe déjà"),
+            @ApiResponse(responseCode = "400", description = "Email invalide"),
+            @ApiResponse(responseCode = "400", description = "Mot de passe invalide"),
+    })
     @PostMapping("/register")
     public ResponseEntity<UserDAO> create(@RequestBody UserCreationDTO userDTO)
             throws FunctionalException, TechnicalException {
@@ -37,6 +48,11 @@ public class UserController {
         return ResponseEntity.created(uri).body(this.userService.create(userDTO));
     }
 
+    @Operation(summary = "Récupère un utilisateur via son email (doit être admin ou l'utilisateur lui-même)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur introuvable"),
+    })
     @GetMapping("/fetchByEmail")
     @PreAuthorize("#email.equals(authentication.principal) or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserDAO> fetchByEmail(@Param("email") String email) throws FunctionalException {
@@ -44,11 +60,16 @@ public class UserController {
     }
 
     @GetMapping("/fetchAll")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserDAO>> fetchAll() {
         return ResponseEntity.ok(this.userService.fetchAll());
     }
 
+    @Operation(summary = "Supprime un utilisateur")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "UUtilisateur supprimé"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur inconnu"),
+    })
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestBody UserDAO userDAO) throws FunctionalException {
         this.userService.delete(userDAO);

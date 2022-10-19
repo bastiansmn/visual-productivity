@@ -80,7 +80,7 @@ import { ConfirmComponent } from './components/auth/confirm/confirm.component';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('1052954350067-sersub6hdqgbl01nq0fhohnsodrhelcc.apps.googleusercontent.com')
+            provider: new GoogleLoginProvider(environment.googleClientId)
           }
         ],
         onError: (err) => {

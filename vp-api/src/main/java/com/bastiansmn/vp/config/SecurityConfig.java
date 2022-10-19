@@ -71,13 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
 
         http
-                .csrf().disable().cors().and()
+                .csrf().disable().cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
                 .and()
                 .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
                 .and()
+                .formLogin().disable()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .addFilter(customAuthenticationFilter)

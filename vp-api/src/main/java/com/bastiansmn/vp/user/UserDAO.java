@@ -1,11 +1,12 @@
 package com.bastiansmn.vp.user;
 
 import com.bastiansmn.vp.role.RoleDAO;
+import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -39,12 +40,14 @@ public class UserDAO {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
     @JsonIgnore
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserProvider provider;
 
     @ManyToMany(
             fetch = FetchType.EAGER
@@ -56,6 +59,15 @@ public class UserDAO {
     )
     @ToString.Exclude
     private Set<RoleDAO> roles;
+
+    @Column(
+            name = "created_date",
+            updatable = false,
+            nullable = false,
+            columnDefinition = "TIMESTAMP DEFAULT now()"
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 
     // TODO: add confirmation code but not in the db
 

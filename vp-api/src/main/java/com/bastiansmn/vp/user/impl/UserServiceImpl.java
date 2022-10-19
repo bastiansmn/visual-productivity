@@ -11,6 +11,7 @@ import com.bastiansmn.vp.user.UserPrincipal;
 import com.bastiansmn.vp.user.UserRepository;
 import com.bastiansmn.vp.user.UserService;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
+import com.bastiansmn.vp.socialAuth.UserProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,13 +41,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public UserDAO create(UserCreationDTO userDTO) throws FunctionalException, TechnicalException {
         // TODO Limiter ler nombre de requêtes par IP (car route publique)
+        if (this.isSocialUser(userDTO.getEmail()))
+            throw new FunctionalException(FunctionalRule.USER_0007);
+
         if (this.emailExists(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0001);
 
         if (!this.validateMail(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0003);
 
-        if (!this.validatePassword(userDTO.getPassword()))
+        if (userDTO.getProvider().equals(UserProvider.LOCAL) && !this.validatePassword(userDTO.getPassword()))
             throw new FunctionalException(FunctionalRule.USER_0004);
 
         Set<RoleDAO> defaultRoles = this.roleService.getDefaultRoles();
@@ -53,8 +59,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .email(userDTO.getEmail())
                 .name(userDTO.getName())
                 .lastname(userDTO.getLastname())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .password(
+                    userDTO.getProvider().equals(UserProvider.LOCAL)
+                        ? passwordEncoder.encode(userDTO.getPassword())
+                        : null
+                )
+                .provider(userDTO.getProvider())
                 .roles(defaultRoles)
+                .createdDate(Date.from(Instant.now()))
                 .isEnabled(false)
                 .isNotLocked(true)
                 .build();
@@ -119,6 +131,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private boolean validateMail(String mail) {
         return mail.matches("^[a-zA-Z\\d._-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$");
+    }
+
+    private boolean isSocialUser(String email) {
+        Optional<UserDAO> user = this.userRepository.findByEmail(email);
+        if (user.isEmpty()) return false;
+        return !user.get().getProvider().equals(UserProvider.LOCAL);
     }
 
 }

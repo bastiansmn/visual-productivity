@@ -26,6 +26,41 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
+  initAuthFlow() {
+    const userStr: string | null = sessionStorage.getItem(this.SAVE_FIELD) ?? localStorage.getItem(this.SAVE_FIELD);
+    const user: User = userStr ? JSON.parse(userStr) : null;
+    if (!user) {
+      this.isLoggedIn = false;
+      this.clearConnection();
+      return;
+    }
+
+    this.checkTokensValidity()
+      .then(async isValid => {
+        console.log(isValid);
+        if (isValid) {
+          this.retrieveUserInfos(user)
+            .catch(err => console.error(err));
+          return;
+        }
+
+        // Refresh token automatically if user wants to stay connected
+        if (this.stayedLogged())
+          await this.refreshTokens();
+        else
+          this.alertService.show(
+            "Vous avez été déconnecté",
+            { duration: 5000, type: AlertType.WARNING }
+          );
+      })
+      .catch(() => {
+        this.alertService.show(
+          "Validation de votre identifiant impossible, reconnectez-vous",
+          { duration: 5000, type: AlertType.ERROR }
+        );
+      })
+  }
+
   validateCode(code: String) {
     return new Promise((resolve, reject) => {
       this.loaderService.show();
@@ -101,7 +136,8 @@ export class AuthService {
         email: userCredentials.email,
         name: userCredentials.firstname,
         lastname: userCredentials.lastname,
-        password: userCredentials.password
+        password: userCredentials.password,
+        provider: 'LOCAL'
       }
 
       this.loaderService.show();
@@ -175,47 +211,45 @@ export class AuthService {
     })
   }
 
-  retrieveUserInfos() {
-    const stringUser: string | null = sessionStorage.getItem(this.SAVE_FIELD) ?? localStorage.getItem(this.SAVE_FIELD);
+  private retrieveUserInfos(foundUser: User) {
+    return new Promise((_, reject) => {
+      // Updating user infos
+      this.loaderService.show();
+      this.http.get<User>(`${environment.apiBaseLink}/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
+        .pipe(
+          catchError(err => {
+            console.error(err);
+            // TODO Refresh token
+            this.loaderService.hide();
+            this.alertService.show(
+              "Vous avez été déconnecté",
+              { duration: 3000, type: AlertType.ERROR }
+            );
+            this.logout();
+            reject("Impossible de récupérer les informations utilisateur");
 
-    if (!stringUser) return;
-    console.log("User connected, retrieving connection...");
-    // Updating user infos
-    const foundUser: User = JSON.parse(stringUser);
-    this.loaderService.show();
-    this.http.get<User>(`${environment.apiBaseLink}/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
-      .pipe(
-        catchError(err => {
-          console.error(err);
-          // TODO Refresh token
-          this.loaderService.hide();
-          this.alertService.show(
-            "Vous avez été déconnecté",
-            { duration: 3000, type: AlertType.ERROR }
-          );
-          this.logout();
-
-          return EMPTY;
-        })
-      )
-      .subscribe(response => {
-        if (!response.body) return;
-        if (response.ok) {
-          this.setConnection(
-            response.body,
-            !!localStorage.getItem(this.SAVE_FIELD)
-          );
-          this.alertService.show("Connecté automatiquement", {
-            duration: 5000,
-            type: AlertType.INFO
+            return EMPTY;
           })
-          setTimeout(() => {}, 5000);
-          this.loaderService.hide();
-        }
-      })
+        )
+        .subscribe(response => {
+          if (!response.body) return;
+          if (response.ok) {
+            this.setConnection(
+              response.body,
+              this.stayedLogged()
+            );
+            this.alertService.show("Reconnecté automatiquement", {
+              duration: 5000,
+              type: AlertType.INFO
+            })
+            setTimeout(() => {}, 5000);
+            this.loaderService.hide();
+          }
+        })
+    })
   }
 
-  setConnection(user: User, stayLogged: boolean) {
+  private setConnection(user: User, stayLogged: boolean) {
     this.loggedUser = user;
     this.isLoggedIn = true;
     this.clearConnection();
@@ -223,13 +257,9 @@ export class AuthService {
       localStorage.setItem("loggedUser", JSON.stringify(user));
     else
       sessionStorage.setItem("loggedUser", JSON.stringify(user));
-    this.alertService.show(
-      "Impossible de vous connecter, votre compte est peut-être désactivé ou bloqué",
-      { duration: 5000, type: AlertType.ERROR }
-    );
   }
 
-  clearConnection() {
+  private clearConnection() {
     sessionStorage.removeItem(this.SAVE_FIELD);
     localStorage.removeItem(this.SAVE_FIELD);
   }
@@ -240,6 +270,98 @@ export class AuthService {
   }
 
   socialLogin(user: SocialUser, provider: LoginProvider) {
-    console.log(user, provider);
+    switch (provider) {
+      case LoginProvider.GOOGLE:
+        return this.googleLogin(user);
+      default:
+        return Promise.reject("Provider not supported");
+    }
+  }
+
+  private googleLogin(user: SocialUser) {
+    return new Promise((resolve, reject) => {
+      this.loaderService.show();
+      this.http.post<User>(`${env.apiBaseLink}/oauth2/login`, user, { observe: 'response' })
+        .pipe(
+          catchError(err => {
+            this.alertService.show(
+              err.error,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject();
+            return EMPTY
+          })
+        )
+        .subscribe(response => {
+          if (!response.body) return;
+          this.loaderService.hide();
+          this.alertService.show(
+            "Connecté",
+            { duration: 3000, type: AlertType.SUCCESS }
+          );
+          this.setConnection(response.body, true);
+          resolve(response.body);
+        })
+    });
+  }
+
+  private checkTokensValidity() {
+    return new Promise<Boolean>((resolve, reject) => {
+      this.loaderService.show();
+      this.http.get<Boolean>(`${env.apiBaseLink}/token/validate`, { observe: 'response' })
+        .pipe(
+          catchError(err => {
+            this.alertService.show(
+              err.error,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject();
+            return EMPTY
+          })
+        )
+        .subscribe(response => {
+          if (response.body === null) {
+            this.loaderService.hide();
+            reject();
+            return;
+          }
+          resolve(response.body);
+          this.loaderService.hide();
+        })
+    });
+  }
+
+  private refreshTokens() {
+    return new Promise((resolve, reject) => {
+      this.loaderService.show();
+      this.http.get<User>(`${env.apiBaseLink}/token/refresh`, { observe: 'response' })
+        .pipe(
+          catchError(err => {
+            this.alertService.show(
+              err.error,
+              { duration: 5000, type: AlertType.ERROR }
+            )
+            this.loaderService.hide();
+            reject();
+            return EMPTY
+          })
+        )
+        .subscribe(response => {
+          if (!response.body) return;
+          this.loaderService.hide();
+          this.alertService.show(
+            "Connexion mise à jour",
+            { duration: 3000, type: AlertType.SUCCESS }
+          );
+          this.setConnection(response.body, this.stayedLogged());
+          resolve(response.body);
+        })
+    });
+  }
+
+  private stayedLogged() {
+    return !!localStorage.getItem(this.SAVE_FIELD);
   }
 }

@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.user.dto;
 
+import com.bastiansmn.vp.socialAuth.UserProvider;
 import lombok.*;
 
 @Getter
@@ -16,5 +17,7 @@ public class UserCreationDTO {
     private String lastname;
 
     private String password;
+
+    private UserProvider provider;
 
 }

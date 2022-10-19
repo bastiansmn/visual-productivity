@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.user.UserPrincipal;
+import com.bastiansmn.vp.utils.CookieUtils;
+import com.bastiansmn.vp.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,8 +33,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter  {
-
-    private final String profile = System.getenv("PROFILE");
 
     private final AuthenticationManager authenticationManager;
 
@@ -52,23 +51,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             IOException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
-        String accessToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.ACCESS_EXPIRATION_TIME))
-                .withIssuer(SecurityConstant.VP_LLC)
-                .withClaim("roles",
-                        user.getAuthorities().stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
-                .withClaim("enabled", user.isEnabled())
-                .withClaim("notLocked", user.isAccountNonLocked())
-                .sign(algorithm);
+        String accessToken = JwtUtils.createAccessToken(algorithm, user.getUsername(), user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()), user.isEnabled(), user.isAccountNonLocked());
 
-        String refreshToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .withIssuer(SecurityConstant.VP_LLC)
-                .sign(algorithm);
+        String refreshToken = JwtUtils.createRefreshToken(algorithm, user.getUsername());
 
         // If user is not active or locked, send error
         if (!user.isEnabled() || !user.isAccountNonLocked()) {
@@ -81,20 +68,21 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         }
 
         // Add tokens in cookie
-        ResponseCookie jwtAccessCookie = this.generateCookie(
+        CookieUtils.setCookies(
+            response,
+            CookieUtils.generateCookie(
                 SecurityConstant.ACCESS_TOKEN_COOKIE_NAME,
                 accessToken,
                 SecurityConstant.ACCESS_TOKEN_URI,
                 SecurityConstant.ACCESS_EXPIRATION_TIME
-        );
-        ResponseCookie jwtRefreshCookie = this.generateCookie(
+            ),
+            CookieUtils.generateCookie(
                 SecurityConstant.REFRESH_TOKEN_COOKIE_NAME,
                 refreshToken,
                 SecurityConstant.REFRESH_TOKEN_URI,
                 SecurityConstant.REFRESH_EXPIRATION_TIME
+            )
         );
-        response.addHeader(HttpHeaders.SET_COOKIE, jwtAccessCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
 
         // Put user in response
         response.setContentType(APPLICATION_JSON_VALUE);
@@ -125,13 +113,4 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // TODO Block user after 3 failed attempts and send mail to unlock it
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path, Integer maxAge) {
-        return ResponseCookie.from(name, value)
-                .httpOnly(true)
-                .path(path)
-                .maxAge(maxAge)
-                .secure(this.profile.equals("prod"))
-                .sameSite("Strict")
-                .build();
-    }
 }

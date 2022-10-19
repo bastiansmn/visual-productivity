@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.responsiveSubscription = this.responsiveService.getMobileStatus().subscribe(isMobile => {
       this.isMobile = isMobile;
     });
-    this.authService.retrieveUserInfos();
+    this.authService.initAuthFlow();
     this.onResize();
   }
 
