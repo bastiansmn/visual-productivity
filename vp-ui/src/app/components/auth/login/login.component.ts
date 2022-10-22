@@ -12,6 +12,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
+  readonly SUCCESS_REDIRECT_ROUTE = '/discover';
+
   formGroup = this.fb.group({
     email: ['', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]],
     password: ['', Validators.required],
@@ -46,7 +48,7 @@ export class LoginComponent implements OnInit {
           remember: this.formGroup.controls['remember'].value ?? false
         }
       ).then(async () => {
-        await this.router.navigate(["/discover"])
+        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE])
       }).catch(err => {
         console.error(err);
       })
@@ -55,7 +57,7 @@ export class LoginComponent implements OnInit {
 
   loginWithGoogle(user: SocialUser): void {
     this.authService.socialLogin(user, LoginProvider.GOOGLE)
-      .then(() => this.router.navigate(["/discover"]));
+      .then(() => this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]));
   }
 
   getErrorMessage(formControlName: string): string {

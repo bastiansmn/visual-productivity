@@ -72,6 +72,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public Boolean validate(HttpServletRequest request) throws FunctionalException {
+        if (request.getCookies() == null)
+            return false;
         Arrays.stream(request.getCookies()).forEach(e -> {
             System.out.println(e.getName());
             System.out.println(e.getValue());
