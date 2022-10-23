@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  apiBaseLink: 'http://localhost:8080/api/v1',
   googleClientId: '1052954350067-sersub6hdqgbl01nq0fhohnsodrhelcc.apps.googleusercontent.com',
 };
 
