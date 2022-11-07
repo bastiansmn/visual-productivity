@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+
+  # Service for the database
+  vp-db:
+    container_name: vp-db
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: vp
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  # Service for the backend
+  backend:
+    container_name: vp-api
+    image: bastiansmn/visual-productivity:server-latest
+    environment:
+      PROFILE: ${PROFILE}
+      DB_URL: ${DB_URL}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      VP_ALLOWED_ORIGINS: ${VP_ALLOWED_ORIGINS}
+      VP_ALLOWED_METHODS: ${VP_ALLOWED_METHODS}
+      VP_ALLOWED_HEADERS: ${VP_ALLOWED_HEADERS}
+      VP_REGISTER_PATTERN: ${VP_REGISTER_PATTERN}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - vp-db
+
+  # Service for pg-admin
+#  pg_admin:
+#    container_name: pg-admin
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+#      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+#    ports:
+#      - "${PG_PORT:-16543}:80"
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  db-data:
