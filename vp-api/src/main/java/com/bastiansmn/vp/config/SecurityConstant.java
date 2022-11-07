@@ -11,6 +11,7 @@ public class SecurityConstant {
     public static final Integer REFRESH_EXPIRATION_TIME = 2_592_000;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+    public static final String LOGIN_URI = "/api/login";
     public static final String ACCESS_TOKEN_URI = "/api";
     public static final String REFRESH_TOKEN_URI = "/api/token";
     public static final String JWT_SECRET = System.getenv("JWT_SECRET");
