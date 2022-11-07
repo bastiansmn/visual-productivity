@@ -1,4 +1,4 @@
-name: Moov CD
+name: VP CD
 
 on:
   push:
@@ -64,7 +64,7 @@ jobs:
         with:
           node-version: 16.x
 
-      - run: cd frontend && npm i && npm run build
+      - run: cd vp-ui && npm i && npm run build
 
       - name: Copy dist files to vps
         uses: appleboy/scp-action@master
@@ -72,6 +72,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: frontend/dist/vp-ui/*
+          source: vp-ui/dist/vp-ui/*
           target: /var/www/html/vp
           strip_components: 3

@@ -6,8 +6,6 @@ services:
   vp-db:
     container_name: vp-db
     image: postgres:latest
-    ports:
-      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
@@ -17,7 +15,7 @@ services:
       - db-data:/var/lib/postgresql/data
 
   # Service for the backend
-  backend:
+  vp-api:
     container_name: vp-api
     image: bastiansmn/visual-productivity:server-latest
     environment:
