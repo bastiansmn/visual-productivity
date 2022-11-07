@@ -42,7 +42,7 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/v1/user/register")
+                        .path("/api/user/register")
                         .toUriString()
         );
         return ResponseEntity.created(uri).body(this.userService.create(userDTO));

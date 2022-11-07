@@ -11,8 +11,8 @@ public class SecurityConstant {
     public static final Integer REFRESH_EXPIRATION_TIME = 2_592_000;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
-    public static final String ACCESS_TOKEN_URI = "/api/v1";
-    public static final String REFRESH_TOKEN_URI = "/api/v1/token";
+    public static final String ACCESS_TOKEN_URI = "/api";
+    public static final String REFRESH_TOKEN_URI = "/api/token";
     public static final String JWT_SECRET = System.getenv("JWT_SECRET");
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Le token n'a pas pu être vérifié";
     public static final String TOKEN_EXPIRED = "Le token a expiré";
@@ -26,13 +26,13 @@ public class SecurityConstant {
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String LOGIN_IS_SOCIAL = "Votre compte est lié à un compte social (Google), connectez vous avec celui ci.";
     public static final String[] PUBLIC_URLS = {
-            "/api/v1/login",
-            "/api/v1/user/register",
-            "/api/v1/token/refresh",
-            "/api/v1/token/validate",
-            "/api/v1/mail/confirm",
-            "/api/v1/mail/revalidate",
-            "/api/v1/oauth2/login",
+            "/api/login",
+            "/api/user/register",
+            "/api/token/refresh",
+            "/api/token/validate",
+            "/api/mail/confirm",
+            "/api/mail/revalidate",
+            "/api/oauth2/login",
             "/",
             "/docs/**",
             "/swagger-ui/**"
