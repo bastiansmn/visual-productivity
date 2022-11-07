@@ -20,8 +20,8 @@ public enum FunctionalRule {
     MAIL_0003("MAIL_0003", "Le code est expiré"),
     TOKEN_0001("TOKEN_0001", "Le token est invalide"),
     TOKEN_0002("TOKEN_0002", "Aucun token renseigné"),
+    PROJ_0001("PROJ_0001", "Le projet n'existe pas")
     ;
-
     private final String name;
     private final String message;
     FunctionalRule(final String name, final String message) {
