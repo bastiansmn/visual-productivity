@@ -3,3 +3,4 @@
 **/*.iml
 .jpb
 .DS_Store
+.env

@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: vp-ui
+    build: ./vp-ui
+    ports:
+      - "80:80"
+
+  backend:
+    container_name: vp-api
+    build: ./vp-api
+    environment:
+      PROFILE: ${PROFILE}
+      DB_URL: ${DB_URL}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      VP_ALLOWED_ORIGINS: ${VP_ALLOWED_ORIGINS}
+      VP_ALLOWED_METHODS: ${VP_ALLOWED_METHODS}
+      VP_ALLOWED_HEADERS: ${VP_ALLOWED_HEADERS}
+      VP_REGISTER_PATTERN: ${VP_REGISTER_PATTERN}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    container_name: vp-db
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: vp
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
