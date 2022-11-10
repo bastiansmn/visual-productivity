@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("${api.prefix}/oauth2")
+@RequestMapping("/oauth2")
 @RequiredArgsConstructor
 @Slf4j
 public class SocialOAuth2Controller {

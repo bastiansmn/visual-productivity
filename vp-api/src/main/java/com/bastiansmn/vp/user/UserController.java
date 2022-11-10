@@ -21,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.prefix}/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -42,7 +42,7 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/user/register")
+                        .path("/user/register")
                         .toUriString()
         );
         return ResponseEntity.created(uri).body(this.userService.create(userDTO));

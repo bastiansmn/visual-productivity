@@ -14,7 +14,7 @@ import java.util.Collection;
 
 @RestController
 @Slf4j
-@RequestMapping("${api.prefix}/project")
+@RequestMapping("/project")
 @RequiredArgsConstructor
 public class ProjectController {
 
@@ -25,7 +25,7 @@ public class ProjectController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/user/register")
+                        .path("/user/register")
                         .toUriString()
         );
         return ResponseEntity.created(uri).body(this.projectService.create(project));

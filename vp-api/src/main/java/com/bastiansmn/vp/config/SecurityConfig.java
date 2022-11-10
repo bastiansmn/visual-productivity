@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.config;
 
+import com.bastiansmn.vp.config.properties.CorsProperties;
 import com.bastiansmn.vp.filter.CustomAuthenticationFilter;
 import com.bastiansmn.vp.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -33,32 +34,22 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${corsConfiguration.allowedOrigins}")
-    private List<String> allowedOrigins;
-    @Value("${corsConfiguration.allowedMethods}")
-    private List<String> allowedMethods;
-    @Value("${corsConfiguration.allowedHeaders}")
-    private List<String> allowedHeaders;
-    @Value("${corsConfiguration.registrerPattern}")
-    private String registrerPattern;
-    @Value("${api.prefix}")
-    private String apiPrefix;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder bCryptPasswordEncoder;
+    private final CorsProperties corsProperties;
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        log.info("Allowed origins: {}", allowedOrigins);
-        configuration.setAllowedOrigins(allowedOrigins);
-        configuration.setAllowedMethods(allowedMethods);
-        configuration.setAllowedHeaders(allowedHeaders);
+        log.info("Allowed origins: {}", corsProperties.getAllowedOrigins());
+        configuration.setAllowedOrigins(corsProperties.getAllowedOrigins());
+        configuration.setAllowedMethods(corsProperties.getAllowedMethods());
+        configuration.setAllowedHeaders(corsProperties.getAllowedHeaders());
         configuration.setAllowCredentials(Boolean.TRUE);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(registrerPattern, configuration);
+        source.registerCorsConfiguration(corsProperties.getRegisterPattern(), configuration);
         return source;
     }
-
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

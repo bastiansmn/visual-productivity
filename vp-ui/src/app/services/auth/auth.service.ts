@@ -37,7 +37,6 @@ export class AuthService {
 
     this.checkTokensValidity()
       .then(async isValid => {
-        console.log(isValid);
         if (isValid) {
           this.retrieveUserInfos(user)
             .catch(err => console.error(err));
@@ -47,11 +46,14 @@ export class AuthService {
         // Refresh token automatically if user wants to stay connected
         if (this.stayedLogged())
           await this.refreshTokens();
-        else
+        else {
           this.alertService.show(
             "Vous avez été déconnecté",
             { duration: 5000, type: AlertType.WARNING }
           );
+          this.logout();
+        }
+
       })
       .catch(() => {
         this.alertService.show(

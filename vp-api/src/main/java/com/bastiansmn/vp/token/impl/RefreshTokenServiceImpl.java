@@ -90,7 +90,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         if (accessTokenCookie == null) {
             return false;
         }
-        String accessToken = refreshTokenCookie.getValue();
+        String accessToken = accessTokenCookie.getValue();
 
         // Check expiration date of both access and refresh token
         try {
@@ -99,6 +99,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             verifier.verify(refreshToken);
             verifier.verify(accessToken);
         } catch (TokenExpiredException e) {
+            System.out.println("Token expired" + e);
             return false;
         } catch (JWTVerificationException e) {
             throw new FunctionalException(FunctionalRule.TOKEN_0001);

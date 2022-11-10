@@ -15,7 +15,7 @@ public class CookieUtils {
                 .path(path)
                 .maxAge(maxAge)
                 .secure(profile.equals("prod"))
-                .sameSite(profile.equals("prod") ? "None" : "Strict")
+                .sameSite("None")
                 .build();
     }
 

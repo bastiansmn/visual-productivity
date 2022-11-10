@@ -1,6 +1,9 @@
 package com.bastiansmn.vp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 @Configuration
 public class SecurityConstant {
@@ -11,9 +14,10 @@ public class SecurityConstant {
     public static final Integer REFRESH_EXPIRATION_TIME = 2_592_000;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
-    public static final String LOGIN_URI = "/api/login";
-    public static final String ACCESS_TOKEN_URI = "/api";
-    public static final String REFRESH_TOKEN_URI = "/api/token";
+    public static final String LOGIN_URI = "/login";
+    // TODO: Changer le base path
+    public static final String ACCESS_TOKEN_URI = "/api/v1";
+    public static final String REFRESH_TOKEN_URI = "/api/v1/token";
     public static final String JWT_SECRET = System.getenv("JWT_SECRET");
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Le token n'a pas pu être vérifié";
     public static final String TOKEN_EXPIRED = "Le token a expiré";
@@ -27,13 +31,13 @@ public class SecurityConstant {
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String LOGIN_IS_SOCIAL = "Votre compte est lié à un compte social (Google), connectez vous avec celui ci.";
     public static final String[] PUBLIC_URLS = {
-            "/api/login",
-            "/api/user/register",
-            "/api/token/refresh",
-            "/api/token/validate",
-            "/api/mail/confirm",
-            "/api/mail/revalidate",
-            "/api/oauth2/login",
+            "/login",
+            "/user/register",
+            "/token/refresh",
+            "/token/validate",
+            "/mail/confirm",
+            "/mail/revalidate",
+            "/oauth2/login",
             "/",
             "/docs/**",
             "/swagger-ui/**"
