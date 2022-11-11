@@ -9,13 +9,12 @@ public class CookieUtils {
 
     private static final String profile = System.getenv("PROFILE");
 
-    public static ResponseCookie generateCookie(String name, String value, String path, Integer maxAge) {
+    public static ResponseCookie generateCookie(String name, String value, String path, Long maxAge) {
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
                 .path(path)
                 .maxAge(maxAge)
                 .secure(profile.equals("prod"))
-                .sameSite("None")
                 .build();
     }
 

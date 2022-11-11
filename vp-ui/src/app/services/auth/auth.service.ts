@@ -66,7 +66,7 @@ export class AuthService {
   validateCode(code: String) {
     return new Promise((resolve, reject) => {
       this.loaderService.show();
-      this.http.put("/api/mail/confirm", {
+      this.http.put("/api/v1/mail/confirm", {
         user: {
           user_id: this.loggedUser?.user_id,
         },
@@ -104,7 +104,7 @@ export class AuthService {
     const user = this.loggedUser;
     return new Promise((resolve, reject) => {
       this.loaderService.show();
-      this.http.post("/api/mail/revalidate", user, { observe: 'response' })
+      this.http.post("/api/v1/mail/revalidate", user, { observe: 'response' })
         .pipe(
           catchError((err: HttpErrorResponse) => {
             const error = err.error as Error;
@@ -143,7 +143,7 @@ export class AuthService {
       }
 
       this.loaderService.show();
-      this.http.post<User>("/api/user/register", user, { observe: 'response' })
+      this.http.post<User>("/api/v1/user/register", user, { observe: 'response' })
         .pipe(
           catchError((err: HttpErrorResponse) => {
             const error = err.error as Error;
@@ -183,7 +183,7 @@ export class AuthService {
       formData.append('password', userCredentials.password);
 
       this.loaderService.show();
-      this.http.post<User>("/api/login", formData, { observe: 'response' })
+      this.http.post<User>("/api/v1/login", formData, { observe: 'response' })
         .pipe(
           retry({ count: 1, delay: 1_000 }),
           catchError(err => {
@@ -217,7 +217,7 @@ export class AuthService {
     return new Promise((_, reject) => {
       // Updating user infos
       this.loaderService.show();
-      this.http.get<User>(`/api/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
+      this.http.get<User>(`/api/v1/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
         .pipe(
           catchError(err => {
             console.error(err);
@@ -283,7 +283,7 @@ export class AuthService {
   private googleLogin(user: SocialUser) {
     return new Promise((resolve, reject) => {
       this.loaderService.show();
-      this.http.post<User>("/api/oauth2/login", user, { observe: 'response' })
+      this.http.post<User>("/api/v1/oauth2/login", user, { observe: 'response' })
         .pipe(
           catchError(err => {
             this.alertService.show(
@@ -311,7 +311,7 @@ export class AuthService {
   private checkTokensValidity() {
     return new Promise<Boolean>((resolve, reject) => {
       this.loaderService.show();
-      this.http.get<Boolean>("/api/token/validate", { observe: 'response' })
+      this.http.get<Boolean>("/api/v1/token/validate", { observe: 'response' })
         .pipe(
           catchError(err => {
             this.alertService.show(
@@ -338,7 +338,7 @@ export class AuthService {
   private refreshTokens() {
     return new Promise((resolve, reject) => {
       this.loaderService.show();
-      this.http.get<User>("/api/token/refresh", { observe: 'response' })
+      this.http.get<User>("/api/v1/token/refresh", { observe: 'response' })
         .pipe(
           catchError(err => {
             this.alertService.show(

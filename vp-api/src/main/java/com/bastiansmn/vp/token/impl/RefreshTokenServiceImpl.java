@@ -74,10 +74,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public Boolean validate(HttpServletRequest request) throws FunctionalException {
         if (request.getCookies() == null)
             return false;
-        Arrays.stream(request.getCookies()).forEach(e -> {
-            System.out.println(e.getName());
-            System.out.println(e.getValue());
-        });
         // Get refresh token
         Cookie refreshTokenCookie = WebUtils.getCookie(request, SecurityConstant.REFRESH_TOKEN_COOKIE_NAME);
         log.debug("Refreshing token with: {}", refreshTokenCookie);
@@ -96,8 +92,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
-            verifier.verify(refreshToken);
             verifier.verify(accessToken);
+            verifier.verify(refreshToken);
         } catch (TokenExpiredException e) {
             System.out.println("Token expired" + e);
             return false;

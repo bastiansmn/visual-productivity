@@ -1,17 +1,14 @@
 package com.bastiansmn.vp.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
 @Configuration
 public class SecurityConstant {
 
     // 1 day in seconds
-    public static final Integer ACCESS_EXPIRATION_TIME = 86_400;
+    public static final Long ACCESS_EXPIRATION_TIME = 86_400L;
     // 1 month in seconds
-    public static final Integer REFRESH_EXPIRATION_TIME = 2_592_000;
+    public static final Long REFRESH_EXPIRATION_TIME = 2_419_200L;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     public static final String LOGIN_URI = "/login";
