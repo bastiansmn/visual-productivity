@@ -51,7 +51,7 @@ public class EventDAO {
     )
     private Boolean whole_day;
 
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany(mappedBy = "events", fetch = FetchType.EAGER)
     private Set<GoalDAO> goals;
 
     @ManyToOne

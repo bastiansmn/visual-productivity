@@ -2,7 +2,9 @@ package com.bastiansmn.vp.goal;
 
 import com.bastiansmn.vp.event.EventDAO;
 import com.bastiansmn.vp.label.LabelDAO;
+import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.task.TaskDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -80,6 +82,16 @@ public class GoalDAO {
             orphanRemoval = true
     )
     private Set<TaskDAO> tasks;
+
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "project_id"
+    )
+    @JsonIgnore
+    private ProjectDAO project;
 
     // For pagination :
     @Column(

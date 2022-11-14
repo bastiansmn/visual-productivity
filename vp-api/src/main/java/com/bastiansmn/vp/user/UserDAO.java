@@ -62,14 +62,12 @@ public class UserDAO {
     private Set<RoleDAO> roles;
 
     @ManyToMany(
-            fetch = FetchType.EAGER
-    )
-    @JoinTable(
-            name = "link_user_projects",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
+            fetch = FetchType.EAGER,
+            mappedBy = "users",
+            cascade = CascadeType.ALL
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<ProjectDAO> projects;
 
     @Column(

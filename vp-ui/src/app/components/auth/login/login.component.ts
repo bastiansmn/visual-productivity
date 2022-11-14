@@ -88,8 +88,7 @@ export class LoginComponent implements OnInit {
       emailInput?.focus();
       emailInput?.blur();
     }
-    console.log(this.route.snapshot.queryParams['remember'])
-    this.formGroup.controls['remember'].setValue(!!this.route.snapshot.queryParams['remember']);
+    this.formGroup.controls['remember'].setValue(this.route.snapshot.queryParams['remember']);
   }
 
 }

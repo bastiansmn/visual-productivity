@@ -12,6 +12,9 @@ import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +22,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,63 +33,66 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserService userService;
 
     @Override
-    public ProjectDAO create(ProjectCreationDTO project) throws FunctionalException {
+    public ProjectDAO create(ProjectCreationDTO projectDTO) throws FunctionalException {
 
-        if (project.getDeadline() == null)
+        if (projectDTO.getDeadline() == null)
             throw new FunctionalException(
                     FunctionalRule.PROJ_0002
             );
 
-        if (project.getName() == null)
+        if (projectDTO.getName() == null)
             throw new FunctionalException(
                     FunctionalRule.PROJ_0003
             );
 
-        if (project.getDescription() == null)
+        if (projectDTO.getDescription() == null)
             throw new FunctionalException(
                     FunctionalRule.PROJ_0004
             );
 
-        if (project.getDeadline().before(Date.from(Instant.now())))
+        if (projectDTO.getDeadline().before(Date.from(Instant.now())))
             throw new FunctionalException(
                     FunctionalRule.PROJ_0005
             );
 
-        if (project.getUser_email() == null)
+        if (projectDTO.getUser_email() == null)
             throw new FunctionalException(
                     FunctionalRule.PROJ_0006
             );
 
-        ProjectDAO toAddProject = ProjectDAO.builder()
-                .name(project.getName())
-                .description(project.getDescription())
-                .deadline(project.getDeadline())
+        UserDAO projectCreator = userService.fetchByEmail(projectDTO.getUser_email());
+
+        ProjectDAO project = ProjectDAO.builder()
+                .name(projectDTO.getName())
+                .description(projectDTO.getDescription())
+                .deadline(projectDTO.getDeadline())
                 .token(RandomStringUtils.randomAlphanumeric(8))
-                .complete_mode(project.isComplete_mode())
+                .complete_mode(projectDTO.isComplete_mode())
                 .created_at(Date.from(Instant.now()))
-                .labels(Set.of())
-                .events(Set.of())
-                .tasks(Set.of())
-                .users(Set.of())
+                .allLabels(Set.of())
+                .allEvents(Set.of())
+                .allGoals(Set.of())
+                .allTasks(Set.of())
+                .users(Set.of(projectCreator))
                 .build();
 
-        toAddProject = this.projectRepository.save(toAddProject);
+        log.info("Creating project: {}", project);
 
-        toAddProject = this.addUserToProject(
-                toAddProject.getProject_id(),
-                project.getUser_email()
-        );
-
-        return toAddProject;
+        return this.projectRepository.save(project);
     }
 
     @Override
     public ProjectDAO fetchById(Long id) throws FunctionalException {
-        // TODO Vérifier si l'user est dans le projet
-        if (this.projectRepository.findById(id).isEmpty())
+        Optional<ProjectDAO> project = this.projectRepository.findById(id);
+
+        if (project.isEmpty())
             throw new FunctionalException(FunctionalRule.PROJ_0001);
 
-        return this.projectRepository.findById(id).get();
+        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!project.get().getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(userEmail))
+            throw new FunctionalException(FunctionalRule.PROJ_0007);
+
+        return project.get();
     }
 
     @Override
@@ -95,20 +102,38 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void deleteById(Long project_id) throws FunctionalException {
-        // TODO Vérifier si l'user est dans le projet et y est admin
-        if (this.projectRepository.findById(project_id).isEmpty())
+        Optional<ProjectDAO> project = this.projectRepository.findById(project_id);
+
+        if (project.isEmpty())
             throw new FunctionalException(FunctionalRule.PROJ_0001);
 
-        this.projectRepository.deleteById(project_id);
+        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!project.get().getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(userEmail))
+            throw new FunctionalException(FunctionalRule.PROJ_0007);
+
+        this.projectRepository.delete(project.get());
     }
 
     @Override
     public ProjectDAO addUserToProject(Long project_id, String user_email) throws FunctionalException {
         ProjectDAO project = this.fetchById(project_id);
-        UserDAO user = this.userService.fetchByEmail(user_email);
 
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
+            throw new FunctionalException(FunctionalRule.PROJ_0007);
+
+        if (project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(user_email))
+            throw new FunctionalException(FunctionalRule.PROJ_0008);
+
+        UserDAO user = this.userService.fetchByEmail(user_email);
         project.getUsers().add(user);
 
         return this.projectRepository.save(project);
+    }
+
+    @Override
+    public Set<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException {
+        UserDAO user = this.userService.fetchByEmail(email);
+        return user.getProjects();
     }
 }

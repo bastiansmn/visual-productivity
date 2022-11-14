@@ -1,6 +1,7 @@
 package com.bastiansmn.vp.project;
 
 import com.bastiansmn.vp.event.EventDAO;
+import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.label.LabelDAO;
 import com.bastiansmn.vp.task.TaskDAO;
 import com.bastiansmn.vp.user.UserDAO;
@@ -60,31 +61,43 @@ public class ProjectDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
-    private Set<LabelDAO> labels;
+    private Set<LabelDAO> allLabels;
 
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
-    private Set<EventDAO> events;
+    private Set<EventDAO> allEvents;
 
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
-    private Set<TaskDAO> tasks;
+    private Set<GoalDAO> allGoals;
+
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "project",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private Set<TaskDAO> allTasks;
 
     @ManyToMany(
             fetch = FetchType.EAGER,
-            mappedBy = "projects",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
+    )
+    @JoinTable(
+            name = "link_user_projects",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<UserDAO> users;
 

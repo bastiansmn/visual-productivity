@@ -26,13 +26,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   ) { }
 
   register() {
-    if (this.formGroup.valid) {
-      this.authService.registerUser(this.formGroup.value).then(async () => {
-        await this.router.navigate(['/confirm'], { queryParams: {remember: this.formGroup.value.remember} });
-      }).catch(err => {
-        console.error(err);
-      })
-    }
+    if (this.formGroup.invalid) return;
+
+    this.authService.registerUser(this.formGroup.value).then(async () => {
+      await this.router.navigate(['/confirm'], { queryParams: {remember: this.formGroup.value.remember} });
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   checkPasswords(formGroup: FormGroup) {

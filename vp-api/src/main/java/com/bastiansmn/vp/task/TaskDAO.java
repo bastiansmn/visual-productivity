@@ -2,6 +2,7 @@ package com.bastiansmn.vp.task;
 
 import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,6 +45,7 @@ public class TaskDAO {
             nullable = false,
             updatable = false
     )
+    @JsonIgnore
     private GoalDAO goal;
 
     @ManyToOne
@@ -52,6 +54,7 @@ public class TaskDAO {
             nullable = false,
             updatable = false
     )
+    @JsonIgnore
     private ProjectDAO project;
 
     // For pagination :

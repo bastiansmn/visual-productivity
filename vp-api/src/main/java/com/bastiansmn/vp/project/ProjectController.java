@@ -48,4 +48,15 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/fetchProjectsOf")
+    public ResponseEntity<Collection<ProjectDAO>> fetchProjectsOfUser(@RequestParam String user_email) throws FunctionalException {
+        return ResponseEntity.ok(this.projectService.fetchProjectsOfUser(user_email));
+    }
+
+    @PostMapping("/addUserToProject")
+    public ResponseEntity<Void> addUserToProject(@RequestParam String user_email, @RequestParam Long project_id) throws FunctionalException {
+        this.projectService.addUserToProject(project_id, user_email);
+        return ResponseEntity.noContent().build();
+    }
+
 }

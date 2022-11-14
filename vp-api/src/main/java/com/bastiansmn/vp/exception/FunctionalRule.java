@@ -25,7 +25,25 @@ public enum FunctionalRule {
     PROJ_0003("PROJ_0003", "Aucun nom spécifié"),
     PROJ_0004("PROJ_0004", "Aucune description spécifiée"),
     PROJ_0005("PROJ_0005", "La deadline ne peut pas être déjà passée"),
-    PROJ_0006("PROJ_0006", "Impossible de créer un projet sans utilisateur");
+    PROJ_0006("PROJ_0006", "Impossible de créer un projet sans utilisateur"),
+    PROJ_0007("PROJ_0007", "Vous devez être membre du projet pour effectuer cette action"),
+    PROJ_0008("PROJ_0008", "L'utilisateur est déjà membre du projet"),
+    GOAL_0001("GOAL_0001", "L'objectif n'existe pas"),
+    GOAL_0002("GOAL_0002", "Aucun nom spécifié"),
+    GOAL_0003("GOAL_0003", "Aucune description spécifiée"),
+    GOAL_0004("GOAL_0004", "Aucun projet spécifié"),
+    GOAL_0005("GOAL_0005", "Les dates précisées ne sont pas valides"),
+    GOAL_0006("GOAL_0006", "Vous devez être membre du projet pour effectuer cette action"),
+    TASK_0001("TASK_0001", "La tâche n'existe pas"),
+    TASK_0002("TASK_0002", "Aucun nom spécifié"),
+    TASK_0003("TASK_0003", "Aucune description spécifiée"),
+    TASK_0004("TASK_0004", "Les dates précisées ne sont pas valides"),
+    TASK_0005("TASK_0005", "Vous devez être membre du projet pour effectuer cette action"),
+    TASK_0006("TASK_0006", "Aucun objectif spécifié"),
+    TASK_0007("TASK_0007", "Aucun projet spécifié"),
+    TASK_0008("TASK_0008", "L'objectif n'appartient pas au projet mentionné"),
+    ;
+
     private final String name;
     private final String message;
     FunctionalRule(final String name, final String message) {
