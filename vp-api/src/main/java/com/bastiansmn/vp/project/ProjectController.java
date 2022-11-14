@@ -21,11 +21,11 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping("/create")
-    public ResponseEntity<ProjectDAO> create(@RequestBody ProjectCreationDTO project) {
+    public ResponseEntity<ProjectDAO> create(@RequestBody ProjectCreationDTO project) throws FunctionalException {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/user/register")
+                        .path("/api/v1/project/create")
                         .toUriString()
         );
         return ResponseEntity.created(uri).body(this.projectService.create(project));

@@ -7,14 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CookieUtils {
 
-    private static final String profile = System.getenv("PROFILE");
-
-    public static ResponseCookie generateCookie(String name, String value, String path, Long maxAge) {
+    public static ResponseCookie generateCookie(String name, String value, String path, Long maxAge, Boolean secure) {
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
                 .path(path)
                 .maxAge(maxAge)
-                .secure(profile.equals("prod"))
+                .secure(secure)
                 .build();
     }
 

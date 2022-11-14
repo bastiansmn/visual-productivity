@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.user;
 
+import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,6 +60,17 @@ public class UserDAO {
     )
     @ToString.Exclude
     private Set<RoleDAO> roles;
+
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "link_user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    @JsonIgnore
+    private Set<ProjectDAO> projects;
 
     @Column(
             name = "created_date",

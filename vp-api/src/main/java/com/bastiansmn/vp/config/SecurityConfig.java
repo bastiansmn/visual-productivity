@@ -1,6 +1,8 @@
 package com.bastiansmn.vp.config;
 
 import com.bastiansmn.vp.config.properties.CorsProperties;
+import com.bastiansmn.vp.config.properties.JwtProperties;
+import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.filter.CustomAuthenticationFilter;
 import com.bastiansmn.vp.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), jwtPropertiesBean(), springPropertiesBean());
         customAuthenticationFilter.setFilterProcessesUrl(SecurityConstant.LOGIN_URI);
 
         http
@@ -75,6 +77,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(customAuthenticationFilter)
                 .addFilterBefore(customAuthorizationFilterBean(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public JwtProperties jwtPropertiesBean() {
+        return new JwtProperties();
+    }
+
+    @Bean
+    public SpringProperties springPropertiesBean() {
+        return new SpringProperties();
     }
 
     @Bean

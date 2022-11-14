@@ -3,6 +3,8 @@ package com.bastiansmn.vp.socialAuth.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
+import com.bastiansmn.vp.config.properties.JwtProperties;
+import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.role.RoleDAO;
@@ -36,6 +38,8 @@ public class SocialOAuth2ServiceImpl implements SocialOAuth2Service {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final JwtProperties jwtProperties;
+    private final SpringProperties springProperties;
 
     @Override
     public UserDAO login(SocialUserDTO userDTO, HttpServletResponse response) throws FunctionalException {
@@ -66,8 +70,8 @@ public class SocialOAuth2ServiceImpl implements SocialOAuth2Service {
             toAddUser = user.get();
         }
 
-        Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
-        JwtUtils.createJWTAndAddInHeaders(algorithm, toAddUser, response);
+        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
+        JwtUtils.createJWTAndAddInHeaders(algorithm, toAddUser, response, springProperties.getProfile().equals("prod"));
 
         return toAddUser;
     }

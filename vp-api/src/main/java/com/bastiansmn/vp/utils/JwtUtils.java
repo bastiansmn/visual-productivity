@@ -32,7 +32,7 @@ public class JwtUtils {
                 .sign(algorithm);
     }
 
-    public static void createJWTAndAddInHeaders(Algorithm algorithm, UserDAO user, HttpServletResponse response) {
+    public static void createJWTAndAddInHeaders(Algorithm algorithm, UserDAO user, HttpServletResponse response, Boolean secure) {
         String accessToken = JwtUtils.createAccessToken(
                 algorithm,
                 user.getEmail(),
@@ -53,13 +53,15 @@ public class JwtUtils {
                         SecurityConstant.ACCESS_TOKEN_COOKIE_NAME,
                         accessToken,
                         SecurityConstant.ACCESS_TOKEN_URI,
-                        SecurityConstant.ACCESS_EXPIRATION_TIME
+                        SecurityConstant.ACCESS_EXPIRATION_TIME,
+                        secure
                 ),
                 CookieUtils.generateCookie(
                         SecurityConstant.REFRESH_TOKEN_COOKIE_NAME,
                         refreshToken,
                         SecurityConstant.REFRESH_TOKEN_URI,
-                        SecurityConstant.REFRESH_EXPIRATION_TIME
+                        SecurityConstant.REFRESH_EXPIRATION_TIME,
+                        secure
                 )
         );
     }

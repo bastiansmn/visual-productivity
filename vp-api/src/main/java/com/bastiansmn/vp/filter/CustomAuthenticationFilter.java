@@ -2,6 +2,8 @@ package com.bastiansmn.vp.filter;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
+import com.bastiansmn.vp.config.properties.JwtProperties;
+import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.user.UserPrincipal;
 import com.bastiansmn.vp.utils.CookieUtils;
 import com.bastiansmn.vp.utils.JwtUtils;
@@ -31,6 +33,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter  {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtProperties jwtProperties;
+    private final SpringProperties springProperties;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -46,7 +50,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws
             IOException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
         String accessToken = JwtUtils.createAccessToken(algorithm, user.getUsername(), user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()), user.isEnabled(), user.isAccountNonLocked());
@@ -70,13 +74,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 SecurityConstant.ACCESS_TOKEN_COOKIE_NAME,
                 accessToken,
                 SecurityConstant.ACCESS_TOKEN_URI,
-                SecurityConstant.ACCESS_EXPIRATION_TIME
+                SecurityConstant.ACCESS_EXPIRATION_TIME,
+                springProperties.getProfile().equals("prod")
             ),
             CookieUtils.generateCookie(
                 SecurityConstant.REFRESH_TOKEN_COOKIE_NAME,
                 refreshToken,
                 SecurityConstant.REFRESH_TOKEN_URI,
-                SecurityConstant.REFRESH_EXPIRATION_TIME
+                SecurityConstant.REFRESH_EXPIRATION_TIME,
+                springProperties.getProfile().equals("prod")
             )
         );
 

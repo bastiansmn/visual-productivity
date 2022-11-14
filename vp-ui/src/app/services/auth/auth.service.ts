@@ -60,6 +60,7 @@ export class AuthService {
           "Validation de votre identifiant impossible, reconnectez-vous",
           { duration: 5000, type: AlertType.ERROR }
         );
+        this.logout();
       })
   }
 

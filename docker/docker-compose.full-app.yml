@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: vp-ui
+    build: ../vp-ui
+    ports:
+      - "80:80"
+
+  backend:
+    container_name: vp-api
+    build: ../vp-api
+    environment:
+      API_PATH: ${API_PATH:-/api/v1}
+      PORT: ${PORT:-8080}
+      DB_URL: jdbc:postgresql://vp-db:5432/vp
+      DB_USERNAME: postgres
+      DB_PASSWORD: root
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      VP_ALLOWED_ORIGINS: ${VP_ALLOWED_ORIGINS:-http://localhost,http://127.0.0.1}
+      VP_ALLOWED_METHODS: ${VP_ALLOWED_METHODS:-GET,POST,PUT,DELETE,OPTIONS}
+      VP_ALLOWED_HEADERS: ${VP_ALLOWED_HEADERS:-*}
+      VP_REGISTER_PATTERN: ${VP_REGISTER_PATTERN:-/**}
+      JWT_SECRET: NotASuperStrongSecret
+    depends_on:
+      - vp-db
+
+  vp-db:
+    container_name: vp-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: vp
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

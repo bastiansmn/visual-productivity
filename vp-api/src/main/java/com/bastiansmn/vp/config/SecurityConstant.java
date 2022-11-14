@@ -15,7 +15,6 @@ public class SecurityConstant {
     // TODO: Changer le base path
     public static final String ACCESS_TOKEN_URI = "/api/v1";
     public static final String REFRESH_TOKEN_URI = "/api/v1/token";
-    public static final String JWT_SECRET = System.getenv("JWT_SECRET");
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Le token n'a pas pu être vérifié";
     public static final String TOKEN_EXPIRED = "Le token a expiré";
     public static final String VP_LLC = "VisualProductivity, LLC";

@@ -31,6 +31,15 @@ public class MailConfig {
     @Value("${spring.mail.default-encoding}")
     private String defaultEncoding;
 
+    @Value("${spring.mail.properties.mail.smtp.auth}")
+    private String auth;
+
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private String starttls;
+
+    @Value("${spring.profiles.active}")
+    private String profile;
+
     @Bean
     public JavaMailSender mailSender() {
 
@@ -43,9 +52,9 @@ public class MailConfig {
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
+        props.put("mail.smtp.auth", this.auth);
+        props.put("mail.smtp.starttls.enable", this.starttls);
+        props.put("mail.debug", ((Boolean) this.profile.equals("dev")).toString());
 
         return mailSender;
     }

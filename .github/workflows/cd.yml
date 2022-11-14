@@ -17,13 +17,13 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/visual-productivity:server-latest vp-api
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/visual-productivity:server-latest
 
-      - name: Copy docker-compose.server.yml file to vps
+      - name: Copy docker-compose.prod.yml file to vps
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: docker-compose.server.yml
+          source: docker-compose.prod.yml
           target: /apps/vp
 
       - name: Deploy using ssh
@@ -35,7 +35,7 @@ jobs:
           port: 22
           script: |
             cd /apps/vp
-            docker compose -f docker-compose.server.yml down
+            docker compose -f docker-compose.prod.yml down
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/visual-productivity:server-latest
             echo "" > .env
             echo "DB_URL=${{ secrets.DB_URL }}" >> .env
@@ -52,7 +52,7 @@ jobs:
             echo "VP_ALLOWED_HEADERS=${{ secrets.VP_ALLOWED_HEADERS }}" >> .env
             echo "VP_REGISTER_PATTERN=${{ secrets.VP_REGISTER_PATTERN }}" >> .env
             export $(grep -v '^#' .env | xargs)
-            docker compose -f docker-compose.server.yml up -d --build
+            docker compose -f docker-compose.prod.yml up -d --build
 
   deploy-client:
     runs-on: ubuntu-latest

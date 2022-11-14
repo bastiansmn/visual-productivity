@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bastiansmn.vp.config.SecurityConstant;
+import com.bastiansmn.vp.config.properties.JwtProperties;
+import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.token.RefreshTokenService;
@@ -32,6 +34,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final UserService userService;
+    private final JwtProperties jwtProperties;
+    private final SpringProperties springProperties;
 
     @Override
     public UserDAO refresh(HttpServletRequest request, HttpServletResponse response) throws FunctionalException {
@@ -42,7 +46,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new FunctionalException(FunctionalRule.TOKEN_0001);
         String refreshToken = refreshTokenCookie.getValue();
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
+            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(refreshToken);
             String email = decodedJWT.getSubject();
@@ -62,7 +66,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 );
 
             UserDAO user = this.userService.fetchByEmail(email);
-            JwtUtils.createJWTAndAddInHeaders(algorithm, user, response);
+            JwtUtils.createJWTAndAddInHeaders(algorithm, user, response, springProperties.getProfile().equals("prod"));
             return user;
         } catch (FunctionalException e) {
             log.error(e.getMessage());
@@ -90,7 +94,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         // Check expiration date of both access and refresh token
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.JWT_SECRET.getBytes());
+            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(accessToken);
             verifier.verify(refreshToken);

@@ -3,6 +3,7 @@ package com.bastiansmn.vp.project;
 import com.bastiansmn.vp.event.EventDAO;
 import com.bastiansmn.vp.label.LabelDAO;
 import com.bastiansmn.vp.task.TaskDAO;
+import com.bastiansmn.vp.user.UserDAO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -79,6 +80,13 @@ public class ProjectDAO {
             orphanRemoval = true
     )
     private Set<TaskDAO> tasks;
+
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "projects",
+            cascade = CascadeType.ALL
+    )
+    private Set<UserDAO> users;
 
     // For pagination :
     @Column(

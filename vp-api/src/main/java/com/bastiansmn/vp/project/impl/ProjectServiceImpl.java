@@ -6,6 +6,9 @@ import com.bastiansmn.vp.project.ProjectCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
+import com.bastiansmn.vp.user.UserDAO;
+import com.bastiansmn.vp.user.UserRepository;
+import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -22,10 +26,36 @@ import java.util.Set;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final UserService userService;
 
     @Override
-    public ProjectDAO create(ProjectCreationDTO project) {
-        System.out.println(project);
+    public ProjectDAO create(ProjectCreationDTO project) throws FunctionalException {
+
+        if (project.getDeadline() == null)
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0002
+            );
+
+        if (project.getName() == null)
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0003
+            );
+
+        if (project.getDescription() == null)
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0004
+            );
+
+        if (project.getDeadline().before(Date.from(Instant.now())))
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0005
+            );
+
+        if (project.getUser_email() == null)
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0006
+            );
+
         ProjectDAO toAddProject = ProjectDAO.builder()
                 .name(project.getName())
                 .description(project.getDescription())
@@ -36,9 +66,17 @@ public class ProjectServiceImpl implements ProjectService {
                 .labels(Set.of())
                 .events(Set.of())
                 .tasks(Set.of())
+                .users(Set.of())
                 .build();
 
-        return this.projectRepository.save(toAddProject);
+        toAddProject = this.projectRepository.save(toAddProject);
+
+        toAddProject = this.addUserToProject(
+                toAddProject.getProject_id(),
+                project.getUser_email()
+        );
+
+        return toAddProject;
     }
 
     @Override
@@ -62,5 +100,15 @@ public class ProjectServiceImpl implements ProjectService {
             throw new FunctionalException(FunctionalRule.PROJ_0001);
 
         this.projectRepository.deleteById(project_id);
+    }
+
+    @Override
+    public ProjectDAO addUserToProject(Long project_id, String user_email) throws FunctionalException {
+        ProjectDAO project = this.fetchById(project_id);
+        UserDAO user = this.userService.fetchByEmail(user_email);
+
+        project.getUsers().add(user);
+
+        return this.projectRepository.save(project);
     }
 }

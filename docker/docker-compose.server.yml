@@ -1,15 +1,23 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  frontend:
-    container_name: vp-ui
-    build: ./vp-ui
-    ports:
-      - "80:80"
 
-  backend:
+  # Service for the database
+  vp-db:
+    container_name: vp-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: vp
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  # Service for the backend
+  vp-api:
     container_name: vp-api
-    build: ./vp-api
+    image: bastiansmn/visual-productivity:server-latest
     environment:
       PROFILE: ${PROFILE}
       DB_URL: ${DB_URL}
@@ -28,19 +36,6 @@ services:
       - "8080:8080"
     depends_on:
       - vp-db
-
-  vp-db:
-    container_name: vp-db
-    image: postgres:latest
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: vp
-    restart: always
-    volumes:
-      - db-data:/var/lib/postgresql/data
 
 volumes:
   db-data:
