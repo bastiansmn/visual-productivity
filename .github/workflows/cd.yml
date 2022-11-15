@@ -23,7 +23,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: docker-compose.server.yml
+          source: docker/docker-compose.server.yml
           target: /apps/vp
 
       - name: Deploy using ssh
