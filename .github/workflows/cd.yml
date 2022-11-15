@@ -38,15 +38,18 @@ jobs:
             docker compose -f docker-compose.server.yml down
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/visual-productivity:server-latest
             echo "" > .env
+            echo "API_PATH=${{ secrets.API_PATH }}" >> .env
+            echo "PORT=${{ secrets.PORT }}" >> .env
             echo "DB_URL=${{ secrets.DB_URL }}" >> .env
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
             echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
             echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
             echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "PROFILE=${{ secrets.PROFILE }}" >> .env
             echo "VP_ALLOWED_ORIGINS=${{ secrets.VP_ALLOWED_ORIGINS }}" >> .env
             echo "VP_ALLOWED_METHODS=${{ secrets.VP_ALLOWED_METHODS }}" >> .env
             echo "VP_ALLOWED_HEADERS=${{ secrets.VP_ALLOWED_HEADERS }}" >> .env

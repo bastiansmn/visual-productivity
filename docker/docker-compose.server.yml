@@ -19,10 +19,13 @@ services:
     container_name: vp-api
     image: bastiansmn/visual-productivity:server-latest
     environment:
-      PROFILE: ${PROFILE}
+      API_PATH: ${API_PATH}
+      PORT: ${PORT}
       DB_URL: ${DB_URL}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USERNAME: ${SMTP_USERNAME}
@@ -33,7 +36,7 @@ services:
       VP_REGISTER_PATTERN: ${VP_REGISTER_PATTERN}
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     depends_on:
       - vp-db
 
