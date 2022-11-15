@@ -7,4 +7,4 @@ RUN mvn clean package
 
 FROM openjdk:17-ea-jdk-oracle
 COPY --from=build /app/target/*.jar /app.jar
-CMD ["java", "-jar", "/app.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app.jar"]

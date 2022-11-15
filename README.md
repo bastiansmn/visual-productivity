@@ -1,6 +1,10 @@
 # visual-productivty
 
-## Test the application
+## Preview the app
+
+A preview version is available at [https://vp.bastian-somon.fr](https://vp.bastian-somon.fr)
+
+## Test the application locally
 
 *All commands below suggest to be executed in the root directory of the project.*
 
@@ -19,11 +23,11 @@ GOOGLE_CLIENT_SECRET=<your google client secret>
 
 Create a file called docker/.env.
 Add your own SMTP server (something like Google, ...)
-You'll need the following variables:
+You'll need the following variables in your .env:
 
 ```
 SMTP_HOST=<your smtp host>
-SMTP_PORT=<your smtp port
+SMTP_PORT=<your smtp port>
 SMTP_USERNAME=<your smtp username>
 SMTP_PASSWORD=<your smtp password>
 ```
@@ -34,3 +38,12 @@ And then you can run the full-app by running:
 docker compose -f docker/docker-compose.full-app.yml up -d --build
 ```
 
+### Local environnement :
+
+However, you can also run a more local environnement (without SMTP server, but note that you still need Google cred to make the social auth works) :
+
+```bash
+docker compose -f docker/docker-compose.dev.yml up -d --build
+```
+
+This will run a DB service, a PGAdmin hosted on port 16543 and Mailhog to simulate a production SMTP server.
