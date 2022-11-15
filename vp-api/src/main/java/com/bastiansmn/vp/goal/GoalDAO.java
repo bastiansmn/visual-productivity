@@ -78,14 +78,12 @@ public class GoalDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "goal",
-            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private Set<TaskDAO> tasks;
 
     @ManyToOne(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            fetch = FetchType.EAGER
     )
     @JoinColumn(
             name = "project_id"

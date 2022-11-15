@@ -37,11 +37,7 @@ public class RoleDAO {
     private String name;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
+            fetch = FetchType.EAGER
     )
     @JoinTable(name = "link_role_auths",
             joinColumns = @JoinColumn(name = "role_id"),

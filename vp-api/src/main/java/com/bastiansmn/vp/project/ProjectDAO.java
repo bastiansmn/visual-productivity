@@ -61,7 +61,6 @@ public class ProjectDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
     private Set<LabelDAO> allLabels;
@@ -69,7 +68,6 @@ public class ProjectDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
     private Set<EventDAO> allEvents;
@@ -77,7 +75,6 @@ public class ProjectDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
     private Set<GoalDAO> allGoals;
@@ -85,14 +82,12 @@ public class ProjectDAO {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
     private Set<TaskDAO> allTasks;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "link_user_projects",

@@ -95,13 +95,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.findAll();
     }
 
-    public void delete(UserDAO userDAO) throws FunctionalException {
-        Optional<UserDAO> user = this.userRepository.findById(userDAO.getUser_id());
+    public void delete(Long user_id) throws FunctionalException {
+        Optional<UserDAO> user = this.userRepository.findById(user_id);
         if (user.isEmpty())
             throw new FunctionalException(FunctionalRule.USER_0004, HttpStatus.NOT_FOUND);
 
         log.info("Deleting user with id={}", user.get().getUser_id());
-        this.userRepository.deleteById(user.get().getUser_id());
+        this.userRepository.delete(user.get());
     }
 
     public boolean emailExists(String email) {

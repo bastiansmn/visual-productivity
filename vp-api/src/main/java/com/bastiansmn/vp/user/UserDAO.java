@@ -62,9 +62,12 @@ public class UserDAO {
     private Set<RoleDAO> roles;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            mappedBy = "users",
-            cascade = CascadeType.ALL
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "link_user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
     )
     @JsonIgnore
     @ToString.Exclude
@@ -78,8 +81,6 @@ public class UserDAO {
     )
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-
-    // TODO: add confirmation code but not in the db
 
     private boolean isEnabled;
 

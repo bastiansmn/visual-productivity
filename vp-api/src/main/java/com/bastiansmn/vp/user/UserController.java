@@ -71,8 +71,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur inconnu"),
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestBody UserDAO userDAO) throws FunctionalException {
-        this.userService.delete(userDAO);
+    public ResponseEntity<Void> delete(@RequestParam Long user_id) throws FunctionalException {
+        this.userService.delete(user_id);
         return ResponseEntity.ok().build();
     }
 

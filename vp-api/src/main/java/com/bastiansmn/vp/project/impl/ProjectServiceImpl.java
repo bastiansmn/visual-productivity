@@ -55,12 +55,9 @@ public class ProjectServiceImpl implements ProjectService {
                     FunctionalRule.PROJ_0005
             );
 
-        if (projectDTO.getUser_email() == null)
-            throw new FunctionalException(
-                    FunctionalRule.PROJ_0006
-            );
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDAO projectCreator = userService.fetchByEmail(projectDTO.getUser_email());
+        UserDAO projectCreator = userService.fetchByEmail(contextUser);
 
         ProjectDAO project = ProjectDAO.builder()
                 .name(projectDTO.getName())

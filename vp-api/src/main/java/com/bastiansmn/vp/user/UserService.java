@@ -13,7 +13,7 @@ public interface UserService {
 
     UserDAO fetchByEmail(String email) throws FunctionalException;
 
-    void delete(UserDAO userDAO) throws FunctionalException;
+    void delete(Long user_id) throws FunctionalException;
 
     List<UserDAO> fetchAll();
 

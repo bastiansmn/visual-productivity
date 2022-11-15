@@ -103,7 +103,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    (document.querySelector('input#lastname') as HTMLInputElement)?.focus();
+    (document.querySelector('input#firstname') as HTMLInputElement)?.focus();
   }
 
 }

@@ -16,6 +16,5 @@ public class ProjectCreationDTO {
     private String description;
     private Date deadline;
     private boolean complete_mode;
-    private String user_email;
 
 }
