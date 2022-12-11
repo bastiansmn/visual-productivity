@@ -45,5 +45,4 @@ volumes:
 
 networks:
   default:
-    external:
-      name: apps-network
+    name: apps-network
