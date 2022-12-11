@@ -1,0 +1,64 @@
+<main>
+  <div class="header">
+
+  </div>
+  <section>
+    <nav [class.active]="navbarToggled" class="project__navigation">
+      <div class="item">
+        <button
+          class="item__image"
+          (click)="toggleNavigation()"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="item__content">
+          Mes projets
+        </div>
+      </div>
+      <a
+        *ngFor="let project of projects"
+        class="item project"
+        [routerLink]="'/app/projects/' + project.project_id"
+        routerLinkActive="active"
+      >
+        <div class="item__image">
+          <span>{{ project.name.substring(0, 2) }}</span>
+        </div>
+        <div class="item__content">
+          {{ project.name }}
+        </div>
+      </a>
+      <a routerLink="/app/create-project" class="item create__project">
+        <div class="item__image create__project">
+          <span>
+            <mat-icon>add</mat-icon>
+          </span>
+        </div>
+        <div class="item__content">
+          Créer un projet
+        </div>
+      </a>
+
+      <!-- Settings -->
+      <a routerLink="/app/settings" class="item settings">
+        <vp-button
+          background="light"
+          hoverColor="dark"
+          color="dark"
+          [border]="true"
+          [hoverBorder]="false"
+          [padding]="false"
+          [rounded]="true"
+        >
+          <mat-icon>settings</mat-icon>
+        </vp-button>
+        <div class="item__content">
+          Paramètres
+        </div>
+      </a>
+    </nav>
+    <div class="project__content">
+      <router-outlet></router-outlet>
+    </div>
+  </section>
+</main>

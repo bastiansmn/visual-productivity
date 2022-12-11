@@ -5,6 +5,7 @@
 // Plus imports for other components in your app.
 @use './app/components/discover/discover-theme.component.scss' as discover;
 @use 'src/app/components/common/input/input-theme.component' as login;
+@use 'src/app/components/application/application-theme.component' as application;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -230,6 +231,7 @@ $ui-theme: mat.define-light-theme((
 // App specific themes:
 @include discover.theme($ui-theme);
 @include login.theme($ui-theme);
+@include application.theme($ui-theme);
 
 /* You can add global styles to this file, and also import other style files */
 @import "gradients";
@@ -240,6 +242,20 @@ body { margin: 0; overflow-x: hidden }
 
 vp-button {
   height: 36px;
+}
+
+button:not(.vp__button) {
+  outline: none;
+  background: transparent;
+  user-select: none;
+  margin: 0;
+  border: none;
+  padding: 0;
+  aspect-ratio: 1;
+  width: 34px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
 }
 
 a, button {

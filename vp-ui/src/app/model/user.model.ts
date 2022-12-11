@@ -26,6 +26,6 @@ export interface User {
   name: String,
   lastname: String,
   roles: Array<Role>,
-  isEnabled: boolean,
-  isNotLocked: boolean
+  enabled: boolean,
+  notLocked: boolean
 }

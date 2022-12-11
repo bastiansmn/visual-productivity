@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from "./services/responsive/responsive.service";
-import {Subscription} from "rxjs";
 import {AuthService} from "./services/auth/auth.service";
 import {AlertService} from "./services/alert/alert.service";
 import {LoaderService} from "./services/loader/loader.service";
@@ -11,9 +10,6 @@ import {LoaderService} from "./services/loader/loader.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
-  responsiveSubscription!: Subscription;
-  isMobile: boolean = false;
 
   constructor(
     private responsiveService: ResponsiveService,
@@ -31,15 +27,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.responsiveSubscription = this.responsiveService.getMobileStatus().subscribe(isMobile => {
-      this.isMobile = isMobile;
-    });
-    this.authService.initAuthFlow();
     this.onResize();
+    this.authService.checkConnection();
   }
 
   ngOnDestroy(): void {
-    this.responsiveSubscription.unsubscribe();
   }
 
   onResize() {

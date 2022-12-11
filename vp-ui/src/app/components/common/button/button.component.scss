@@ -4,7 +4,6 @@
   border: none;
   border-radius: 9px;
   height: 100%;
-  padding-inline: 1rem;
 
   cursor: pointer;
 
@@ -137,4 +136,12 @@
 
 .bg-green {
   background: $green;
+}
+
+.padding-inline {
+  padding-inline: 1rem;
+}
+
+.rounded {
+  border-radius: 9999px;
 }

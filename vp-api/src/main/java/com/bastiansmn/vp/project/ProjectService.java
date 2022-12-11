@@ -4,6 +4,7 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.user.UserDAO;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public interface ProjectService {
@@ -17,6 +18,6 @@ public interface ProjectService {
 
     ProjectDAO addUserToProject(Long project_id, String user_email) throws FunctionalException;
 
-    Set<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException;
+    List<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException;
 
 }

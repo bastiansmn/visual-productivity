@@ -16,6 +16,8 @@ export class ButtonComponent implements AfterViewInit {
   @Input() disabled: boolean = false;
   @Input() scaleOnHover: boolean = false;
   @Input() tabulationIndex: string = "-1";
+  @Input() padding: boolean = true;
+  @Input() rounded: boolean = false;
 
   @ViewChild('button') button!: ElementRef
 
@@ -40,6 +42,10 @@ export class ButtonComponent implements AfterViewInit {
       this.button.nativeElement.classList.add('hov-border')
     if (this.scaleOnHover)
       this.button.nativeElement.classList.add('hov-scale')
+    if (this.padding)
+      this.button.nativeElement.classList.add('padding-inline')
+    if (this.rounded)
+      this.button.nativeElement.classList.add('rounded')
   }
 
 }

@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
-  readonly SUCCESS_REDIRECT_ROUTE = '/discover';
+  readonly SUCCESS_REDIRECT_ROUTE = '/app';
 
   formGroup = this.fb.group({
     email: ['', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]],
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
       this.loginWithGoogle(user);
     });
     if (!!this.authService.loggedUser) {
-      this.formGroup.controls['email'].setValue(<string>this.authService.loggedUser.email);
+      this.formGroup.controls['email'].setValue(<string>this.authService.loggedUser.getValue()?.email);
       const emailInput: HTMLInputElement | null = document.querySelector('input#email');
 
       emailInput?.focus();

@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -71,7 +72,7 @@ public class UserDAO {
     )
     @JsonIgnore
     @ToString.Exclude
-    private Set<ProjectDAO> projects;
+    private List<ProjectDAO> projects;
 
     @Column(
             name = "created_date",

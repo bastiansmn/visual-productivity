@@ -2,6 +2,7 @@ package com.bastiansmn.vp.event;
 
 import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -60,6 +61,7 @@ public class EventDAO {
             nullable = false,
             updatable = false
     )
+    @JsonIgnore
     private ProjectDAO project;
 
 

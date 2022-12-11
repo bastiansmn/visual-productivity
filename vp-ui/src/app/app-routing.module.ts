@@ -6,6 +6,13 @@ import {LoginComponent} from "./components/auth/login/login.component";
 import {RegisterComponent} from "./components/auth/register/register.component";
 import {ConfirmComponent} from "./components/auth/confirm/confirm.component";
 import {CanConfirmAccount} from "./guards/can-confirm-account.service";
+import {ApplicationComponent} from "./components/application/application.component";
+import {IsLoggedInGuard} from "./guards/is-logged-in.guard";
+import {LoginResolverService} from "./services/resolvers/login-resolver.service";
+import {ProjectComponent} from "./components/application/project/project.component";
+import {DashboardComponent} from "./components/application/dashboard/dashboard.component";
+import {SettingsComponent} from "./components/application/settings/settings.component";
+import {CreateProjectComponent} from "./components/application/create-project/create-project.component";
 
 const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
@@ -15,7 +22,7 @@ const routerOptions: ExtraOptions = {
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'discover',
+    redirectTo: 'app',
     pathMatch: 'full'
   },
   {
@@ -35,6 +42,38 @@ const routes: Routes = [
     component: ConfirmComponent,
     canActivate: [CanConfirmAccount],
     canLoad: [CanConfirmAccount]
+  },
+  {
+    path: 'app',
+    component: ApplicationComponent,
+    resolve: {
+      loggedIn: LoginResolverService
+    },
+    canLoad: [IsLoggedInGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path: 'create-project',
+        component: CreateProjectComponent
+      },
+      {
+        path: 'projects/:id',
+        component: ProjectComponent
+        // TODO: Add project resolver and guard
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent
+      }
+    ]
   }
 ];
 

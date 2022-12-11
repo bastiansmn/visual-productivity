@@ -6,3 +6,12 @@
     opacity: 1;
   }
 }
+
+@keyframes btt {
+  from {
+    transform: var(--transformation, translate(0)) translateY(100%);
+  }
+  to {
+    transform: var(--transformation, translate(0)) translateY(0);
+  }
+}

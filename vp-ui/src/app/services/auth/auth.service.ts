@@ -2,20 +2,21 @@ import {Injectable} from '@angular/core';
 import {LoginProvider, User, UserLogin, UserRegister} from "../../model/user.model";
 import {SocialUser} from "@abacritt/angularx-social-login";
 import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {environment, environment as env} from "../../../environments/environment";
-import {catchError, EMPTY, retry} from "rxjs";
+import {environment} from "../../../environments/environment";
+import {BehaviorSubject, catchError, EMPTY, retry, Subject} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {AlertService, AlertType} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
 import {Error} from "../../model/error.model";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  loggedUser?: User;
-  isLoggedIn = false;
+  loggedUser = new BehaviorSubject<User | null>(null);
+  isLoggedIn = new BehaviorSubject<boolean>(false);
 
   readonly SAVE_FIELD = "loggedUser"
 
@@ -26,42 +27,58 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
-  initAuthFlow() {
+  checkConnection() {
     const userStr: string | null = sessionStorage.getItem(this.SAVE_FIELD) ?? localStorage.getItem(this.SAVE_FIELD);
     const user: User = userStr ? JSON.parse(userStr) : null;
-    if (!user) {
-      this.isLoggedIn = false;
-      this.clearConnection();
-      return;
-    }
+    this.isLoggedIn.next(!!user);
+  }
 
-    this.checkTokensValidity()
-      .then(async isValid => {
-        if (isValid) {
-          this.retrieveUserInfos(user)
-            .catch(err => console.error(err));
-          return;
-        }
+  initAuthFlow() {
+    return new Promise<boolean>((resolve, reject) => {
+      const userStr: string | null = sessionStorage.getItem(this.SAVE_FIELD) ?? localStorage.getItem(this.SAVE_FIELD);
+      const user: User = userStr ? JSON.parse(userStr) : null;
+      if (!user) {
+        this.isLoggedIn.next(false);
+        this.clearConnection();
+        reject();
+        return;
+      }
 
-        // Refresh token automatically if user wants to stay connected
-        if (this.stayedLogged())
-          await this.refreshTokens();
-        else {
+      this.checkTokensValidity()
+        .then(async isValid => {
+          if (isValid) {
+            this.retrieveUserInfos(user)
+              .catch(err => {
+                console.error(err);
+                this.isLoggedIn.next(false);
+                reject();
+              });
+            resolve(true);
+            return;
+          }
+
+          // Refresh token automatically if user wants to stay connected
+          if (this.stayedLogged())
+            await this.refreshTokens();
+          else {
+            this.alertService.show(
+              "Vous avez été déconnecté",
+              { duration: 5000, type: AlertType.WARNING }
+            );
+            this.logout();
+            reject();
+          }
+
+        })
+        .catch(() => {
           this.alertService.show(
-            "Vous avez été déconnecté",
-            { duration: 5000, type: AlertType.WARNING }
+            "Validation de votre identifiant impossible, reconnectez-vous",
+            { duration: 5000, type: AlertType.ERROR }
           );
           this.logout();
-        }
-
-      })
-      .catch(() => {
-        this.alertService.show(
-          "Validation de votre identifiant impossible, reconnectez-vous",
-          { duration: 5000, type: AlertType.ERROR }
-        );
-        this.logout();
-      })
+          reject();
+        })
+    })
   }
 
   validateCode(code: String) {
@@ -69,7 +86,7 @@ export class AuthService {
       this.loaderService.show();
       this.http.put("/api/v1/mail/confirm", {
         user: {
-          user_id: this.loggedUser?.user_id,
+          user_id: this.loggedUser.getValue()?.user_id
         },
         confirmationCode: code
       }, { observe: 'response' })
@@ -170,8 +187,8 @@ export class AuthService {
               "Vous allez recevoir un mail de confirmation",
               { type: AlertType.INFO, persistent: true }
             )
-            this.loggedUser = response.body;
-            this.isLoggedIn = false;
+            this.loggedUser.next(response.body);
+            this.isLoggedIn.next(false);
             resolve(response);
         });
     })
@@ -215,7 +232,7 @@ export class AuthService {
   }
 
   private retrieveUserInfos(foundUser: User) {
-    return new Promise((_, reject) => {
+    return new Promise((resolve, reject) => {
       // Updating user infos
       this.loaderService.show();
       this.http.get<User>(`/api/v1/user/fetchByEmail?email=${foundUser.email}`, {observe: "response"})
@@ -247,14 +264,15 @@ export class AuthService {
             })
             setTimeout(() => {}, 5000);
             this.loaderService.hide();
+            resolve(null);
           }
         })
     })
   }
 
   private setConnection(user: User, stayLogged: boolean) {
-    this.loggedUser = user;
-    this.isLoggedIn = true;
+    this.loggedUser.next(user);
+    this.isLoggedIn.next(true);
     this.clearConnection();
     if (stayLogged)
       localStorage.setItem("loggedUser", JSON.stringify(user));

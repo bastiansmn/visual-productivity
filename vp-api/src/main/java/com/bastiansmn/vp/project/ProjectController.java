@@ -3,9 +3,11 @@ package com.bastiansmn.vp.project;
 import com.bastiansmn.vp.exception.FunctionalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,6 +34,7 @@ public class ProjectController {
     }
 
     @GetMapping("/fetchById")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ProjectDAO> fetchById(@RequestParam Long project_id) throws FunctionalException {
         return ResponseEntity.ok(this.projectService.fetchById(project_id));
     }
@@ -48,7 +51,14 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/myProjects")
+    public ResponseEntity<Collection<ProjectDAO>> myProjects() throws FunctionalException {
+        String userContext = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(this.projectService.fetchProjectsOfUser(userContext));
+    }
+
     @GetMapping("/fetchProjectsOf")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Collection<ProjectDAO>> fetchProjectsOfUser(@RequestParam String user_email) throws FunctionalException {
         return ResponseEntity.ok(this.projectService.fetchProjectsOfUser(user_email));
     }

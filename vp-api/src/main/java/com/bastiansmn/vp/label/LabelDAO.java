@@ -1,6 +1,7 @@
 package com.bastiansmn.vp.label;
 
 import com.bastiansmn.vp.project.ProjectDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,6 +43,7 @@ public class LabelDAO {
             nullable = false,
             updatable = false
     )
+    @JsonIgnore
     private ProjectDAO project;
 
     // For pagination :

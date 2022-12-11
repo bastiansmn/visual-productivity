@@ -6,6 +6,7 @@ import com.bastiansmn.vp.label.LabelDAO;
 import com.bastiansmn.vp.task.TaskDAO;
 import com.bastiansmn.vp.user.UserDAO;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,17 +23,23 @@ import java.util.Set;
 public class ProjectDAO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(name = "project_id", strategy = "com.bastiansmn.vp.project.ProjectIdGenerator")
+    @GeneratedValue(generator = "project_id")
     @Column(
             nullable = false,
             updatable = false
     )
-    private Long project_id;
+    private String project_id;
 
     @Column(
             nullable = false
     )
     private String name;
+
+    @Column(
+            nullable = false
+    )
+    private String project_identifier;
 
     @Column(
             nullable = false

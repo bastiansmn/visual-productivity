@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import "src/variables";
+
+@mixin color($ui-theme) {
+  $color-config: mat.get-color-config($ui-theme);
+  $primary: map.get($color-config, 'primary');
+  $accent: map.get($color-config, 'accent');
+  $warn: map.get($color-config, 'warn');
+
+
+  .project {
+    & .item__image {
+      span {
+        background: mat.get-color-from-palette($primary, 500);
+      }
+    }
+
+    &.active {
+      & .item__image {
+        box-shadow: inset 0 0 0 var(--primary-border-size) $purple,
+                    inset 0 0 0 var(--gap-border-size) $light;
+      }
+    }
+  }
+}
+
+@mixin theme($ui-theme) {
+  $color-config: mat.get-color-config($ui-theme);
+  @if $color-config != null {
+    @include color($ui-theme);
+  }
+}

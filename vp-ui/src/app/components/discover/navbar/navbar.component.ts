@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
   @Output() toggle = new EventEmitter()
 
   get isLoggedIn() {
-    return this.authService.isLoggedIn;
+    return this.authService.isLoggedIn.getValue();
   }
 
   constructor(private authService: AuthService) { }

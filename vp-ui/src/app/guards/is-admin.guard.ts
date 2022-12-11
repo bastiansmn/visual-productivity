@@ -15,8 +15,8 @@ export class IsAdminGuard implements CanActivate, CanLoad {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return (this.authService.loggedUser?.isNotLocked
-      && this.authService.loggedUser?.isEnabled
+    return (this.authService.loggedUser?.notLocked
+      && this.authService.loggedUser?.enabled
       && this.authService.loggedUser?.roles.map((r: Role) => r.name).includes("ROLE_ADMIN")
     ) ?? false;
   }
@@ -24,8 +24,8 @@ export class IsAdminGuard implements CanActivate, CanLoad {
   canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return (this.authService.loggedUser?.isNotLocked
-      && this.authService.loggedUser?.isEnabled
+    return (this.authService.loggedUser?.notLocked
+      && this.authService.loggedUser?.enabled
       && this.authService.loggedUser?.roles.map((r: Role) => r.name).includes("ROLE_ADMIN")
     ) ?? false;
   }

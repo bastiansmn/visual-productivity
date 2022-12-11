@@ -34,6 +34,15 @@
           <span>S'inscrire</span>
         </a>
       </mat-list-item>
+      <mat-list-item *ngIf="isLoggedIn">
+        <a
+          routerLink="/app"
+          routerLinkActive="active"
+        >
+          <mat-icon>desktop_mac</mat-icon>
+          <span>Mon espace</span>
+        </a>
+      </mat-list-item>
     </mat-list>
   </div>
 </div>

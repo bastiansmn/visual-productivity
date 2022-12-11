@@ -1,0 +1,175 @@
+@import "src/variables";
+@import "src/keyframes";
+
+$navbar-size: 70px;
+
+main {
+  background: $green-light;
+  height: 100vh;
+  width: 100vw;
+
+  div.header {
+    height: $navbar-size;
+    width: 100%;
+  }
+
+  section {
+    height: calc(100% - $navbar-size);
+    width: 100%;
+    background: $light;
+    border-radius: 20px 20px 0 0;
+    will-change: transform;
+    animation: btt 1s cubic-bezier(.07,0,.05,1);
+    box-shadow: 0 4px 15px rgba(76, 76, 76, 0.3);
+
+    position: relative;
+    display: flex;
+
+    $project-navbar-width: 40px;
+    $project-navbar-padding: 1rem;
+    $project-navbar-width-ext: 200px;
+
+    nav.project__navigation {
+      position: absolute;
+      width: $project-navbar-width;
+      height: calc(100% - 2* $project-navbar-padding);
+      padding: $project-navbar-padding;
+      justify-content: center;
+      border-right: 1px solid $light-grey;
+      transition: width .2s ease-in-out;
+      z-index: 1000;
+      background: $light;
+      display: flex;
+      flex-direction: column;
+
+      & a {
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      & .project {
+        text-decoration: none;
+
+        &:not(.active) {
+          & .item__image {
+            box-shadow: inset 0 0 0;
+          }
+
+          &:hover {
+
+          }
+        }
+
+        & .item__image {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          transition: box-shadow .2s ease-out;
+          span {
+            width: calc(100% - 2*var(--gap-border-size));
+            height: calc(100% - 2*var(--gap-border-size));
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: $light;
+          }
+        }
+      }
+
+      & .item {
+        width: 100%;
+        height: $project-navbar-width;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        margin-bottom: 1rem;
+
+        & .item__image {
+          --primary-border-size: 1px;
+          --gap-border-size: 3px;
+          box-sizing: border-box;
+          min-width: $project-navbar-width;
+          min-height: $project-navbar-width;
+          display: grid;
+          place-items: center;
+        }
+
+        & .item__content {
+          height: 100%;
+          $padding: $project-navbar-padding;
+          padding-inline: $padding;
+          min-width:
+            calc($project-navbar-width-ext -
+            $project-navbar-width - 2*$padding);
+          transition: opacity .2s ease-in-out;
+          opacity: 0;
+          margin: 0;
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      &.active {
+        width: $project-navbar-width-ext;
+
+        & .item {
+          & .item__content {
+            opacity: 1;
+          }
+        }
+      }
+
+      & .create__project {
+        &:hover {
+          & div span {
+            background: $light-grey;
+          }
+        }
+
+        & div {
+          display: grid;
+          place-items: center;
+
+          & span {
+            background: $dark;
+            color: $light;
+            width: 60%;
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            transition: background .2s ease-in-out;
+
+            mat-icon {
+              font-size: 20px;
+              display: grid;
+              place-items: center;
+            }
+          }
+        }
+      }
+
+      & .settings {
+        margin-top: auto;
+        margin-bottom: 0 !important;
+
+        & vp-button {
+          min-width: $project-navbar-width;
+          min-height: $project-navbar-width;
+
+          &::ng-deep mat-icon {
+            display: grid;
+            place-items: center;
+          }
+        }
+      }
+    }
+
+    .project__content {
+      width: calc(100% - $project-navbar-width - 1px);
+      padding: 1rem;
+      margin-left: calc($project-navbar-width + 2 * $project-navbar-padding);
+      z-index: 50;
+    }
+  }
+}

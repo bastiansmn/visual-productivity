@@ -18,10 +18,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         ProjectDAO project = ProjectDAO.builder()
                 .name(projectDTO.getName())
+                .project_identifier(projectDTO.getName().toLowerCase().replaceAll(" ", "-"))
                 .description(projectDTO.getDescription())
                 .deadline(projectDTO.getDeadline())
                 .token(RandomStringUtils.randomAlphanumeric(8))
@@ -129,7 +127,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Set<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException {
+    public List<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException {
         UserDAO user = this.userService.fetchByEmail(email);
         return user.getProjects();
     }
