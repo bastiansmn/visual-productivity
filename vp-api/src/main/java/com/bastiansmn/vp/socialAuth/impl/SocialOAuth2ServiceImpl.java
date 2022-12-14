@@ -12,6 +12,7 @@ import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.socialAuth.SocialOAuth2Service;
 import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.bastiansmn.vp.socialAuth.dto.SocialUserDTO;
+import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserRepository;
 import com.bastiansmn.vp.utils.CookieUtils;
@@ -40,6 +41,7 @@ public class SocialOAuth2ServiceImpl implements SocialOAuth2Service {
     private final RoleService roleService;
     private final JwtProperties jwtProperties;
     private final SpringProperties springProperties;
+    private final TokenService tokenService;
 
     @Override
     public UserDAO login(SocialUserDTO userDTO, HttpServletResponse response) throws FunctionalException {
@@ -70,8 +72,7 @@ public class SocialOAuth2ServiceImpl implements SocialOAuth2Service {
             toAddUser = user.get();
         }
 
-        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
-        JwtUtils.createJWTAndAddInHeaders(algorithm, toAddUser, response, springProperties.getProfile().equals("prod"));
+        tokenService.createJWTAndAddInHeaders(toAddUser, response, springProperties.getProfile().equals("prod"));
 
         return toAddUser;
     }

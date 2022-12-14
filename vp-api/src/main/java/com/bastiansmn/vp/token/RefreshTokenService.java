@@ -10,6 +10,6 @@ public interface RefreshTokenService {
 
     UserDAO refresh(HttpServletRequest request, HttpServletResponse response) throws FunctionalException;
 
-    Boolean validate(HttpServletRequest request) throws FunctionalException;
+    Boolean validate(HttpServletRequest request, HttpServletResponse response) throws FunctionalException;
 
 }

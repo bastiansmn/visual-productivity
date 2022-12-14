@@ -4,9 +4,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.config.properties.JwtProperties;
 import com.bastiansmn.vp.config.properties.SpringProperties;
+import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserPrincipal;
 import com.bastiansmn.vp.utils.CookieUtils;
-import com.bastiansmn.vp.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
     private final SpringProperties springProperties;
+    private final TokenService tokenService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -51,11 +52,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             IOException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
-        String accessToken = JwtUtils.createAccessToken(algorithm, user.getUsername(), user.getAuthorities().stream()
+        String accessToken = tokenService.createAccessToken(user.getUsername(), user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()), user.isEnabled(), user.isAccountNonLocked());
 
-        String refreshToken = JwtUtils.createRefreshToken(algorithm, user.getUsername());
+        String refreshToken = tokenService.createRefreshToken(user.getUsername());
 
         // If user is not active or locked, send error
         if (!user.isEnabled() || !user.isAccountNonLocked()) {
@@ -73,15 +74,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             CookieUtils.generateCookie(
                 SecurityConstant.ACCESS_TOKEN_COOKIE_NAME,
                 accessToken,
-                SecurityConstant.ACCESS_TOKEN_URI,
-                SecurityConstant.ACCESS_EXPIRATION_TIME,
+                jwtProperties.getAccessPath(),
+                jwtProperties.getAccessTokenExpirationTime(),
                 springProperties.getProfile().equals("prod")
             ),
             CookieUtils.generateCookie(
                 SecurityConstant.REFRESH_TOKEN_COOKIE_NAME,
                 refreshToken,
-                SecurityConstant.REFRESH_TOKEN_URI,
-                SecurityConstant.REFRESH_EXPIRATION_TIME,
+                jwtProperties.getRefreshPath(),
+                jwtProperties.getRefreshTokenExpirationTime(),
                 springProperties.getProfile().equals("prod")
             )
         );

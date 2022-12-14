@@ -24,8 +24,8 @@ public class RefreshTokenController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Boolean> validate(HttpServletRequest request) throws FunctionalException {
-        return ResponseEntity.ok(this.refreshTokenService.validate(request));
+    public ResponseEntity<Boolean> validate(HttpServletRequest request, HttpServletResponse response) throws FunctionalException {
+        return ResponseEntity.ok(this.refreshTokenService.validate(request, response));
     }
 
 }

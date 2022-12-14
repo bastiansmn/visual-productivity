@@ -12,6 +12,7 @@ import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.token.RefreshTokenService;
+import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserService;
 import com.bastiansmn.vp.utils.JwtUtils;
@@ -36,6 +37,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final UserService userService;
     private final JwtProperties jwtProperties;
     private final SpringProperties springProperties;
+    private final TokenService tokenService;
 
     @Override
     public UserDAO refresh(HttpServletRequest request, HttpServletResponse response) throws FunctionalException {
@@ -66,7 +68,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 );
 
             UserDAO user = this.userService.fetchByEmail(email);
-            JwtUtils.createJWTAndAddInHeaders(algorithm, user, response, springProperties.getProfile().equals("prod"));
+            tokenService.createJWTAndAddInHeaders(user, response, springProperties.getProfile().equals("prod"));
             return user;
         } catch (FunctionalException e) {
             log.error(e.getMessage());
@@ -75,7 +77,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public Boolean validate(HttpServletRequest request) throws FunctionalException {
+    public Boolean validate(HttpServletRequest request, HttpServletResponse response) throws FunctionalException {
         if (request.getCookies() == null)
             return false;
         // Get refresh token
@@ -88,7 +90,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         // Get access token
         Cookie accessTokenCookie = WebUtils.getCookie(request, SecurityConstant.ACCESS_TOKEN_COOKIE_NAME);
         if (accessTokenCookie == null) {
-            return false;
+            // Refresh the token
+            this.refresh(request, response);
+            return true;
         }
         String accessToken = accessTokenCookie.getValue();
 

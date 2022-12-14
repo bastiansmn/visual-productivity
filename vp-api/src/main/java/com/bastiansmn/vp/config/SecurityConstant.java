@@ -5,16 +5,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SecurityConstant {
 
-    // 1 day in seconds
-    public static final Long ACCESS_EXPIRATION_TIME = 86_400L;
-    // 1 month in seconds
-    public static final Long REFRESH_EXPIRATION_TIME = 2_419_200L;
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     public static final String LOGIN_URI = "/login";
-    // TODO: Changer le base path
-    public static final String ACCESS_TOKEN_URI = "/api/v1";
-    public static final String REFRESH_TOKEN_URI = "/api/v1/token";
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Le token n'a pas pu être vérifié";
     public static final String TOKEN_EXPIRED = "Le token a expiré";
     public static final String VP_LLC = "VisualProductivity, LLC";
@@ -36,7 +29,8 @@ public class SecurityConstant {
             "/oauth2/login",
             "/",
             "/docs/**",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
+            "/actuator/**",
     };
 
 }
