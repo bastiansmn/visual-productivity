@@ -38,7 +38,7 @@ public class GoalController {
 
     @GetMapping("/fetchAllOfProject")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Collection<GoalDAO>> fetchAll(@RequestParam Long project_id) throws FunctionalException {
+    public ResponseEntity<Collection<GoalDAO>> fetchAll(@RequestParam String project_id) throws FunctionalException {
         return ResponseEntity.ok(this.goalService.fetchAll(project_id));
     }
 

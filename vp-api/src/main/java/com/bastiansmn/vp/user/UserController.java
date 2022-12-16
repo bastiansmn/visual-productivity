@@ -59,6 +59,17 @@ public class UserController {
         return ResponseEntity.ok(this.userService.fetchByEmail(email));
     }
 
+    @Operation(summary = "Récupère l'utilisateur connecté (via les cookies)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur introuvable")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<UserDAO> me() throws FunctionalException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(this.userService.fetchByEmail(email));
+    }
+
     @GetMapping("/fetchAll")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserDAO>> fetchAll() {

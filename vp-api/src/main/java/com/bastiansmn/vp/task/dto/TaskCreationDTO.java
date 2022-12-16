@@ -16,6 +16,6 @@ public class TaskCreationDTO {
     private Date date_start;
     private Date date_end;
     private Long goal_id;
-    private Long project_id;
+    private String project_id;
 
 }

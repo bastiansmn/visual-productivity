@@ -3,15 +3,15 @@
     <h1 class="mat-subheading-2">S'inscrire</h1>
     <vp-input
       [parentForm]="formGroup"
-      parentFormControlName="firstname"
+      parentFormControlName="name"
       type="text"
       placeholder="Votre prénom"
-      name="firstname"
+      name="name"
       [required]="true"
       tabulationIndex="1"
     >
       <small class="errorMessage mat-caption" errorMessage>
-        {{ getErrorMessage('firstname') }}
+        {{ getErrorMessage('name') }}
       </small>
     </vp-input>
     <vp-input

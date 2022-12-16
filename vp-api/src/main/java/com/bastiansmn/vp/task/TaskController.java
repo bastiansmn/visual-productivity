@@ -36,7 +36,7 @@ public class TaskController {
     }
 
     @GetMapping("/fetchAllOfProject")
-    public ResponseEntity<Collection<TaskDAO>> fetchAllOfProject(@RequestParam Long project_id) throws FunctionalException {
+    public ResponseEntity<Collection<TaskDAO>> fetchAllOfProject(@RequestParam String project_id) throws FunctionalException {
         return ResponseEntity.ok(this.taskService.fetchAllOfProject(project_id));
     }
 

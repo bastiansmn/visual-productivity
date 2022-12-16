@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {catchError, EMPTY, Observable} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, from, Observable, of} from "rxjs";
 import {Error} from "../../model/error.model";
 import {environment} from "../../../environments/environment";
 import {AlertService, AlertType} from "../alert/alert.service";
@@ -12,10 +12,10 @@ import Project from "../../model/project.model";
 })
 export class ProjectService {
 
-  private projects: Project[] = [];
+  projects$ = new BehaviorSubject<Project[]>([]);
 
-  get getProjects() {
-    return this.projects;
+  get projects() {
+    return this.projects$.getValue();
   }
 
   constructor(
@@ -24,28 +24,35 @@ export class ProjectService {
     private loaderService: LoaderService
   ) { }
 
+  fetchProjectById(_id: string) {
+    const optProject = this.projects.find(p => p.project_id === _id);
+    if (optProject)
+      return of(optProject);
+    return this.http.get<Project>(`/api/v1/project/fetchById?project_id=${_id}`)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
+
   fetchProjects() {
-    this.loaderService.show();
     return this.http.get<Project[]>("/api/v1/project/myProjects")
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          const error = err.error as Error;
-          if (!environment.production) {
-            console.error(error.devMessage);
-            console.error(error.httpStatus, error.httpStatusString);
-          }
-          this.alertService.show(
-            error.message,
-            { duration: 5000, type: AlertType.ERROR }
-          )
-          this.loaderService.hide();
-          return EMPTY
-        })
+        catchError(this.handleError)
       )
-      .subscribe((projects: Project[]) => {
-        this.projects = projects;
-        this.loaderService.hide();
-      });
+  }
+
+  handleError(err: HttpErrorResponse) {
+    const error = err.error as Error;
+    if (!environment.production) {
+      console.error(error.devMessage);
+      console.error(error.httpStatus, error.httpStatusString);
+    }
+    this.alertService.show(
+      error.message,
+      { duration: 5000, type: AlertType.ERROR }
+    )
+    this.loaderService.hide();
+    return EMPTY;
   }
 
 }

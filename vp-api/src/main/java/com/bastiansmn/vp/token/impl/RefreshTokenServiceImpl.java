@@ -103,7 +103,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             verifier.verify(accessToken);
             verifier.verify(refreshToken);
         } catch (TokenExpiredException e) {
-            System.out.println("Token expired" + e);
             return false;
         } catch (JWTVerificationException e) {
             throw new FunctionalException(FunctionalRule.TOKEN_0001);

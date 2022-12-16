@@ -17,6 +17,6 @@ public class GoalCreationDTO {
     private String description;
     private Date date_start;
     private Date deadline;
-    private Long project_id;
+    private String project_id;
 
 }

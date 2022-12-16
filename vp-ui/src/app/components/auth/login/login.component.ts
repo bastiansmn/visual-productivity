@@ -1,27 +1,33 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
-import {LoginProvider} from "../../../model/user.model";
+import {User, UserLogin} from "../../../model/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subject, takeUntil} from "rxjs";
+import {LoaderService} from "../../../services/loader/loader.service";
+import {AlertService, AlertType} from "../../../services/alert/alert.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   readonly SUCCESS_REDIRECT_ROUTE = '/app';
+  componentDestroyed$ = new Subject<boolean>();
 
   formGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]],
-    password: ['', Validators.required],
-    remember: [false]
+    email: this.fb.control<string>('', [Validators.required, Validators.pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")]),
+    password: this.fb.control<string>('', Validators.required),
+    remember: this.fb.control<boolean>(false)
   });
 
   constructor(
     private socialAuthService: SocialAuthService,
+    private loaderService: LoaderService,
+    private alertService: AlertService,
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
@@ -30,34 +36,42 @@ export class LoginComponent implements OnInit {
 
   loginWithVP(): void {
     // Validate form
-    const emailInput: HTMLInputElement | null = document.querySelector('input#email');
-    const passwordInput: HTMLInputElement | null = document.querySelector('input#password');
+    this.formGroup.markAllAsTouched();
 
-    emailInput?.focus();
-    emailInput?.blur();
+    if (this.formGroup.invalid) return;
 
-    passwordInput?.focus();
-    passwordInput?.blur();
-
-    // If form is valid call auth service
-    if (this.formGroup.valid) {
-      this.authService.loginWithVP(
-        {
-          email: this.formGroup.controls['email'].value ?? '',
-          password: this.formGroup.controls['password'].value ?? '',
-          remember: this.formGroup.controls['remember'].value ?? false
-        }
-      ).then(async () => {
-        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE])
-      }).catch(err => {
-        console.error(err);
-      })
-    }
+    this.loaderService.show();
+    this.authService.loginWithVP(this.formGroup.value as UserLogin)
+      .pipe(
+        takeUntil(this.componentDestroyed$)
+      )
+      .subscribe(async user => {
+        this.loaderService.hide();
+        this.alertService.show(
+          "Connecté",
+          { duration: 3000, type: AlertType.SUCCESS }
+        )
+        this.authService.isLoggedIn.next(true);
+        this.authService.loggedUser.next(user);
+        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
+      });
   }
 
   loginWithGoogle(user: SocialUser): void {
-    this.authService.socialLogin(user, LoginProvider.GOOGLE)
-      .then(() => this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]));
+    this.authService.loginWithSocial(user)
+      .pipe(
+        takeUntil(this.componentDestroyed$)
+      )
+      .subscribe(async user => {
+        console.log(user);
+        this.alertService.show(
+          "Connecté avec Google",
+          { duration: 3000, type: AlertType.SUCCESS }
+        )
+        this.authService.isLoggedIn.next(true);
+        this.authService.loggedUser.next(user);
+        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
+      });
   }
 
   getErrorMessage(formControlName: string): string {
@@ -83,12 +97,14 @@ export class LoginComponent implements OnInit {
     });
     if (!!this.authService.loggedUser) {
       this.formGroup.controls['email'].setValue(<string>this.authService.loggedUser.getValue()?.email);
-      const emailInput: HTMLInputElement | null = document.querySelector('input#email');
-
-      emailInput?.focus();
-      emailInput?.blur();
+      this.formGroup.markAllAsTouched();
     }
     this.formGroup.controls['remember'].setValue(this.route.snapshot.queryParams['remember']);
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
 }

@@ -35,7 +35,7 @@ public class ProjectController {
 
     @GetMapping("/fetchById")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ProjectDAO> fetchById(@RequestParam Long project_id) throws FunctionalException {
+    public ResponseEntity<ProjectDAO> fetchById(@RequestParam String project_id) throws FunctionalException {
         return ResponseEntity.ok(this.projectService.fetchById(project_id));
     }
 
@@ -46,7 +46,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/deleteById")
-    public ResponseEntity<Void> deleteById(@RequestParam Long project_id) throws FunctionalException {
+    public ResponseEntity<Void> deleteById(@RequestParam String project_id) throws FunctionalException {
         this.projectService.deleteById(project_id);
         return ResponseEntity.noContent().build();
     }
@@ -64,7 +64,7 @@ public class ProjectController {
     }
 
     @PostMapping("/addUserToProject")
-    public ResponseEntity<Void> addUserToProject(@RequestParam String user_email, @RequestParam Long project_id) throws FunctionalException {
+    public ResponseEntity<Void> addUserToProject(@RequestParam String user_email, @RequestParam String project_id) throws FunctionalException {
         this.projectService.addUserToProject(project_id, user_email);
         return ResponseEntity.noContent().build();
     }

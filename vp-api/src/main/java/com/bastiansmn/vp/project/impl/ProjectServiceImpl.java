@@ -77,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDAO fetchById(Long id) throws FunctionalException {
+    public ProjectDAO fetchById(String id) throws FunctionalException {
         Optional<ProjectDAO> project = this.projectRepository.findById(id);
 
         if (project.isEmpty())
@@ -96,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteById(Long project_id) throws FunctionalException {
+    public void deleteById(String project_id) throws FunctionalException {
         Optional<ProjectDAO> project = this.projectRepository.findById(project_id);
 
         if (project.isEmpty())
@@ -110,7 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDAO addUserToProject(Long project_id, String user_email) throws FunctionalException {
+    public ProjectDAO addUserToProject(String project_id, String user_email) throws FunctionalException {
         ProjectDAO project = this.fetchById(project_id);
 
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

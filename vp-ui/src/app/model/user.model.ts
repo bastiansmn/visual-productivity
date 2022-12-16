@@ -10,12 +10,12 @@ export interface UserRegister {
   email: string,
   password: string,
   passwordConfirm: string,
-  firstname: string,
+  name: string,
   lastname: string
 }
 
 export enum LoginProvider {
-  VP = "VP",
+  VP = "LOCAL",
   GOOGLE = "GOOGLE"
 }
 

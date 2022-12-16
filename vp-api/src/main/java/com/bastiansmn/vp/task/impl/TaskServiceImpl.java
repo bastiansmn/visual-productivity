@@ -93,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
      @Override
-    public Collection<TaskDAO> fetchAllOfProject(Long project_id) throws FunctionalException {
+    public Collection<TaskDAO> fetchAllOfProject(String project_id) throws FunctionalException {
         ProjectDAO project = this.projectService.fetchById(project_id);
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))

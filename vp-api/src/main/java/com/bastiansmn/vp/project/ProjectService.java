@@ -10,13 +10,13 @@ import java.util.Set;
 public interface ProjectService {
     ProjectDAO create(ProjectCreationDTO project) throws FunctionalException;
 
-    ProjectDAO fetchById(Long id) throws FunctionalException;
+    ProjectDAO fetchById(String id) throws FunctionalException;
 
     Collection<ProjectDAO> fetchAll();
 
-    void deleteById(Long project_id) throws FunctionalException;
+    void deleteById(String project_id) throws FunctionalException;
 
-    ProjectDAO addUserToProject(Long project_id, String user_email) throws FunctionalException;
+    ProjectDAO addUserToProject(String project_id, String user_email) throws FunctionalException;
 
     List<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException;
 

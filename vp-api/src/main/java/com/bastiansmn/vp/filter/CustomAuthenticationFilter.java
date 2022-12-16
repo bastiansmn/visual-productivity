@@ -1,6 +1,5 @@
 package com.bastiansmn.vp.filter;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.config.properties.JwtProperties;
 import com.bastiansmn.vp.config.properties.SpringProperties;
@@ -51,7 +50,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws
             IOException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
         String accessToken = tokenService.createAccessToken(user.getUsername(), user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()), user.isEnabled(), user.isAccountNonLocked());

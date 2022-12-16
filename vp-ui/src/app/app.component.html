@@ -2,15 +2,15 @@
   <router-outlet></router-outlet>
   <div
     role="alert"
-    [className]="'app__alert' + ' ' + alert.getOptions.type"
-    *ngIf="alert.isShown"
+    [className]="'app__alert' + ' ' + alert.getOptions.getValue().type"
+    *ngIf="alert.isShown | async"
   >
-    <div class="app__alert__message">{{ alert.getMessage }}</div>
+    <div class="app__alert__message">{{ alert.getMessage | async }}</div>
     <div class="app__alert__close" (click)="alert.hide()"><mat-icon>cancel</mat-icon></div>
   </div>
   <div
     class="app__loader"
-    *ngIf="loader.isShown"
+    *ngIf="loader.isShown | async"
   >
     <mat-spinner color="primary"></mat-spinner>
   </div>

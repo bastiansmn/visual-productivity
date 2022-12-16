@@ -88,7 +88,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public Collection<GoalDAO> fetchAll(Long project_id) throws FunctionalException {
+    public Collection<GoalDAO> fetchAll(String project_id) throws FunctionalException {
         ProjectDAO project = this.projectService.fetchById(project_id);
 
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

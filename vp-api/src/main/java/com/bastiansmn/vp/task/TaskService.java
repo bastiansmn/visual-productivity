@@ -11,7 +11,7 @@ public interface TaskService {
 
     TaskDAO fetchById(Long task_id) throws FunctionalException;
 
-    Collection<TaskDAO> fetchAllOfProject(Long project_id) throws FunctionalException;
+    Collection<TaskDAO> fetchAllOfProject(String project_id) throws FunctionalException;
 
     Collection<TaskDAO> fetchAllOfGoal(Long goal_id) throws FunctionalException;
 

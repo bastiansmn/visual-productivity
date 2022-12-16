@@ -11,7 +11,7 @@ public interface GoalService {
 
     GoalDAO fetchById(Long id) throws FunctionalException;
 
-    Collection<GoalDAO> fetchAll(Long project_id) throws FunctionalException;
+    Collection<GoalDAO> fetchAll(String project_id) throws FunctionalException;
 
     void delete(Long goalID) throws FunctionalException;
 

@@ -4,7 +4,7 @@ import Goal from "./goal.model";
 import {User} from "./user.model";
 
 export default interface Project {
-  project_id: number;
+  project_id: string;
   name: string;
   description: string;
   token: string;

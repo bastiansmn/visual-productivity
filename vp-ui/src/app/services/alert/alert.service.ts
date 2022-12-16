@@ -1,4 +1,5 @@
 import {ElementRef, Injectable, ViewChild} from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 
 export enum AlertType {
   SUCCESS = 'success',
@@ -18,35 +19,35 @@ export type AlertOptions = {
 })
 export class AlertService {
 
-  private shown: boolean = false;
-  private message: String = "";
+  private shown: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private message: BehaviorSubject<String> = new BehaviorSubject<String>("");
 
   // Default options
-  private options: AlertOptions = {
+  private options: BehaviorSubject<AlertOptions> = new BehaviorSubject<AlertOptions>({
     duration: 5000,
     type: AlertType.INFO,
     persistent: false
-  };
+  });
 
   constructor() {  }
 
   init() {
-    this.shown = false;
-    this.message = "";
+    this.shown.next(false);
+    this.message.next("");
   }
 
   show(message: String, options?: AlertOptions): void {
-    this.message = message;
-    this.shown = true;
-    this.options = {
+    this.message.next(message);
+    this.shown.next(true);
+    this.options.next({
       ...this.options,
       ...options
-    }
-    if (!this.options.persistent) setTimeout(() => this.shown = false, this.options.duration);
+    });
+    if (!this.options.getValue().persistent) setTimeout(() => this.shown.next(false), this.options.getValue().duration);
   }
 
   hide() {
-    this.shown = false;
+    this.shown.next(false);
   }
 
 

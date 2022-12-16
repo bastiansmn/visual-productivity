@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
@@ -6,15 +6,10 @@ import {MatSidenav} from "@angular/material/sidenav";
   templateUrl: './discover.component.html',
   styleUrls: ['./discover.component.scss', './_discover-theme.component.scss']
 })
-export class DiscoverComponent implements OnInit {
+export class DiscoverComponent {
 
   @ViewChild('sidenav') public sidenav!: MatSidenav;
   opened: boolean = false;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   toggleNavigation(): void {
     this.sidenav.toggle();
