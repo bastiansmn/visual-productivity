@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {LoginProvider, User, UserLogin, UserRegister} from "../../model/user.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {BehaviorSubject, catchError} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {AlertService} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
 import {SocialUser} from "@abacritt/angularx-social-login";
-import {handleError} from "../../http-error-handler.util";
+import {handleError} from "../../utils/http-error-handler.util";
 import {Router} from "@angular/router";
 
 @Injectable({

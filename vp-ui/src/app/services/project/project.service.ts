@@ -6,7 +6,7 @@ import {environment} from "../../../environments/environment";
 import {AlertService, AlertType} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
 import Project from "../../model/project.model";
-import {handleError} from "../../http-error-handler.util";
+import {handleError} from "../../utils/http-error-handler.util";
 
 @Injectable({
   providedIn: 'root'

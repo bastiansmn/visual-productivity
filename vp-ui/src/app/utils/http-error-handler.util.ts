@@ -1,6 +1,6 @@
-import {Error} from "./model/error.model";
-import {environment} from "../environments/environment";
-import {AlertType} from "./services/alert/alert.service";
+import {Error} from "../model/error.model";
+import {environment} from "../../environments/environment";
+import {AlertType} from "../services/alert/alert.service";
 import {EMPTY} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -19,7 +19,7 @@ export const handleError = (err: HttpErrorResponse, services: any) => {
       { duration: 5000, type: AlertType.ERROR }
     );
 
-  if (services.hasOwnProperty('alertService-persist'))
+  if (services.hasOwnProperty('alertService_persist'))
     services.alertService.show(
       error.message,
       { type: AlertType.ERROR, persist: true }
