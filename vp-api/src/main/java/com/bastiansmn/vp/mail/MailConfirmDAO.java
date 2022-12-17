@@ -30,7 +30,11 @@ public class MailConfirmDAO {
 
     // Delete mailConfirm when user is deleted
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            updatable = false
+    )
     private UserDAO concernedUser;
 
     @Column(nullable = false, updatable = false)

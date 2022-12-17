@@ -1,4 +1,9 @@
 --
+-- PostgreSQL database dump
+--
+
+
+--
 -- Name: authorities; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -6,6 +11,7 @@ CREATE TABLE public.authorities (
     auth_id bigint NOT NULL,
     name character varying(255) NOT NULL
 );
+
 
 --
 -- Name: authorities_auth_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -17,6 +23,7 @@ CREATE SEQUENCE public.authorities_auth_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
 
 --
 -- Name: authorities_auth_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -36,8 +43,9 @@ CREATE TABLE public.events (
     description character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     whole_day boolean NOT NULL,
-    project_id bigint NOT NULL
+    project_id character varying(255) NOT NULL
 );
+
 
 --
 -- Name: events_event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -50,11 +58,13 @@ CREATE SEQUENCE public.events_event_id_seq
     NO MAXVALUE
     CACHE 1;
 
+
 --
 -- Name: events_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.events_event_id_seq OWNED BY public.events.event_id;
+
 
 
 --
@@ -69,8 +79,10 @@ CREATE TABLE public.goals (
     description character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     status character varying(255) NOT NULL,
-    project_id bigint
+    project_id character varying(255)
 );
+
+
 
 --
 -- Name: goals_goal_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -82,6 +94,8 @@ CREATE SEQUENCE public.goals_goal_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: goals_goal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -99,8 +113,10 @@ CREATE TABLE public.labels (
     color character varying(255) NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     name character varying(255) NOT NULL,
-    project_id bigint NOT NULL
+    project_id character varying(255) NOT NULL
 );
+
+
 
 --
 -- Name: labels_label_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -112,6 +128,8 @@ CREATE SEQUENCE public.labels_label_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: labels_label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -129,6 +147,8 @@ CREATE TABLE public.link_goal_events (
     event_id bigint NOT NULL
 );
 
+
+
 --
 -- Name: link_goal_labels; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -137,6 +157,8 @@ CREATE TABLE public.link_goal_labels (
     goal_id bigint NOT NULL,
     label_id bigint NOT NULL
 );
+
+
 
 --
 -- Name: link_role_auths; Type: TABLE; Schema: public; Owner: postgres
@@ -147,14 +169,18 @@ CREATE TABLE public.link_role_auths (
     auth_id bigint NOT NULL
 );
 
+
+
 --
 -- Name: link_user_projects; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.link_user_projects (
-    project_id bigint NOT NULL,
-    user_id bigint NOT NULL
+    user_id bigint NOT NULL,
+    project_id character varying(255) NOT NULL
 );
+
+
 
 --
 -- Name: link_user_roles; Type: TABLE; Schema: public; Owner: postgres
@@ -165,6 +191,8 @@ CREATE TABLE public.link_user_roles (
     role_id bigint NOT NULL
 );
 
+
+
 --
 -- Name: mail_confirm; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -174,8 +202,10 @@ CREATE TABLE public.mail_confirm (
     attempts integer NOT NULL,
     confirmation_code character varying(255) NOT NULL,
     expiration_date timestamp without time zone NOT NULL,
-    user_id bigint
+    user_id bigint NOT NULL
 );
+
+
 
 --
 -- Name: mail_confirm_confirmation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -187,6 +217,8 @@ CREATE SEQUENCE public.mail_confirm_confirmation_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: mail_confirm_confirmation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -200,31 +232,16 @@ ALTER SEQUENCE public.mail_confirm_confirmation_id_seq OWNED BY public.mail_conf
 --
 
 CREATE TABLE public.projects (
-    project_id bigint NOT NULL,
+    project_id character varying(255) NOT NULL,
     complete_mode boolean NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     deadline timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     description character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
+    project_identifier character varying(255) NOT NULL,
     token character varying(255) NOT NULL
 );
 
---
--- Name: projects_project_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.projects_project_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
---
--- Name: projects_project_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.projects_project_id_seq OWNED BY public.projects.project_id;
 
 
 --
@@ -236,6 +253,8 @@ CREATE TABLE public.role (
     name character varying(255) NOT NULL
 );
 
+
+
 --
 -- Name: role_role_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
@@ -246,6 +265,8 @@ CREATE SEQUENCE public.role_role_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: role_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -266,8 +287,10 @@ CREATE TABLE public.tasks (
     description character varying(255),
     name character varying(255) NOT NULL,
     goal_id bigint NOT NULL,
-    project_id bigint NOT NULL
+    project_id character varying(255) NOT NULL
 );
+
+
 
 --
 -- Name: tasks_task_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -279,6 +302,8 @@ CREATE SEQUENCE public.tasks_task_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: tasks_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -303,16 +328,20 @@ CREATE TABLE public.users (
     provider character varying(255) NOT NULL
 );
 
+
+
 --
 -- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.users_user_id_seq
-    START WITH 1
+    START WITH 2
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
 
 --
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -357,13 +386,6 @@ ALTER TABLE ONLY public.mail_confirm ALTER COLUMN confirmation_id SET DEFAULT ne
 
 
 --
--- Name: projects project_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.projects ALTER COLUMN project_id SET DEFAULT nextval('public.projects_project_id_seq'::regclass);
-
-
---
 -- Name: role role_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -399,7 +421,6 @@ INSERT INTO public.authorities (auth_id, name) VALUES (4, 'delete');
 --
 
 
-
 --
 -- Data for Name: goals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -429,15 +450,16 @@ INSERT INTO public.authorities (auth_id, name) VALUES (4, 'delete');
 --
 
 INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (2, 1);
-INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 4);
 INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 1);
-INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 3);
 INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 2);
+INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 4);
+INSERT INTO public.link_role_auths (role_id, auth_id) VALUES (1, 3);
 
 
 --
 -- Data for Name: link_user_projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
 
 
 --
@@ -450,6 +472,12 @@ INSERT INTO public.link_user_roles (user_id, role_id) VALUES (1, 1);
 
 --
 -- Data for Name: mail_confirm; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
@@ -472,14 +500,14 @@ INSERT INTO public.role (role_id, name) VALUES (2, 'ROLE_USER');
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.users (user_id, created_date, email, is_enabled, is_not_locked, lastname, name, password, provider) VALUES (1, '2022-11-14 17:40:29.044', 'bastian.somon@gmail.com', true, true, 'Somon', 'Bastian', '$2a$10$HUwF..ZtBFUnBbzQ7xua5ufPakbW2HAc4ixnX0/1QXXGUjua5dfh6', 'LOCAL');
+INSERT INTO public.users (user_id, created_date, email, is_enabled, is_not_locked, lastname, name, password, provider) VALUES (1, '2022-12-17 17:16:08.625', 'bastian.somon@gmail.com', true, true, 'Somon', 'Bastian', '$2a$10$HNpBool/m9MsZNFrdMYAAeTB7VdlMJfvtvyHHeQmcEGnHhVRZKmVm', 'LOCAL');
 
 
 --
 -- Name: authorities_auth_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.authorities_auth_id_seq', 6, true);
+SELECT pg_catalog.setval('public.authorities_auth_id_seq', 4, true);
 
 
 --
@@ -508,13 +536,6 @@ SELECT pg_catalog.setval('public.labels_label_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.mail_confirm_confirmation_id_seq', 1, true);
-
-
---
--- Name: projects_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.projects_project_id_seq', 2, true);
 
 
 --
@@ -656,6 +677,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.role
     ADD CONSTRAINT uk_8sewwnpamngi6b1dwaa88askk UNIQUE (name);
+
+
+--
+-- Name: projects uk_d2odc28mq6cesjqfpe1mq7srs; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT uk_d2odc28mq6cesjqfpe1mq7srs UNIQUE (project_identifier);
 
 
 --

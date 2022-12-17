@@ -48,26 +48,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new FunctionalException(FunctionalRule.TOKEN_0001);
         String refreshToken = refreshTokenCookie.getValue();
         try {
-            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            DecodedJWT decodedJWT = verifier.verify(refreshToken);
-            String email = decodedJWT.getSubject();
-            if (!this.userService.emailExists(email))
-                throw new FunctionalException(FunctionalRule.USER_0004);
-
-            if (!this.userService.isEnabled(email))
-                throw new FunctionalException(
-                        FunctionalRule.USER_0006,
-                        FORBIDDEN
-                );
-
-            if (!this.userService.isNotLocked(email))
-                throw new FunctionalException(
-                        FunctionalRule.USER_0005,
-                        FORBIDDEN
-                );
-
-            UserDAO user = this.userService.fetchByEmail(email);
+            UserDAO user = this.verifyUser(refreshToken);
             tokenService.createJWTAndAddInHeaders(user, response, springProperties.getProfile().equals("prod"));
             return user;
         } catch (FunctionalException e) {
@@ -98,16 +79,39 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         // Check expiration date of both access and refresh token
         try {
-            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            verifier.verify(accessToken);
-            verifier.verify(refreshToken);
+
+            this.verifyUser(accessToken);
+            this.verifyUser(refreshToken);
+
         } catch (TokenExpiredException e) {
             return false;
         } catch (JWTVerificationException e) {
             throw new FunctionalException(FunctionalRule.TOKEN_0001);
         }
         return true;
+    }
+
+    private UserDAO verifyUser(String token) throws FunctionalException {
+        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(token);
+        String email = decodedJWT.getSubject();
+        if (!this.userService.emailExists(email))
+            throw new FunctionalException(FunctionalRule.USER_0004);
+
+        if (!this.userService.isEnabled(email))
+            throw new FunctionalException(
+                    FunctionalRule.USER_0006,
+                    FORBIDDEN
+            );
+
+        if (!this.userService.isNotLocked(email))
+            throw new FunctionalException(
+                    FunctionalRule.USER_0005,
+                    FORBIDDEN
+            );
+
+        return this.userService.fetchByEmail(email);
     }
 
 }

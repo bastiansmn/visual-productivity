@@ -19,17 +19,17 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: '',
-    redirectTo: 'discover',
+    redirectTo: 'app',
     pathMatch: 'full'
   },
   {
     path: 'discover',
     component: DiscoverComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: 'register',

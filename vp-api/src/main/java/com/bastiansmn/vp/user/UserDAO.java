@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.user;
 
+import com.bastiansmn.vp.mail.MailConfirmDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.bastiansmn.vp.socialAuth.UserProvider;
@@ -73,6 +74,14 @@ public class UserDAO {
     @JsonIgnore
     @ToString.Exclude
     private List<ProjectDAO> projects;
+
+    @OneToMany(
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<MailConfirmDAO> mailConfirmations;
 
     @Column(
             name = "created_date",

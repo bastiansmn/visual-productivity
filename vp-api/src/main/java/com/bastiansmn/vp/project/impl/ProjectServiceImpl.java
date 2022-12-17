@@ -58,7 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         ProjectDAO project = ProjectDAO.builder()
                 .name(projectDTO.getName())
-                .project_identifier(projectDTO.getName().toLowerCase().replaceAll(" ", "-"))
+                .projectIdentifier(projectDTO.getName().toLowerCase().replaceAll(" ", "-"))
                 .description(projectDTO.getDescription())
                 .deadline(projectDTO.getDeadline())
                 .token(RandomStringUtils.randomAlphanumeric(8))

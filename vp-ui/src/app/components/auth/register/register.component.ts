@@ -40,8 +40,9 @@ export class RegisterComponent implements OnDestroy, AfterViewInit {
       .pipe(
         takeUntil(this.componentDestroyed$)
       )
-      .subscribe(async () => {
+      .subscribe(async user => {
         this.loaderService.hide();
+        this.authService.loggedUser.next(user);
         await this.router.navigate(['/confirm'], { queryParams: { remember: this.formGroup.value.remember } });
       })
   }

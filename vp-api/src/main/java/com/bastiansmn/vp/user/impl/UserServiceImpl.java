@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .provider(userDTO.getProvider())
                 .roles(defaultRoles)
                 .createdDate(Date.from(Instant.now()))
+                .mailConfirmations(List.of())
                 .isEnabled(false)
                 .isNotLocked(true)
                 .build();

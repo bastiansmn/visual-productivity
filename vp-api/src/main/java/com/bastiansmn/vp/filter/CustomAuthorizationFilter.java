@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.config.properties.JwtProperties;
+import com.bastiansmn.vp.exception.ApiError;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.user.UserService;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Date;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -82,7 +83,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             Collection<SimpleGrantedAuthority> authorities =
                     stream(roles)
                             .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
+                            .toList();
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
@@ -94,12 +95,26 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             log.error("{}: {}", SecurityConstant.ACCESS_DENIED_MESSAGE, e.getMessage());
             response.setStatus(e.getHttpStatus().value());
             response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), e.getClientMessage());
+            var apiError = new ApiError(
+                    new Date(),
+                    e.getClientMessage(),
+                    e.getMessage(),
+                    e.getHttpStatus(),
+                    e.getHttpStatus().value()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), apiError);
         } catch (TokenExpiredException exception) {
             log.error("{}: {}", SecurityConstant.TOKEN_EXPIRED, exception.getMessage());
             response.setStatus(FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.TOKEN_EXPIRED);
+            var apiError = new ApiError(
+                    new Date(),
+                    SecurityConstant.TOKEN_EXPIRED,
+                    SecurityConstant.TOKEN_EXPIRED,
+                    FORBIDDEN,
+                    FORBIDDEN.value()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), apiError);
         } catch (Exception exception) {
             exception.printStackTrace();
             log.error(
@@ -110,7 +125,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             );
             response.setStatus(FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.TOKEN_CANNOT_BE_VERIFIED);
+            var apiError = new ApiError(
+                    new Date(),
+                    SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
+                    SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
+                    FORBIDDEN,
+                    FORBIDDEN.value()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), apiError);
         }
     }
 

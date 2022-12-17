@@ -67,7 +67,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreationDTO.getDate_end().after(goal.getDeadline()))
             throw new FunctionalException(FunctionalRule.TASK_0004);
 
-        if (!goal.getProject().getProject_id().equals(project.getProject_id()))
+        if (!goal.getProject().getProjectId().equals(project.getProjectId()))
             throw new FunctionalException(FunctionalRule.TASK_0008);
 
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

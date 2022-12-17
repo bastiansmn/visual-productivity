@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
-import {User, UserLogin} from "../../../model/user.model";
+import {UserLogin} from "../../../model/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import {LoaderService} from "../../../services/loader/loader.service";
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.componentDestroyed$)
       )
-      .subscribe(async user => {
+      .subscribe(user => {
         this.loaderService.hide();
         this.alertService.show(
           "Connecté",
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         )
         this.authService.isLoggedIn.next(true);
         this.authService.loggedUser.next(user);
-        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
+        this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
       });
   }
 
@@ -62,15 +62,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.componentDestroyed$)
       )
-      .subscribe(async user => {
+      .subscribe(user => {
         console.log(user);
         this.alertService.show(
           "Connecté avec Google",
           { duration: 3000, type: AlertType.SUCCESS }
         )
+        this.loaderService.hide();
         this.authService.isLoggedIn.next(true);
         this.authService.loggedUser.next(user);
-        await this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
+        this.router.navigate([this.SUCCESS_REDIRECT_ROUTE]);
       });
   }
 
@@ -97,7 +98,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     if (!!this.authService.loggedUser) {
       this.formGroup.controls['email'].setValue(<string>this.authService.loggedUser.getValue()?.email);
-      this.formGroup.markAllAsTouched();
     }
     this.formGroup.controls['remember'].setValue(this.route.snapshot.queryParams['remember']);
   }

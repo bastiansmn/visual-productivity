@@ -3,6 +3,7 @@ package com.bastiansmn.vp.filter;
 import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.config.properties.JwtProperties;
 import com.bastiansmn.vp.config.properties.SpringProperties;
+import com.bastiansmn.vp.exception.ApiError;
 import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserPrincipal;
 import com.bastiansmn.vp.utils.CookieUtils;
@@ -21,6 +22,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -97,18 +99,39 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         if (reason.equals("User is disabled")) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.USER_NOT_ENABLED_MESSAGE);
+            ApiError apiError = new ApiError(
+                    new Date(),
+                    SecurityConstant.USER_NOT_ENABLED_MESSAGE,
+                    SecurityConstant.USER_NOT_ENABLED_MESSAGE,
+                    HttpStatus.FORBIDDEN,
+                    HttpStatus.FORBIDDEN.value()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), apiError);
             return;
         } else if (reason.equals("User account is locked")) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.USER_BLOCKED_MESSAGE);
+            ApiError apiError = new ApiError(
+                    new Date(),
+                    SecurityConstant.USER_BLOCKED_MESSAGE,
+                    SecurityConstant.USER_BLOCKED_MESSAGE,
+                    HttpStatus.FORBIDDEN,
+                    HttpStatus.FORBIDDEN.value()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), apiError);
             return;
         }
         // Bad credentials
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), SecurityConstant.INVALID_CREDENTIALS_MESSAGE);
+        ApiError apiError = new ApiError(
+                new Date(),
+                SecurityConstant.INVALID_CREDENTIALS_MESSAGE,
+                SecurityConstant.INVALID_CREDENTIALS_MESSAGE,
+                HttpStatus.FORBIDDEN,
+                HttpStatus.FORBIDDEN.value()
+        );
+        new ObjectMapper().writeValue(response.getOutputStream(), apiError);
 
         log.error("Authentication failed for user: {} with password: {}", request.getParameter("email"), request.getParameter("password"));
         // TODO Block user after 3 failed attempts and send mail to unlock it

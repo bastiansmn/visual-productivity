@@ -26,10 +26,11 @@ public class ProjectDAO {
     @GenericGenerator(name = "project_id", strategy = "com.bastiansmn.vp.project.ProjectIdGenerator")
     @GeneratedValue(generator = "project_id")
     @Column(
+            name = "project_id",
             nullable = false,
             updatable = false
     )
-    private String project_id;
+    private String projectId;
 
     @Column(
             nullable = false
@@ -37,9 +38,11 @@ public class ProjectDAO {
     private String name;
 
     @Column(
-            nullable = false
+            name = "project_identifier",
+            nullable = false,
+            unique = true
     )
-    private String project_identifier;
+    private String projectIdentifier;
 
     @Column(
             nullable = false

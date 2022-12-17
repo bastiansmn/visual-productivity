@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {LoginProvider, User, UserLogin, UserRegister} from "../../model/user.model";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {BehaviorSubject, catchError, EMPTY} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject, catchError} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
-import {AlertService, AlertType} from "../alert/alert.service";
+import {AlertService} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
-import {Error} from "../../model/error.model";
 import {SocialUser} from "@abacritt/angularx-social-login";
+import {handleError} from "../../http-error-handler.util";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class AuthService {
     private http: HttpClient,
     private cookieService: CookieService,
     private alertService: AlertService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private router: Router
   ) { }
 
   loginWithVP(user: UserLogin) {
@@ -31,7 +32,11 @@ export class AuthService {
 
     return this.http.post<User>("/api/v1/login", formData)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService,
+          cookieService: this.cookieService
+        }))
       )
   }
 
@@ -44,7 +49,11 @@ export class AuthService {
 
     return this.http.post<User>("/api/v1/user/register", userWithProvider)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService,
+          cookieService: this.cookieService
+        }))
       )
   }
 
@@ -52,64 +61,71 @@ export class AuthService {
     const body = {
       confirmationCode: confirmationCode,
       user: {
-        user_id: this.loggedUser.value?.user_id
+        user_id: this.loggedUser.getValue()?.user_id
       }
     }
 
     return this.http.put("/api/v1/mail/confirm", body)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
       )
   }
 
   revalidateEmail() {
     return this.http.post("/api/v1/mail/revalidate", this.loggedUser.value)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
       )
   }
 
   refreshTokens() {
     return this.http.get<User>("/api/v1/token/refresh")
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService,
+          cookieService: this.cookieService
+        }))
       )
   }
 
   validateTokens() {
     return this.http.get<boolean>("/api/v1/token/validate")
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService,
+          cookieService: this.cookieService,
+          router: this.router
+        }))
       )
   }
 
   getUserInfos() {
     return this.http.get<User>("/api/v1/user/me")
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
       )
   }
 
   loginWithSocial(user: SocialUser) {
     return this.http.post<User>("/api/v1/oauth2/login", user)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
       )
   }
 
-  handleError(err: HttpErrorResponse) {
-    console.log(err);
-    const error = err.error as Error;
-    if (!environment.production) {
-      console.error(error.devMessage);
-      console.error(error.httpStatus, error.httpStatusString);
-    }
-    this.alertService.show(
-      error.message,
-      { duration: 5000, type: AlertType.ERROR }
-    )
-    this.loaderService.hide();
-    return EMPTY;
-  }
 
 }

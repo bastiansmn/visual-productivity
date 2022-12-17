@@ -31,28 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.onResize();
-    this.authService.validateTokens()
-      .pipe(
-        takeUntil(this.componentDestroyed$)
-      )
-      .subscribe(isValid => {
-        if (!isValid) {
-          this.alertService.show(
-            "Votre session a expiré, veuillez vous reconnecter",
-            { type: AlertType.WARNING, duration: 5000 }
-          );
-          return;
-        }
-
-        this.authService.isLoggedIn.next(true);
-        this.authService.getUserInfos()
-          .pipe(
-            takeUntil(this.componentDestroyed$)
-          )
-          .subscribe(user => {
-            this.authService.loggedUser.next(user);
-          });
-      });
   }
 
   ngOnDestroy(): void {

@@ -1,9 +1,5 @@
 package com.bastiansmn.vp.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,17 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
-
-@Getter
-@Setter
-@AllArgsConstructor
-class ApiError {
-    private Date timestamp;
-    private String message;
-    private String devMessage;
-    private HttpStatus httpStatusString;
-    private Integer httpStatus;
-}
 
 @ControllerAdvice
 @RestController

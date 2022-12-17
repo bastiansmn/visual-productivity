@@ -10,7 +10,7 @@ public enum FunctionalRule {
     USER_0003("USER_0003", "Le mot de passe n'est pas valide"),
     USER_0004("USER_0004", "L'utilisateur n'existe pas"),
     USER_0005("USER_0005", "L'utilisateur est bloqué"),
-    USER_0006("USER_0006", "L'utilisateur est désactivé"),
+    USER_0006("USER_0006", "Compte est désactivé"),
     USER_0007("USER_0007", "Vous êtes déjà connecté avec un compte externe (Google)"),
     USER_0008("USER_0008", "Utilisateur externe invalide"),
     ROLE_0001("ROLE_0001", "Le rôle n'existe pas"),

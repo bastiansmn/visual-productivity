@@ -42,7 +42,7 @@ export class ConfirmComponent implements OnDestroy, AfterViewInit {
             "Votre compte a été validé",
             { duration: 5000, type: AlertType.SUCCESS }
           );
-          await this.router.navigate(['/'], {queryParams: { remember }});
+          await this.router.navigate(['/login'], {queryParams: { remember }});
         })
     }
   }
