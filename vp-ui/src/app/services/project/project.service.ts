@@ -5,7 +5,7 @@ import {Error} from "../../model/error.model";
 import {environment} from "../../../environments/environment";
 import {AlertService, AlertType} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
-import Project from "../../model/project.model";
+import Project, {ProjectCreation} from "../../model/project.model";
 import {handleError} from "../../utils/http-error-handler.util";
 
 @Injectable({
@@ -26,7 +26,7 @@ export class ProjectService {
   ) { }
 
   fetchProjectById(_id: string) {
-    const optProject = this.projects.find(p => p.project_id === _id);
+    const optProject = this.projects.find(p => p.projectId === _id);
     if (optProject)
       return of(optProject);
     return this.http.get<Project>(`/api/v1/project/fetchById?project_id=${_id}`)
@@ -48,18 +48,14 @@ export class ProjectService {
       )
   }
 
-  handleError(err: HttpErrorResponse) {
-    const error = err.error as Error;
-    if (!environment.production) {
-      console.error(error.devMessage);
-      console.error(error.httpStatus, error.httpStatusString);
-    }
-    this.alertService.show(
-      error.message,
-      { duration: 5000, type: AlertType.ERROR }
-    )
-    this.loaderService.hide();
-    return EMPTY;
+  createProject(project: ProjectCreation) {
+    return this.http.post<Project>("/api/v1/project/create", project)
+      .pipe(
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
+      )
   }
 
 }

@@ -3,8 +3,15 @@ import Event from "./event.model";
 import Goal from "./goal.model";
 import {User} from "./user.model";
 
+export interface ProjectCreation {
+  name: string;
+  description: string;
+  deadline: Date;
+  complete_mode: boolean;
+}
+
 export default interface Project {
-  project_id: string;
+  projectId: string;
   name: string;
   description: string;
   token: string;

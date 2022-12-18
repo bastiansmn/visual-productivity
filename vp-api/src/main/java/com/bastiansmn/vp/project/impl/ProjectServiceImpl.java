@@ -71,6 +71,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .users(Set.of(projectCreator))
                 .build();
 
+        if (this.projectRepository.findByProjectIdentifier(project.getProjectIdentifier()).isPresent())
+            throw new FunctionalException(
+                    FunctionalRule.PROJ_0001
+            );
+
         log.info("Creating project: {}", project);
 
         return this.projectRepository.save(project);

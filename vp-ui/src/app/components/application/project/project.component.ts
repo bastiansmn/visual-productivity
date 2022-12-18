@@ -21,7 +21,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._route.params.subscribe(params => {
-      if (!params.hasOwnProperty('id')) return;
       this._projectService.fetchProjectById(params['id'])
         .pipe(
           takeUntil(this.componentDestroyed$)

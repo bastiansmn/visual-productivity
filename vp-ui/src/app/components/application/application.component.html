@@ -17,8 +17,9 @@
       </div>
       <a
         *ngFor="let project of projects"
+        (click)="navbarToggled && toggleNavigation()"
         class="item project"
-        [routerLink]="'/app/projects/' + project.project_id"
+        [routerLink]="'/app/projects/' + project.projectId"
         routerLinkActive="active"
       >
         <div class="item__image">
@@ -28,7 +29,10 @@
           {{ project.name }}
         </div>
       </a>
-      <a routerLink="/app/create-project" class="item create__project">
+      <a
+        routerLink="/app/create-project"
+        (click)="navbarToggled && toggleNavigation()"
+        class="item create__project">
         <div class="item__image create__project">
           <span>
             <mat-icon>add</mat-icon>
@@ -40,7 +44,7 @@
       </a>
 
       <!-- Settings -->
-      <a routerLink="/app/settings" class="item settings">
+      <a routerLink="/app/settings" class="item settings" (click)="navbarToggled && toggleNavigation()">
         <vp-button
           background="light"
           hoverColor="dark"

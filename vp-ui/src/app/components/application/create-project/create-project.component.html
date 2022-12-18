@@ -1,1 +1,66 @@
-<p>create-project works!</p>
+<div class="create__project">
+  <form class="project__form" [formGroup]="form" (submit)="createProject()">
+    <h1 class="mat-subheading-2">Créer un project</h1>
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="name"
+      type="text"
+      placeholder="Nom du projet"
+      name="name"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('name') }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="description"
+      type="text"
+      placeholder="Description du projet"
+      name="description"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage("description") }}
+      </small>
+    </vp-input>
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="deadline"
+      type="date"
+      placeholder="Date de fin du projet"
+      name="deadline"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage("deadline") }}
+      </small>
+      <small class="mat-caption">
+        La deadline pourra être modifiée ultérieurement.
+      </small>
+    </vp-input>
+
+
+    <vp-check
+      [parentForm]="form"
+      parentFormControlName="complete_mode"
+      name="complete_mode"
+      tabulationIndex="3"
+    >
+      Mode complet
+    </vp-check>
+
+    <div class="controls">
+      <vp-button
+        [disabled]="form.invalid"
+        tabulationIndex="4"
+      >
+        Créer
+      </vp-button>
+    </div>
+  </form>
+</div>

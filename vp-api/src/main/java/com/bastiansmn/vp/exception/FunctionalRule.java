@@ -28,6 +28,7 @@ public enum FunctionalRule {
     PROJ_0006("PROJ_0006", "Impossible de créer un projet sans utilisateur"),
     PROJ_0007("PROJ_0007", "Vous devez être membre du projet pour effectuer cette action"),
     PROJ_0008("PROJ_0008", "L'utilisateur est déjà membre du projet"),
+    PROJ_0009("PROJ_0009", "Un projet avec ce nom existe déjà"),
     GOAL_0001("GOAL_0001", "L'objectif n'existe pas"),
     GOAL_0002("GOAL_0002", "Aucun nom spécifié"),
     GOAL_0003("GOAL_0003", "Aucune description spécifiée"),
