@@ -115,4 +115,15 @@ public class ProjectDAO {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
 
+    @Column(
+            nullable = false,
+            columnDefinition = "TIMESTAMP DEFAULT now()"
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
+
+    @PrePersist
+    protected void onCreate() {
+        updated_at = created_at = new Date();
+    }
 }

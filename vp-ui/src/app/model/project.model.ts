@@ -23,4 +23,5 @@ export default interface Project {
   allTasks: Task[];
   users: User[];
   created_at: Date;
+  updated_at: Date;
 }

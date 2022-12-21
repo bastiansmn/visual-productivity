@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -37,6 +37,16 @@ import {DashboardComponent} from './components/application/dashboard/dashboard.c
 import {SettingsComponent} from './components/application/settings/settings.component';
 import {CreateProjectComponent} from './components/application/create-project/create-project.component';
 
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { ProjectDashboardComponent } from './components/application/project/project-dashboard/project-dashboard.component';
+import { ProjectTasksComponent } from './components/application/project/project-tasks/project-tasks.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { AddUserDialogComponent } from './components/application/project/project-dashboard/add-user-dialog/add-user-dialog.component';
+import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { StatusPipe } from './pipes/status.pipe';
+registerLocaleData(localeFr);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +65,11 @@ import {CreateProjectComponent} from './components/application/create-project/cr
     ProjectComponent,
     DashboardComponent,
     SettingsComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    ProjectDashboardComponent,
+    ProjectTasksComponent,
+    AddUserDialogComponent,
+    StatusPipe
   ],
   imports: [
     BrowserModule,
@@ -76,7 +90,9 @@ import {CreateProjectComponent} from './components/application/create-project/cr
     SocialLoginModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [
     {
@@ -94,6 +110,7 @@ import {CreateProjectComponent} from './components/application/create-project/cr
         }
       } as SocialAuthServiceConfig,
     },
+    { provide: LOCALE_ID, useValue: 'fr-FR'},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CookieSetterInterceptor,

@@ -1,22 +1,29 @@
 package com.bastiansmn.vp.project.impl;
 
+import com.bastiansmn.vp.config.properties.CorsProperties;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
+import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.exception.TechnicalRule;
 import com.bastiansmn.vp.project.ProjectCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
 import com.bastiansmn.vp.user.UserDAO;
-import com.bastiansmn.vp.user.UserRepository;
 import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +35,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserService userService;
+    private final SpringTemplateEngine templateEngine;
+    private final JavaMailSender mailSender;
+    private final CorsProperties corsProperties;
 
     @Override
     public ProjectDAO create(ProjectCreationDTO projectDTO) throws FunctionalException {
@@ -115,7 +125,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDAO addUserToProject(String project_id, String user_email) throws FunctionalException {
+    public UserDAO addUserToProject(String project_id, String user_email)
+            throws FunctionalException, TechnicalException {
         ProjectDAO project = this.fetchById(project_id);
 
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -128,7 +139,35 @@ public class ProjectServiceImpl implements ProjectService {
         UserDAO user = this.userService.fetchByEmail(user_email);
         project.getUsers().add(user);
 
-        return this.projectRepository.save(project);
+        try {
+            MimeMessage message = this.mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setTo(user.getEmail());
+            helper.setSubject("Visual Productivity - Vous avez été ajouté à un projet");
+
+            Context context = new Context();
+            context.setVariables(
+                    Map.of(
+                            "firstName", user.getName(),
+                            "projectName", project.getName(),
+                            "url", "%s/app/projects/%s/dashboard".formatted(this.corsProperties.getCurrentOrigin(), project.getProjectId())
+                    )
+            );
+            helper.setText(templateEngine.process("addUserToProject", context), true);
+            this.mailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("Impossible d'envoyer le mail pour ajouter un utilisateur au projet: {}", user.getEmail());
+            throw new TechnicalException(
+                    TechnicalRule.MAIL_0001,
+                    HttpStatus.SERVICE_UNAVAILABLE
+            );
+        }
+
+        project.setUpdated_at(Date.from(Instant.now()));
+        this.projectRepository.save(project);
+
+        return user;
     }
 
     @Override

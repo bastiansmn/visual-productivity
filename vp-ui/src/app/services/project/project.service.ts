@@ -7,6 +7,7 @@ import {AlertService, AlertType} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
 import Project, {ProjectCreation} from "../../model/project.model";
 import {handleError} from "../../utils/http-error-handler.util";
+import {User} from "../../model/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +57,16 @@ export class ProjectService {
           alertService: this.alertService
         }))
       )
+  }
+
+  addUserInProject(email: string, projectId: string) {
+    return this.http.post<User>(`/api/v1/project/addUserToProject?user_email=${email}&project_id=${projectId}`, {})
+      .pipe(
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        })
+      ));
   }
 
 }

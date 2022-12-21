@@ -12,6 +12,10 @@ import Project from "../../../model/project.model";
 export class ProjectComponent implements OnInit, OnDestroy {
 
   project$ = new BehaviorSubject<Project | null>(null);
+  get project() {
+    return this.project$.getValue();
+  }
+
   private componentDestroyed$ = new Subject<boolean>();
 
   constructor(

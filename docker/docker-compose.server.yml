@@ -35,6 +35,7 @@ services:
       VP_ALLOWED_HEADERS: ${VP_ALLOWED_HEADERS}
       VP_REGISTER_PATTERN: ${VP_REGISTER_PATTERN}
       JWT_SECRET: ${JWT_SECRET}
+      ORIGIN: ${ORIGIN}
     ports:
       - "${PORT}:${PORT}"
     depends_on:

@@ -18,5 +18,6 @@ public class CorsProperties {
     private List<String> allowedMethods;
     private List<String> allowedHeaders;
     private String registerPattern;
+    private String currentOrigin;
 
 }

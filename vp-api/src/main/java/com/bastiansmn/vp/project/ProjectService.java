@@ -1,6 +1,7 @@
 package com.bastiansmn.vp.project;
 
 import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.user.UserDAO;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ public interface ProjectService {
 
     void deleteById(String project_id) throws FunctionalException;
 
-    ProjectDAO addUserToProject(String project_id, String user_email) throws FunctionalException;
+    UserDAO addUserToProject(String project_id, String user_email) throws FunctionalException, TechnicalException;
 
     List<ProjectDAO> fetchProjectsOfUser(String email) throws FunctionalException;
 

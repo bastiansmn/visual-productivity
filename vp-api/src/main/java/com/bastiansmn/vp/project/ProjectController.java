@@ -1,6 +1,8 @@
 package com.bastiansmn.vp.project;
 
 import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.user.UserDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -64,9 +66,9 @@ public class ProjectController {
     }
 
     @PostMapping("/addUserToProject")
-    public ResponseEntity<Void> addUserToProject(@RequestParam String user_email, @RequestParam String project_id) throws FunctionalException {
-        this.projectService.addUserToProject(project_id, user_email);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDAO> addUserToProject(@RequestParam String user_email, @RequestParam String project_id)
+            throws FunctionalException, TechnicalException {
+        return ResponseEntity.ok(this.projectService.addUserToProject(project_id, user_email));
     }
 
 }

@@ -34,6 +34,7 @@ main {
       width: $project-navbar-width;
       height: calc(100% - 2* $project-navbar-padding);
       padding: $project-navbar-padding;
+      border-radius: 20px 0 0 0;
       justify-content: center;
       border-right: 1px solid $light-grey;
       transition: width .2s ease-in-out;
@@ -166,8 +167,9 @@ main {
     }
 
     .project__content {
+      overflow: auto;
       width: calc(100% - $project-navbar-width - 1px);
-      padding: 1rem;
+      padding: 1.5rem;
       margin-left: calc($project-navbar-width + 2 * $project-navbar-padding);
       z-index: 50;
     }

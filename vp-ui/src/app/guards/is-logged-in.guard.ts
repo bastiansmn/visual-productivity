@@ -19,7 +19,7 @@ import {AlertService, AlertType} from "../services/alert/alert.service";
 @Injectable({
   providedIn: 'root'
 })
-export class IsLoggedInGuard implements CanActivate {
+export class IsLoggedInGuard implements CanActivate, CanActivateChild {
 
   constructor(
     private authService: AuthService,
@@ -28,6 +28,10 @@ export class IsLoggedInGuard implements CanActivate {
     private loaderService: LoaderService,
     private alertService: AlertService
   ) {}
+
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    return this.canActivate(childRoute, state);
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.authService.isLoggedIn.getValue()) return true;

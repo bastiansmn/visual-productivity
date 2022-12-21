@@ -1,0 +1,30 @@
+<div class="add_user__dialog">
+  <form class="add_user__form" [formGroup]="form" (submit)="close()">
+    <h1 class="mat-subheading-2">Ajouter un utilisateur</h1>
+    <p>
+      <small style="margin-bottom: 1rem;">Inviter un utilisateur à rejoindre votre projet. Ce dernier recevra un email pour lui notifier l'ajout.</small>
+    </p>
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="email"
+      type="email"
+      placeholder="Mail à ajouter"
+      name="email"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('email') }}
+      </small>
+    </vp-input>
+
+    <div class="controls">
+      <vp-button
+        [disabled]="form.invalid"
+        tabulationIndex="2"
+      >
+        Ajouter
+      </vp-button>
+    </div>
+  </form>
+</div>

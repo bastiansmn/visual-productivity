@@ -205,7 +205,7 @@ $ui-typography: mat.define-typography-config(
   $title: mat.define-typography-level(24px, 32px, 700, $font-name),
   $subheading-2: mat.define-typography-level(22px, 1.2em, 400, $font-name),
   $subheading-1: mat.define-typography-level(18px, 1.2em, 400, $font-name),
-  $body-2: mat.define-typography-level(16px, 1.25em, 600, $font-name),
+  $body-2: mat.define-typography-level(14px, 1.25em, 700, $font-name),
   $body-1: mat.define-typography-level(16px, 1.25em, 400, $font-name),
   $caption: mat.define-typography-level(12px, 16px, 400, $font-name),
   $button: mat.define-typography-level(15px, 1.25em, 500, $font-name),
@@ -260,6 +260,10 @@ button:not(.vp__button) {
 
 a, button {
   color: unset;
+}
+
+small:not(.errorMessage) {
+  color: darkgray;
 }
 
 // All text

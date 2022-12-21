@@ -60,9 +60,7 @@ export class AuthService {
   confirmMail(confirmationCode: string) {
     const body = {
       confirmationCode: confirmationCode,
-      user: {
-        user_id: this.loggedUser.getValue()?.user_id
-      }
+      user: this.loggedUser.value
     }
 
     return this.http.put("/api/v1/mail/confirm", body)

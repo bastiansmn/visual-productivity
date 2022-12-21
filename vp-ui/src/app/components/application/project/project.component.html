@@ -1,1 +1,21 @@
-{{ project$ | async | json }}
+<div class="project__header">
+  <h1 class="mat-subheading-2">{{ project?.name }}</h1>
+  <small class="mat-caption">Dernière mise à jour: {{ project?.updated_at | date: 'medium' }}</small>
+</div>
+
+<div class="project__content">
+  <div class="project__navigation">
+    <a routerLink="dashboard" routerLinkActive="active">
+      <vp-button [hoverBorder]="false">
+        Tableau de bord
+      </vp-button>
+    </a>
+    <a routerLink="tasks" routerLinkActive="active">
+      <vp-button [hoverBorder]="false">
+        Tâches
+      </vp-button>
+    </a>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

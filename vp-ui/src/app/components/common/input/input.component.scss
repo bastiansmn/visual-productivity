@@ -68,6 +68,10 @@
     transition: border .3s ease-in-out;
     outline: none;
 
+    &[type='date'] {
+      font-family: unset;
+    }
+
     &.ng-touched.ng-valid {
       border:
         2px solid

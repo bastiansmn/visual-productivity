@@ -11,10 +11,15 @@ import {DashboardComponent} from "./components/application/dashboard/dashboard.c
 import {SettingsComponent} from "./components/application/settings/settings.component";
 import {CreateProjectComponent} from "./components/application/create-project/create-project.component";
 import {IsLoggedInGuard} from "./guards/is-logged-in.guard";
+import {
+  ProjectDashboardComponent
+} from "./components/application/project/project-dashboard/project-dashboard.component";
+import {ProjectTasksComponent} from "./components/application/project/project-tasks/project-tasks.component";
 
 const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
-  anchorScrolling: 'enabled'
+  anchorScrolling: 'enabled',
+  paramsInheritanceStrategy: 'always',
 };
 
 const routes: Routes = [
@@ -60,7 +65,22 @@ const routes: Routes = [
       },
       {
         path: 'projects/:id',
-        component: ProjectComponent
+        component: ProjectComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full'
+          },
+          {
+            path: 'dashboard',
+            component: ProjectDashboardComponent
+          },
+          {
+            path: 'tasks',
+            component: ProjectTasksComponent
+          }
+        ]
       },
       {
         path: 'settings',

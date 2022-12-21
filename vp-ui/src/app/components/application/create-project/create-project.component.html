@@ -1,6 +1,7 @@
 <div class="create__project">
   <form class="project__form" [formGroup]="form" (submit)="createProject()">
     <h1 class="mat-subheading-2">Créer un project</h1>
+    <p>Nom du projet:</p>
     <vp-input
       [parentForm]="form"
       parentFormControlName="name"
@@ -14,6 +15,8 @@
         {{ getErrorMessage('name') }}
       </small>
     </vp-input>
+
+    <p>Description du projet:</p>
     <vp-input
       [parentForm]="form"
       parentFormControlName="description"
@@ -27,6 +30,8 @@
         {{ getErrorMessage("description") }}
       </small>
     </vp-input>
+
+    <p>Date prévisionnelle de fin de projet:</p>
     <vp-input
       [parentForm]="form"
       parentFormControlName="deadline"
@@ -40,7 +45,7 @@
         {{ getErrorMessage("deadline") }}
       </small>
       <small class="mat-caption">
-        La deadline pourra être modifiée ultérieurement.
+        Cette dernière pourra être modifiée ultérieurement.
       </small>
     </vp-input>
 
@@ -51,8 +56,9 @@
       name="complete_mode"
       tabulationIndex="3"
     >
-      Mode complet
+      Mode complet*
     </vp-check>
+    <small class="mat-caption">*Le mode complet vous permet d'avoir accès à toutes les fonctionnalités d'optimisation automatique d'agenda et autres. Si vous voulez simplement planifier des réunions et organiser votre projet, laissez cette case décochée</small>
 
     <div class="controls">
       <vp-button

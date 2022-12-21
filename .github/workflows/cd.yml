@@ -56,6 +56,7 @@ jobs:
             echo "VP_ALLOWED_METHODS=${{ secrets.VP_ALLOWED_METHODS }}" >> .env
             echo "VP_ALLOWED_HEADERS=${{ secrets.VP_ALLOWED_HEADERS }}" >> .env
             echo "VP_REGISTER_PATTERN=${{ secrets.VP_REGISTER_PATTERN }}" >> .env
+            echo "ORIGIN=${{ secrets.ORIGIN }}" >> .env
             export $(grep -v '^#' .env | xargs)
             docker compose -f docker-compose.server.yml up -d --build
 

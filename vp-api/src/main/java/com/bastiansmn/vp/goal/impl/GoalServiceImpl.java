@@ -8,6 +8,7 @@ import com.bastiansmn.vp.goal.GoalService;
 import com.bastiansmn.vp.goal.GoalStatus;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
+import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
 import com.bastiansmn.vp.user.UserDAO;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class GoalServiceImpl implements GoalService {
 
     private final GoalRepository goalRepository;
     private final ProjectService projectService;
+    private final ProjectRepository projectRepository;
 
     @Override
     public GoalDAO create(GoalCreationDTO goalDTO) throws FunctionalException {
@@ -58,6 +60,9 @@ public class GoalServiceImpl implements GoalService {
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.GOAL_0006);
+
+        project.setUpdated_at(new Date());
+        this.projectRepository.save(project);
 
         GoalDAO goal = GoalDAO.builder()
                 .name(goalDTO.getName())
@@ -108,6 +113,10 @@ public class GoalServiceImpl implements GoalService {
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!goal.getProject().getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.GOAL_0006);
+
+        ProjectDAO project = goal.getProject();
+        project.setUpdated_at(new Date());
+        this.projectRepository.save(project);
 
         this.goalRepository.delete(goal);
     }

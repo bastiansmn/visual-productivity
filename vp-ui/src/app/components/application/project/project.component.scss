@@ -1,0 +1,36 @@
+@import "src/variables";
+
+.project__header {
+  margin-bottom: 1.5rem;
+
+  & h1 {
+    margin-bottom: .3rem;
+  }
+}
+
+.project__navigation {
+  margin-bottom: 1.5rem;
+
+  a {
+    margin-right: .5rem;
+
+    &:not(.active) ::ng-deep button {
+      background: transparent !important;
+      color: darkgray;
+
+      &:hover {
+        color: darkgray;
+      }
+    }
+
+    &.active ::ng-deep button {
+      background: $purple-light;
+      color: $light;
+
+      &:hover {
+        background: $purple-light;
+        color: $light;
+      }
+    }
+  }
+}

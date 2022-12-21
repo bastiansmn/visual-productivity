@@ -1,0 +1,160 @@
+@import "src/variables";
+
+.project__toolbar {
+  width: 100%;
+
+  & .toolbar__content {
+    display: flex;
+    margin-bottom: 1.5rem;
+
+    & .project__users {
+      width: fit-content;
+      display: flex;
+
+      & > div {
+        margin-right: -12px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        height: 30px;
+        aspect-ratio: 1;
+      }
+
+      .user {
+        background: $purple;
+        border: $light 3px solid;
+        color: $light;
+        user-select: none;
+      }
+
+      .add_user {
+        background: $light;
+        margin: 2px;
+        height: 28px;
+        border: darkgray 1px solid;
+        color: darkgray;
+        cursor: pointer;
+      }
+    }
+  }
+
+  & .project__goals {
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    & .card {
+      $padding: 1rem;
+      padding: $padding;
+      background: $rly-light-grey;
+      width: 25%;
+      max-width: 400px;
+      min-width: 200px;
+      border-radius: 9px;
+
+      & .goal__header {
+        display: flex;
+        height: 22px;
+        margin-bottom: 1rem;
+
+        & * {
+          height: 100%;
+          margin-bottom: 0;
+
+          display: flex;
+          align-items: end;
+          margin-right: .5rem;
+        }
+
+        & small {
+          height: 100%;
+          aspect-ratio: 1;
+          background: $light-grey;
+          color: $dark;
+          border-radius: 8px;
+          font-weight: 600;
+          display: grid;
+          place-items: center;
+        }
+      }
+
+      & .goal {
+        $padding: .5rem;
+        padding: $padding;
+        border: $light-grey 1px solid;
+        width: calc(100% - 2 * $padding);
+        background: $light;
+        border-radius: 9px;
+        margin-bottom: .7rem;
+        cursor: pointer;
+        box-shadow: 0 0 3px 0 #d0d0d045;
+
+        & h2 {
+          margin-bottom: .5rem;
+        }
+
+        & .goal__content {
+          border-bottom: 1px $light-grey solid;
+        }
+
+        & .goal__icons {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 24px;
+          margin-top: .5rem;
+
+          & .tasks {
+            display: flex;
+            align-items: center;
+
+            mat-icon {
+              display: grid;
+              place-items: center;
+              height: 100%;
+              aspect-ratio: 1;
+              font-size: 16px;
+              color: darkgray;
+            }
+
+            small {
+              height: fit-content;
+            }
+          }
+        }
+      }
+
+      & .add__goal {
+        $padding: .2rem;
+        padding: $padding;
+        border: $light-grey 1px solid;
+        width: calc(100% - 2 * $padding);
+        background: $rly-light-grey;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        transition: background .2s ease-in-out;
+        margin-bottom: 0;
+
+        &:hover {
+          background: $light-grey;
+        }
+
+        mat-icon {
+          display: grid;
+          place-items: center;
+          height: 100%;
+          aspect-ratio: 1;
+          font-size: 16px;
+          color: darkgray;
+        }
+
+        small {
+          display: grid;
+          place-items: center;
+        }
+      }
+    }
+  }
+}
