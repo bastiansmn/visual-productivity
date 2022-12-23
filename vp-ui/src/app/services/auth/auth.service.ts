@@ -98,7 +98,6 @@ export class AuthService {
       .pipe(
         catchError(err => handleError(err, {
           loaderService: this.loaderService,
-          alertService: this.alertService,
           cookieService: this.cookieService,
           router: this.router
         }))

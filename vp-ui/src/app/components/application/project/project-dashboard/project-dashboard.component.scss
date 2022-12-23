@@ -17,6 +17,7 @@
         place-items: center;
         border-radius: 50%;
         height: 30px;
+        width: 30px;
         aspect-ratio: 1;
       }
 
@@ -40,7 +41,7 @@
 
   & .project__goals {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: 1rem;
 
@@ -53,6 +54,10 @@
       min-width: 200px;
       border-radius: 9px;
 
+      &:nth-last-child(1) .goal__header {
+        margin-bottom: 0;
+      }
+
       & .goal__header {
         display: flex;
         height: 22px;
@@ -63,12 +68,13 @@
           margin-bottom: 0;
 
           display: flex;
-          align-items: end;
+          align-items: flex-end;
           margin-right: .5rem;
         }
 
         & small {
-          height: 100%;
+          height: 22px;
+          width: 22px;
           aspect-ratio: 1;
           background: $light-grey;
           color: $dark;
@@ -112,7 +118,8 @@
             mat-icon {
               display: grid;
               place-items: center;
-              height: 100%;
+              height: 24px;
+              width: 24px;
               aspect-ratio: 1;
               font-size: 16px;
               color: darkgray;
@@ -130,6 +137,7 @@
         padding: $padding;
         border: $light-grey 1px solid;
         width: calc(100% - 2 * $padding);
+        height: calc(32px - 2 * $padding);
         background: $rly-light-grey;
         display: flex;
         justify-content: center;
@@ -144,7 +152,8 @@
         mat-icon {
           display: grid;
           place-items: center;
-          height: 100%;
+          height: calc(32px - 2 * $padding);
+          width: calc(32px - 2 * $padding);
           aspect-ratio: 1;
           font-size: 16px;
           color: darkgray;

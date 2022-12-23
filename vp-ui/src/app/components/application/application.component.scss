@@ -134,7 +134,8 @@ main {
           & span {
             background: $dark;
             color: $light;
-            width: 60%;
+            width: calc(.6 * $project-navbar-width);
+            height: calc(.6 * $project-navbar-width);
             aspect-ratio: 1;
             display: grid;
             place-items: center;

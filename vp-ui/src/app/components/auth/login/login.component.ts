@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         takeUntil(this.componentDestroyed$)
       )
       .subscribe(user => {
-        console.log(user);
         this.alertService.show(
           "Connecté avec Google",
           { duration: 3000, type: AlertType.SUCCESS }

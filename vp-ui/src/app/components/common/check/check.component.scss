@@ -63,7 +63,8 @@
       display: inline-block;
       vertical-align: text-top;
       border: $border-size solid $light-grey;
-      height: calc(100% - 2*$border-size);
+      height: calc(20px - 2*$border-size);
+      width: calc(20px - 2*$border-size);
       aspect-ratio: 1;
       border-radius: 4px;
       background: $light;
