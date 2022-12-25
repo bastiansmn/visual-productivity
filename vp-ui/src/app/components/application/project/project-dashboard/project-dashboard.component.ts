@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ProjectService} from "../../../../services/project/project.service";
-import {BehaviorSubject, catchError, EMPTY, Subject, takeUntil} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, Subject, take, takeUntil} from "rxjs";
 import Project from "../../../../model/project.model";
 import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
@@ -8,6 +8,8 @@ import {AddUserDialogComponent} from "./add-user-dialog/add-user-dialog.componen
 import {AlertService, AlertType} from "../../../../services/alert/alert.service";
 import {LoaderService} from "../../../../services/loader/loader.service";
 import Goal, {GoalStatus} from "../../../../model/goal.model";
+import {AddGoalDialogComponent} from "./add-goal-dialog/add-goal-dialog.component";
+import {GoalService} from "../../../../services/goal/goal.service";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -30,25 +32,34 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     return this.goalsGrouped$.getValue();
   }
   goalsByStatus(status: string) {
-    return this.goalsGrouped[status];
+    return this.goalsGrouped[status].sort((g1, g2) => new Date(g1.deadline).getTime() - new Date(g2.deadline).getTime());
   }
   GoalStatus = GoalStatus;
   enumIterator = Object.keys(GoalStatus);
+  goal$ = new BehaviorSubject<Goal | null>(null);
+  get goal() {
+    return this.goal$.getValue();
+  }
+  get goalShown() {
+    return !!this.goal;
+  }
 
   constructor(
     private projectService: ProjectService,
+    private goalService: GoalService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private alertService: AlertService,
     private loaderService: LoaderService
   ) { }
 
-  toggleDialog() {
+  toggleAddProjectDialog() {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
-      data: this.project
+      data: this.project,
+      disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (!this.project?.projectId) return;
       if (!result) return;
       if (!result.match('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')) return;
@@ -76,6 +87,41 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleAddGoalDialog(status: string) {
+    if (this.enumIterator.indexOf(status) === -1) return;
+
+    const dialogRef = this.dialog.open(AddGoalDialogComponent, {
+      data: { project: this.project, type: status},
+      disableClose: true
+    })
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (!result) return;
+
+      this.goalService.addGoalInProject(result)
+        .pipe(takeUntil(this.componentDestroyed$))
+        .subscribe(goal => {
+          this.projectService.projects.find(p => p.projectId === this.project?.projectId)?.allGoals.push(goal);
+          this.goalsGrouped$.next({
+            ...this.goalsGrouped,
+            [status]: [...this.goalsGrouped[status], goal]
+          });
+        });
+    })
+  }
+
+  showGoal(goal: Goal) {
+    this.goal$.next(goal);
+  }
+
+  closeGoal() {
+    this.goal$.next(null);
+  }
+
+  getCompletedTasks(goal: Goal) {
+    return goal.tasks.filter(t => t.completed).length;
+  }
+
   ngOnInit(): void {
     this.loaderService.show();
     this.route.params
@@ -99,5 +145,4 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.componentDestroyed$.next(true);
     this.componentDestroyed$.complete();
   }
-
 }

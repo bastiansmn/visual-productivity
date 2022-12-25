@@ -17,4 +17,5 @@ public interface TaskService {
 
     void delete(Long task_id) throws FunctionalException;
 
+    TaskDAO markAsDone(Long taskId) throws FunctionalException;
 }

@@ -45,6 +45,7 @@ export class AddUserDialogComponent implements OnInit {
   }
 
   close() {
+    if (this.form.invalid) return this.dialogRef.close();
     this.form.setValidators(null);
     this.dialogRef.close(this.form.get('email')?.value);
   }

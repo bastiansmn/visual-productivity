@@ -20,6 +20,16 @@
 
     <div class="controls">
       <vp-button
+        background="red-light"
+        color="light"
+        hoverColor="red-light"
+        tabulationIndex="6"
+        (click)="close()"
+      >
+        Fermer
+      </vp-button>
+
+      <vp-button
         [disabled]="form.invalid"
         tabulationIndex="2"
       >

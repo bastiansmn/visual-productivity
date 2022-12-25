@@ -1,0 +1,99 @@
+<div class="add_goal__dialog">
+  <form class="add_goal__form" [formGroup]="form" (submit)="close()">
+    <h1 class="mat-subheading-2">Ajouter un objectif</h1>
+    <p>
+      <small style="margin-bottom: 1rem;">Cet objectif apparaîtra dans votre tableau des objectifs. Vous pourrez y assigner des tâches, des évènements, des libellés, ...</small>
+    </p>
+    <vp-input
+      [parentForm]="form"
+      label="Nom de l'objectif"
+      parentFormControlName="name"
+      type="text"
+      placeholder="Mon objectif"
+      name="name"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('name') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Description de l'objectif"
+      parentFormControlName="description"
+      type="text"
+      placeholder="Cet objectif sert à ..."
+      name="description"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('description') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Date de commencement de l'objectif"
+      parentFormControlName="date_start"
+      type="date"
+      name="date_start"
+      [required]="true"
+      tabulationIndex="3"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('date_start') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Date de commencement de l'objectif"
+      parentFormControlName="deadline"
+      type="date"
+      name="deadline"
+      [required]="true"
+      tabulationIndex="5"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('deadline') }}
+      </small>
+    </vp-input>
+
+    <vp-select
+      [parentForm]="form"
+      label="Status de l'objectif"
+      parentFormControlName="goalStatus"
+      placeholder="..."
+      name="goalStatus"
+      [required]="true"
+      [options]="options"
+      tabulationIndex="4"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('goalStatus') }}
+      </small>
+    </vp-select>
+
+    <div class="controls">
+      <vp-button
+        background="red-light"
+        color="light"
+        hoverColor="red-light"
+        tabulationIndex="6"
+        (click)="close()"
+      >
+        Fermer
+      </vp-button>
+
+      <vp-button
+        [disabled]="form.invalid"
+        tabulationIndex="6"
+      >
+        Ajouter
+      </vp-button>
+    </div>
+  </form>
+</div>

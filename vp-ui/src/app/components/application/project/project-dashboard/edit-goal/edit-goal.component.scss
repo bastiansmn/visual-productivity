@@ -1,0 +1,74 @@
+@import "src/variables";
+
+.edit__goal {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  $padding: 2rem;
+  padding: $padding;
+  min-width: 200px;
+  width: calc(80% - 2 * $padding);
+  height: calc(100% - 2 * $padding);
+  max-width: 300px;
+  background: $rly-light-grey;
+  box-shadow: -2px 0 11px 0 rgb(140 140 140 / 27%);
+  animation: rtl 0.3s ease-in-out;
+
+  & .close {
+    margin-bottom: 1rem;
+  }
+
+  & .goal__header {
+    & .goal__title h1 {
+      margin-bottom: .2rem;
+    }
+
+    & p {
+      margin-bottom: 1px;
+
+      &:nth-last-child(1) {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  & .divider {
+    height: 2px;
+    border-radius: 1px;
+    width: 80%;
+    margin: auto;
+    margin-block: 2rem;
+    background: $light-grey;
+  }
+
+  & .goal__content {
+    & h2 {
+      margin-bottom: .2rem;
+    }
+
+    & .task__count {
+      display: flex;
+      justify-content: space-between;
+
+      & .count {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+          display: grid;
+          place-items: center;
+          height: 24px;
+          width: 24px;
+          aspect-ratio: 1;
+          font-size: 16px;
+          color: darkgray;
+        }
+
+        small {
+          height: fit-content;
+        }
+      }
+    }
+  }
+}

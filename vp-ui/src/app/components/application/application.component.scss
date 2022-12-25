@@ -1,8 +1,6 @@
 @import "src/variables";
 @import "src/keyframes";
 
-$navbar-size: 70px;
-
 main {
   background: $green-light;
   height: 100vh;
@@ -158,6 +156,8 @@ main {
         & vp-button {
           min-width: $project-navbar-width;
           min-height: $project-navbar-width;
+          max-width: $project-navbar-width;
+          max-height: $project-navbar-width;
 
           &::ng-deep mat-icon {
             display: grid;
@@ -168,6 +168,7 @@ main {
     }
 
     .project__content {
+      position: relative;
       overflow: auto;
       width: calc(100% - $project-navbar-width - 1px);
       padding: 1.5rem;

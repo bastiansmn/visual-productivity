@@ -1,4 +1,5 @@
 import Label from "./label.model";
+import Task from "./task.model";
 
 export enum GoalStatus {
   TODO = "TODO",
@@ -16,4 +17,13 @@ export default interface Goal {
   labels: Label[],
   tasks: Task[],
   created_at: Date;
+}
+
+export interface GoalCreation {
+  date_start: Date;
+  deadline: Date;
+  description: string
+  goalStatus: GoalStatus
+  name: string
+  project_id: string
 }

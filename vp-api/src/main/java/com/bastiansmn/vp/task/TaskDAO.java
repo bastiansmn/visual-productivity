@@ -39,6 +39,11 @@ public class TaskDAO {
     )
     private Date date_end;
 
+    @Column(
+            nullable = false
+    )
+    private Boolean completed;
+
     @ManyToOne
     @JoinColumn(
             name = "goal_id",

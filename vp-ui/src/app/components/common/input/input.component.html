@@ -1,5 +1,8 @@
 <div class="vp__input" [formGroup]="parentForm">
   <ng-content select="[icon]"></ng-content>
+  <label [for]="name">
+    {{ label }}
+  </label>
   <input
     [id]="name"
     [type]="type"

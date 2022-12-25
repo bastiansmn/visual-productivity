@@ -3,7 +3,6 @@
 .vp__button {
   border: none;
   border-radius: 9px;
-  height: 100%;
 
   cursor: pointer;
 
@@ -82,6 +81,18 @@
     &.hov-green:hover {
       color: $green;
     }
+
+    &.hov-red:hover {
+      color: $red;
+    }
+
+    &.hov-orange:hover {
+      color: $orange;
+    }
+
+    &.hov-red-light:hover {
+      color: $red-light;
+    }
   }
 }
 
@@ -136,6 +147,14 @@
 
 .bg-green {
   background: $green;
+}
+
+.bg-red {
+  background: $red;
+}
+
+.bg-red-light {
+  background: $red-light;
 }
 
 .padding-inline {

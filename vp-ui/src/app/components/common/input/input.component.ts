@@ -6,9 +6,10 @@ import {FormGroup} from "@angular/forms";
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss', '_input-theme.component.scss']
 })
-export class InputComponent implements OnInit {
+export class InputComponent {
 
   @Input() type: String = "text";
+  @Input() label!: String;
   @Input() placeholder!: String;
   @Input() name!: String;
   @Input() spellcheck: boolean = false;
@@ -22,10 +23,5 @@ export class InputComponent implements OnInit {
   // Form relative Input()
   @Input() parentForm!: FormGroup;
   @Input() parentFormControlName!: string;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

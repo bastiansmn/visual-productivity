@@ -37,14 +37,24 @@ import {DashboardComponent} from './components/application/dashboard/dashboard.c
 import {SettingsComponent} from './components/application/settings/settings.component';
 import {CreateProjectComponent} from './components/application/create-project/create-project.component';
 
-import { registerLocaleData } from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { ProjectDashboardComponent } from './components/application/project/project-dashboard/project-dashboard.component';
-import { ProjectTasksComponent } from './components/application/project/project-tasks/project-tasks.component';
+import {
+  ProjectDashboardComponent
+} from './components/application/project/project-dashboard/project-dashboard.component';
+import {ProjectTasksComponent} from './components/application/project/project-tasks/project-tasks.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { AddUserDialogComponent } from './components/application/project/project-dashboard/add-user-dialog/add-user-dialog.component';
-import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import { StatusPipe } from './pipes/status.pipe';
+import {
+  AddUserDialogComponent
+} from './components/application/project/project-dashboard/add-user-dialog/add-user-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {StatusPipe} from './pipes/status.pipe';
+import {
+  AddGoalDialogComponent
+} from './components/application/project/project-dashboard/add-goal-dialog/add-goal-dialog.component';
+import { SelectComponent } from './components/common/select/select.component';
+import { EditGoalComponent } from './components/application/project/project-dashboard/edit-goal/edit-goal.component';
+
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -69,7 +79,11 @@ registerLocaleData(localeFr);
     ProjectDashboardComponent,
     ProjectTasksComponent,
     AddUserDialogComponent,
-    StatusPipe
+    StatusPipe,
+    AddGoalDialogComponent,
+    SelectComponent,
+    EditGoalComponent,
+    EditGoalComponent
   ],
   imports: [
     BrowserModule,

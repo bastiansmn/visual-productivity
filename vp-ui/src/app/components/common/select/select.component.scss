@@ -2,12 +2,12 @@
 
 @media not all and (min-resolution:.001dpcm)
 { @supports (-webkit-appearance:none) {
-  .vp__input::ng-deep [icon] {
+  .vp__select::ng-deep [icon] {
     display: none;
   }
 }}
 
-.vp__input {
+.vp__select {
   position: relative;
   margin-bottom: .8rem;
 
@@ -22,23 +22,18 @@
       right: .7rem;
     }
 
-    & input.ng-touched.ng-invalid + [errorMessage] {
+    & select.ng-touched.ng-invalid + [errorMessage] {
       height: 16px;
       visibility: visible;
     }
 
-    & input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
+    & select::-webkit-outer-spin-button,
+    select::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
 
-    /* Firefox */
-    & input[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    & input.ng-touched.ng-valid + [errorMessage] {
+    & select.ng-touched.ng-valid + [errorMessage] {
       height: 0;
       visibility: hidden;
     }
@@ -59,25 +54,23 @@
     margin-bottom: .3rem;
   }
 
-  & input {
-    $padding: .7rem;
+  & select {
+    z-index: 99;
     position: relative;
-    $border-size: 2px;
+    $padding: .7rem;
     padding-inline: $padding;
-    width: calc(100% - 2*$padding - 2*$border-size);
-    height: calc(40px - 2*$border-size);
+    width: 100%;
+    height: 40px;
+    $border-size: 2px;
     border: $border-size solid $light-grey;
+
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
 
     border-radius: 12px;
     transition: border .3s ease-in-out;
     outline: none;
-
-    &[type='date'] {
-      font-family: unset;
-    }
-    &:not([type='date']) {
-      height: 34px;
-    }
 
     &.ng-touched.ng-valid {
       border:

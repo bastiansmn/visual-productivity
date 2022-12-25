@@ -7,36 +7,42 @@
       <div *ngFor="let user of project?.users; let i = index" [style.z-index]="(project?.users?.length ?? 0) + 1 - i" class="user" [matTooltip]="user?.name + ' ' + user?.lastname">
         {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
       </div>
-      <div [style.z-index]="0" role="button" (click)="toggleDialog()" class="add_user">
+      <div [style.z-index]="0" role="button" (click)="toggleAddProjectDialog()" class="add_user">
         <mat-icon>add</mat-icon>
-      </div>
-    </div>
-  </div>
-
-  <div class="project__goals">
-    <div class="status card" *ngFor="let status of enumIterator">
-      <div class="goal__header">
-        <h1 class="mat-body">{{ status | statusDisplay }}</h1>
-        <small class="mat-small">{{ goalsByStatus(status).length }}</small>
-      </div>
-      <div class="goal" *ngFor="let goal of goalsByStatus(status)">
-        <div class="goal__content">
-          <h2 [matTooltip]="goal.description" class="mat-body-2">{{ goal.name }}</h2>
-        </div>
-        <div class="goal__icons">
-          <div class="tasks">
-            <mat-icon>assignment_turned_in</mat-icon>
-            <small class="mat-small">0 / {{ goal.tasks.length }}</small>
-          </div>
-          <div class="deadline">
-            <small class="mat-small">{{ goal.deadline | date: 'dd.MM.yyyy' }}</small>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="status !== GoalStatus.DONE" role="button" class="goal add__goal">
-        <mat-icon>add</mat-icon>
-        <small>Ajouter un objectif</small>
       </div>
     </div>
   </div>
 </div>
+
+<div class="project__goals">
+  <div class="status card" *ngFor="let status of enumIterator">
+    <div class="goal__header">
+      <h1 class="mat-body">{{ status | statusDisplay }}</h1>
+      <small class="mat-small">{{ goalsByStatus(status).length }}</small>
+    </div>
+    <div (click)="showGoal(goal)" class="goal" *ngFor="let goal of goalsByStatus(status)">
+      <div class="goal__content">
+        <h2 class="mat-body-2">{{ goal.name }}</h2>
+      </div>
+      <div class="goal__icons">
+        <div class="tasks">
+          <mat-icon>assignment_turned_in</mat-icon>
+          <small class="mat-small">{{ getCompletedTasks(goal) }} / {{ goal.tasks.length }}</small>
+        </div>
+        <div class="deadline">
+          <small class="mat-small">{{ goal.deadline | date: 'dd.MM.yyyy' }}</small>
+        </div>
+      </div>
+    </div>
+    <div (click)="toggleAddGoalDialog(status)" *ngIf="status !== GoalStatus.DONE" role="button" class="add__goal">
+      <mat-icon>add</mat-icon>
+      <small>Ajouter un objectif</small>
+    </div>
+  </div>
+</div>
+
+<app-edit-goal
+  *ngIf="goalShown"
+  [goal]="goal"
+  (closed)="closeGoal()"
+></app-edit-goal>

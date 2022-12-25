@@ -2,6 +2,7 @@ package com.bastiansmn.vp.goal;
 
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
+import com.bastiansmn.vp.goal.dto.StatusUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,11 @@ public class GoalController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Collection<GoalDAO>> fetchAll(@RequestParam String project_id) throws FunctionalException {
         return ResponseEntity.ok(this.goalService.fetchAll(project_id));
+    }
+
+    @PatchMapping("/updateStatus")
+    public ResponseEntity<GoalDAO> update(@RequestBody StatusUpdateDTO goal) throws FunctionalException {
+        return ResponseEntity.ok(this.goalService.update(goal));
     }
 
     @DeleteMapping("/delete")

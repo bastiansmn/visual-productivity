@@ -5,4 +5,5 @@ export default interface Task {
   date_start: Date,
   date_end: Date,
   created_at: Date,
+  completed: boolean,
 }

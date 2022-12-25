@@ -7,6 +7,7 @@ import com.bastiansmn.vp.goal.GoalRepository;
 import com.bastiansmn.vp.goal.GoalService;
 import com.bastiansmn.vp.goal.GoalStatus;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
+import com.bastiansmn.vp.goal.dto.StatusUpdateDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
@@ -69,7 +70,7 @@ public class GoalServiceImpl implements GoalService {
                 .description(goalDTO.getDescription())
                 .date_start(goalDTO.getDate_start())
                 .deadline(goalDTO.getDeadline())
-                .status(GoalStatus.IN_PROGRESS)
+                .status(goalDTO.getGoalStatus())
                 .labels(Set.of())
                 .events(Set.of())
                 .tasks(Set.of())
@@ -101,6 +102,16 @@ public class GoalServiceImpl implements GoalService {
             throw new FunctionalException(FunctionalRule.GOAL_0006);
 
         return this.goalRepository.findAllByProject(project);
+    }
+
+    @Override
+    public GoalDAO update(StatusUpdateDTO goal) throws FunctionalException {
+        GoalDAO goalDAO = this.fetchById(goal.getGoal_id());
+
+        if (goal.getGoalStatus() != null)
+            goalDAO.setStatus(goal.getGoalStatus());
+
+        return this.goalRepository.save(goalDAO);
     }
 
     @Override

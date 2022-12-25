@@ -81,6 +81,7 @@ public class TaskServiceImpl implements TaskService {
                 .date_end(taskCreationDTO.getDate_end())
                 .goal(goal)
                 .project(project)
+                .completed(false)
                 .created_at(Date.from(Instant.now()))
                 .build();
 
@@ -120,5 +121,14 @@ public class TaskServiceImpl implements TaskService {
             throw new FunctionalException(FunctionalRule.TASK_0005);
 
         this.taskRepository.delete(task);
+    }
+
+    @Override
+    public TaskDAO markAsDone(Long taskId) throws FunctionalException {
+        TaskDAO task = this.fetchById(taskId);
+
+        task.setCompleted(true);
+
+        return this.taskRepository.save(task);
     }
 }

@@ -8,6 +8,7 @@ import {LoaderService} from "../loader/loader.service";
 import Project, {ProjectCreation} from "../../model/project.model";
 import {handleError} from "../../utils/http-error-handler.util";
 import {User} from "../../model/user.model";
+import {GoalCreation} from "../../model/goal.model";
 
 @Injectable({
   providedIn: 'root'

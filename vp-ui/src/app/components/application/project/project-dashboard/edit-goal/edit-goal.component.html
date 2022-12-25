@@ -1,0 +1,47 @@
+<aside class="edit__goal">
+  <div class="close">
+    <vp-button
+      (click)="close()"
+    >
+      Fermer
+    </vp-button>
+  </div>
+
+  <div class="goal__header">
+    <div class="goal__title">
+      <h1 class="mat-body">{{ goal?.name }}</h1>
+    </div>
+    <p>
+      <small class="goal__description">
+        {{ goal?.description }}
+      </small>
+    </p>
+    <p>
+      <small class="goal__description">
+        Commence le: {{ goal?.date_start | date: 'dd/MM/yyyy' }}
+      </small>
+    </p>
+    <p>
+      <small class="goal__description">
+        Fini le: {{ goal?.deadline | date: 'dd/MM/yyyy' }}
+      </small>
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="goal__content">
+    <div class="task__count">
+      <h2 class="mat-body-1">Tâches:</h2>
+      <div class="count">
+        <mat-icon>assignment_turned_in</mat-icon>
+        <small class="mat-small">{{ getCompletedTasks() }} / {{ goal?.tasks?.length }}</small>
+      </div>
+    </div>
+    <div class="tasks">
+      <div class="task" *ngFor="let task of goal?.tasks">
+        {{ task | json }}
+      </div>
+    </div>
+  </div>
+</aside>
