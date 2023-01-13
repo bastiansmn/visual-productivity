@@ -15,12 +15,12 @@
 </div>
 
 <div class="project__goals">
-  <div class="status card" *ngFor="let status of enumIterator">
+  <div class="status card" [id]="status" [cdkDropListConnectedTo]="enumIterator" [cdkDropListData]="goalsByStatus(status)" cdkDropList (cdkDropListDropped)="handleDrop($event)" *ngFor="let status of enumIterator">
     <div class="goal__header">
       <h1 class="mat-body">{{ status | statusDisplay }}</h1>
       <small class="mat-small">{{ goalsByStatus(status).length }}</small>
     </div>
-    <div (click)="showGoal(goal)" class="goal" *ngFor="let goal of goalsByStatus(status)">
+    <div (click)="showGoal(goal)" class="goal" cdkDrag *ngFor="let goal of goalsByStatus(status)">
       <div class="goal__content">
         <h2 class="mat-body-2">{{ goal.name }}</h2>
       </div>
@@ -44,5 +44,6 @@
 <app-edit-goal
   *ngIf="goalShown"
   [goal]="goal"
+  [project]="project"
   (closed)="closeGoal()"
 ></app-edit-goal>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Goal, {GoalCreation} from "../../model/goal.model";
+import Goal, {GoalCreation, GoalStatus} from "../../model/goal.model";
 import {HttpClient} from "@angular/common/http";
 import {catchError} from "rxjs";
 import {handleError} from "../../utils/http-error-handler.util";
@@ -19,6 +19,19 @@ export class GoalService {
 
   addGoalInProject(goal: GoalCreation) {
     return this.http.post<Goal>("/api/v1/goal/create", goal)
+      .pipe(
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService,
+          alertService: this.alertService
+        }))
+      );
+  }
+
+  updateStatus(goalID: number, status: GoalStatus) {
+    return this.http.patch<Goal>(`/api/v1/goal/updateStatus`, {
+      goal_id: goalID,
+      goalStatus: status
+    })
       .pipe(
         catchError(err => handleError(err, {
           loaderService: this.loaderService,

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from "../../../../services/project/project.service";
 import {BehaviorSubject, catchError, EMPTY, Subject, take, takeUntil} from "rxjs";
 import Project from "../../../../model/project.model";
@@ -10,6 +10,7 @@ import {LoaderService} from "../../../../services/loader/loader.service";
 import Goal, {GoalStatus} from "../../../../model/goal.model";
 import {AddGoalDialogComponent} from "./add-goal-dialog/add-goal-dialog.component";
 import {GoalService} from "../../../../services/goal/goal.service";
+import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -144,5 +145,27 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed$.next(true);
     this.componentDestroyed$.complete();
+  }
+
+  handleDrop($event: CdkDragDrop<Goal[]>) {
+    transferArrayItem(
+      $event.previousContainer.data,
+      $event.container.data,
+      $event.previousIndex,
+      $event.currentIndex,
+    );
+
+    // Get the element dragged
+    const goal = $event.container.data[$event.currentIndex];
+
+    // Update the goal status
+    this.goalService.updateStatus(goal.goal_id, $event.container.id as GoalStatus)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.alertService.show(
+          "Le statut de la tâche a été mis à jour",
+          { type: AlertType.SUCCESS, duration: 5000 }
+        );
+      })
   }
 }

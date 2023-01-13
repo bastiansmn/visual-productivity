@@ -54,6 +54,8 @@ import {
 } from './components/application/project/project-dashboard/add-goal-dialog/add-goal-dialog.component';
 import { SelectComponent } from './components/common/select/select.component';
 import { EditGoalComponent } from './components/application/project/project-dashboard/edit-goal/edit-goal.component';
+import { AddTaskDialogComponent } from './components/application/project/project-dashboard/edit-goal/add-task-dialog/add-task-dialog.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 registerLocaleData(localeFr);
 
@@ -83,31 +85,33 @@ registerLocaleData(localeFr);
     AddGoalDialogComponent,
     SelectComponent,
     EditGoalComponent,
-    EditGoalComponent
+    EditGoalComponent,
+    AddTaskDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
-    SocialLoginModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    MatDialogModule
-  ],
+   imports: [
+      BrowserModule,
+      AppRoutingModule,
+      BrowserAnimationsModule,
+      ServiceWorkerModule.register('ngsw-worker.js', {
+         enabled: environment.production,
+         // Register the ServiceWorker as soon as the application is stable
+         // or after 30 seconds (whichever comes first).
+         registrationStrategy: 'registerWhenStable:30000'
+      }),
+      MatCardModule,
+      MatButtonModule,
+      MatIconModule,
+      MatToolbarModule,
+      MatSidenavModule,
+      MatListModule,
+      SocialLoginModule,
+      ReactiveFormsModule,
+      HttpClientModule,
+      MatProgressSpinnerModule,
+      MatTooltipModule,
+      MatDialogModule,
+      DragDropModule
+   ],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',

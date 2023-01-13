@@ -42,6 +42,17 @@
       <div class="task" *ngFor="let task of goal?.tasks">
         {{ task | json }}
       </div>
+      <vp-button
+        background="light"
+        color="purple"
+        [border]="true"
+        [hoverBorder]="false"
+        hoverBgColor="purple"
+        hoverColor="light"
+        (click)="openAddTaskDialog()"
+      >
+        Ajouter une tâche
+      </vp-button>
     </div>
   </div>
 </aside>
