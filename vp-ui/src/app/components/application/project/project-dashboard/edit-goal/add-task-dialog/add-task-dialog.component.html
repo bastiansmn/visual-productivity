@@ -1,1 +1,81 @@
-<p>add-task-dialog works!</p>
+<div class="add_task__dialog">
+  <form class="add_task__form" [formGroup]="form" (submit)="close()">
+    <h1 class="mat-subheading-2"><span>Ajouter une tâche à l'objectif:</span> <br> <span>{{ goal.name }}</span></h1>
+    <vp-input
+      [parentForm]="form"
+      label="Nom de la tâche"
+      parentFormControlName="name"
+      name="name"
+      type="text"
+      placeholder="Ma tâche"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('name') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Description de la tâche"
+      parentFormControlName="description"
+      type="text"
+      placeholder="Cet tâche sert à ..."
+      name="description"
+      [required]="true"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('description') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Date de commencement de la tâche"
+      parentFormControlName="date_start"
+      type="date"
+      name="date_start"
+      [required]="true"
+      tabulationIndex="3"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('date_start') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      label="Date de fin de la tâche"
+      parentFormControlName="date_end"
+      type="date"
+      name="date_end"
+      [required]="true"
+      tabulationIndex="4"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('date_end') }}
+      </small>
+    </vp-input>
+
+    <div class="controls">
+      <vp-button
+        background="red-light"
+        color="light"
+        hoverColor="red-light"
+        tabulationIndex="5"
+        (click)="close()"
+      >
+        Fermer
+      </vp-button>
+
+      <vp-button
+        [disabled]="form.invalid"
+        tabulationIndex="6"
+      >
+        Ajouter
+      </vp-button>
+    </div>
+  </form>
+</div>

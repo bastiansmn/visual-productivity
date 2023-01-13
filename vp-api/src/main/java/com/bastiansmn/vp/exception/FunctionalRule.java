@@ -43,7 +43,9 @@ public enum FunctionalRule {
     TASK_0006("TASK_0006", "Aucun objectif spécifié"),
     TASK_0007("TASK_0007", "Aucun projet spécifié"),
     TASK_0008("TASK_0008", "L'objectif n'appartient pas au projet mentionné"),
-    ;
+    TASK_0009("TASK_0009", "La date de fin de la tâche ne peut pas être après la deadline de l'objectif"),
+    TASK_0010("TASK_0010", "La date de fin de la tâche ne peut pas être après la deadline du projet"),
+        ;
 
     private final String name;
     private final String message;

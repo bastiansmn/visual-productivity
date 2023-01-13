@@ -281,3 +281,7 @@ h1, h2, h3, h4, h5, h6, p, span, li, ul, ol, button, input, textarea {
 * {
   scroll-behavior: smooth;
 }
+
+.text-red {
+  color: $red !important;
+}

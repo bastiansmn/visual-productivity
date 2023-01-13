@@ -22,8 +22,12 @@
       </small>
     </p>
     <p>
-      <small class="goal__description">
-        Fini le: {{ goal?.deadline | date: 'dd/MM/yyyy' }}
+      <small class="goal__description" [class.text-red]="deadlineIsSoon(goal?.deadline)">
+        <mat-icon [class.warning]="deadlineIsSoon(goal?.deadline)" *ngIf="deadlineIsSoon(goal?.deadline)">
+          warning
+        </mat-icon>
+        Fini le:
+        {{ goal?.deadline | date: 'dd/MM/yyyy' }}
       </small>
     </p>
   </div>
@@ -39,10 +43,11 @@
       </div>
     </div>
     <div class="tasks">
-      <div class="task" *ngFor="let task of goal?.tasks">
-        {{ task | json }}
+      <div class="task" *ngFor="let task of getSortedTasks(goal?.tasks)">
+        <app-task-preview (done)="resort()" (deleted)="handleDeletedTask($event)" [task]="task"></app-task-preview>
       </div>
       <vp-button
+        *ngIf="goal?.status !== GoalStatus.DONE"
         background="light"
         color="purple"
         [border]="true"

@@ -56,6 +56,7 @@ import { SelectComponent } from './components/common/select/select.component';
 import { EditGoalComponent } from './components/application/project/project-dashboard/edit-goal/edit-goal.component';
 import { AddTaskDialogComponent } from './components/application/project/project-dashboard/edit-goal/add-task-dialog/add-task-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import { TaskPreviewComponent } from './components/application/project/common/task-preview/task-preview.component';
 
 registerLocaleData(localeFr);
 
@@ -86,7 +87,8 @@ registerLocaleData(localeFr);
     SelectComponent,
     EditGoalComponent,
     EditGoalComponent,
-    AddTaskDialogComponent
+    AddTaskDialogComponent,
+    TaskPreviewComponent
   ],
    imports: [
       BrowserModule,

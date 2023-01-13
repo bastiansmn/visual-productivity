@@ -50,6 +50,11 @@ public class TaskController {
         return ResponseEntity.ok(this.taskService.markAsDone(task_id));
     }
 
+    @PatchMapping("/markAsUndone")
+    public ResponseEntity<TaskDAO> markAsUndone(@RequestParam Long task_id) throws FunctionalException {
+        return ResponseEntity.ok(this.taskService.markAsUndone(task_id));
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestParam Long task_id) throws FunctionalException {
         this.taskService.delete(task_id);

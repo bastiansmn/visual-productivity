@@ -65,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
             throw new FunctionalException(FunctionalRule.TASK_0004);
 
         if (taskCreationDTO.getDate_end().after(goal.getDeadline()))
-            throw new FunctionalException(FunctionalRule.TASK_0004);
+            throw new FunctionalException(FunctionalRule.TASK_0009);
 
         if (!goal.getProject().getProjectId().equals(project.getProjectId()))
             throw new FunctionalException(FunctionalRule.TASK_0008);
@@ -128,6 +128,15 @@ public class TaskServiceImpl implements TaskService {
         TaskDAO task = this.fetchById(taskId);
 
         task.setCompleted(true);
+
+        return this.taskRepository.save(task);
+    }
+
+    @Override
+    public TaskDAO markAsUndone(Long taskId) throws FunctionalException {
+        TaskDAO task = this.fetchById(taskId);
+
+        task.setCompleted(false);
 
         return this.taskRepository.save(task);
     }

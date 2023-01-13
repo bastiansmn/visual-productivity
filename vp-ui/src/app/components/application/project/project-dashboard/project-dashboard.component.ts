@@ -148,6 +148,10 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
 
   handleDrop($event: CdkDragDrop<Goal[]>) {
+    if ($event.previousContainer.id === $event.container.id) return;
+
+    // TODO: Si $event.container.id === 'DONE' && goal non terminé alors demander confirmation via modal
+
     transferArrayItem(
       $event.previousContainer.data,
       $event.container.data,
@@ -167,5 +171,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           { type: AlertType.SUCCESS, duration: 5000 }
         );
       })
+  }
+
+  deadlineIsSoon(deadline: Date) {
+    // TODO: Permettre de configurer le nombre de jours avant la date limite
+    // Return true if the deadline is in less than 5 days
+    return new Date(deadline).getTime() - new Date().getTime() < 5 * 24 * 60 * 60 * 1000;
   }
 }
