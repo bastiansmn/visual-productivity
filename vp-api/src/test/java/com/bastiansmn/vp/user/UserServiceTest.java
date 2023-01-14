@@ -4,6 +4,8 @@ import com.bastiansmn.vp.authorities.AuthoritiesService;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.mail.MailConfirmService;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesRepository;
+import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
@@ -34,6 +36,8 @@ class UserServiceTest {
     @Mock
     private RoleService roleService;
     @Mock private MailConfirmService mailConfirmService;
+    @Mock private PendingInvitesRepository pendingInvitesRepository;
+    @Mock private ProjectRepository projectRepository;
 
     private UserService underTest;
 
@@ -43,7 +47,9 @@ class UserServiceTest {
                 this.userRepository,
                 this.roleService,
                 new BCryptPasswordEncoder(),
-                this.mailConfirmService
+                this.mailConfirmService,
+                this.pendingInvitesRepository,
+                this.projectRepository
         );
     }
 
