@@ -1,14 +1,11 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BehaviorSubject, catchError, EMPTY, from, Observable, of} from "rxjs";
-import {Error} from "../../model/error.model";
-import {environment} from "../../../environments/environment";
-import {AlertService, AlertType} from "../alert/alert.service";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject, catchError, of} from "rxjs";
+import {AlertService} from "../alert/alert.service";
 import {LoaderService} from "../loader/loader.service";
 import Project, {ProjectCreation} from "../../model/project.model";
 import {handleError} from "../../utils/http-error-handler.util";
 import {User} from "../../model/user.model";
-import {GoalCreation} from "../../model/goal.model";
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +58,7 @@ export class ProjectService {
   }
 
   addUserInProject(email: string, projectId: string) {
-    return this.http.post<User>(`/api/v1/project/addUserToProject?user_email=${email}&project_id=${projectId}`, {})
+    return this.http.post<User | null>(`/api/v1/project/addUserToProject?user_email=${email}&project_id=${projectId}`, {})
       .pipe(
         catchError(err => handleError(err, {
           loaderService: this.loaderService,

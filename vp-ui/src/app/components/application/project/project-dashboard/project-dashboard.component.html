@@ -48,4 +48,6 @@
   [goal]="goal"
   [project]="project"
   (closed)="closeGoal()"
+  (updated)="updateGoal($event)"
+  (deleted)="deleteGoal($event)"
 ></app-edit-goal>

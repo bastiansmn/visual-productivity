@@ -18,6 +18,7 @@ export class GoalService {
   ) { }
 
   addGoalInProject(goal: GoalCreation) {
+    console.log(goal);
     return this.http.post<Goal>("/api/v1/goal/create", goal)
       .pipe(
         catchError(err => handleError(err, {
@@ -40,4 +41,12 @@ export class GoalService {
       );
   }
 
+  deleteGoal(goal_id: number) {
+    return this.http.delete(`/api/v1/goal/delete?goal_id=${goal_id}`)
+      .pipe(
+        catchError(err => handleError(err, {
+          loaderService: this.loaderService
+        }))
+      );
+  }
 }

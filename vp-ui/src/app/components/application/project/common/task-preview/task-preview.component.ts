@@ -3,6 +3,7 @@ import Task from "../../../../../model/task.model";
 import {TaskService} from "../../../../../services/task/task.service";
 import {take} from "rxjs";
 import {AlertService, AlertType} from "../../../../../services/alert/alert.service";
+import Goal, {GoalStatus} from "../../../../../model/goal.model";
 
 @Component({
   selector: 'app-task-preview',
@@ -12,8 +13,12 @@ import {AlertService, AlertType} from "../../../../../services/alert/alert.servi
 export class TaskPreviewComponent {
 
   @Input() task!: Task;
+  @Input() goal!: Goal | null;
   @Output() deleted = new EventEmitter();
   @Output() done = new EventEmitter();
+  @Output() statusChanged = new EventEmitter();
+
+  GoalStatus = GoalStatus;
 
   constructor(
     private taskService: TaskService,
@@ -33,6 +38,7 @@ export class TaskPreviewComponent {
       this.taskService.markAsUndone(this.task.task_id)
         .pipe(take(1))
         .subscribe(() => {
+          this.statusChanged.emit();
           this.task.completed = false;
         });
     } else {
@@ -40,6 +46,7 @@ export class TaskPreviewComponent {
         .pipe(take(1))
         .subscribe(() => {
           this.task.completed = true;
+          this.statusChanged.emit();
           this.done.emit();
           this.alertService.show(
             "Tâche complétée",

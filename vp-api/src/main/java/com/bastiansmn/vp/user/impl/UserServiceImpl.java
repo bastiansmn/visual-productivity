@@ -4,6 +4,11 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.mail.MailConfirmService;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesDAO;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesRepository;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesService;
+import com.bastiansmn.vp.project.ProjectRepository;
+import com.bastiansmn.vp.project.ProjectService;
 import com.bastiansmn.vp.role.RoleDAO;
 import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.user.UserDAO;
@@ -38,6 +43,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final MailConfirmService mailConfirmService;
+    private final PendingInvitesRepository pendingInvitesRepository;
+    private final ProjectRepository projectRepository;
 
     public UserDAO create(UserCreationDTO userDTO) throws FunctionalException, TechnicalException {
         // TODO Limiter ler nombre de requêtes par IP (car route publique)
@@ -73,6 +80,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
 
         log.info("Creating user: {}", user);
+
+        var pendingInvites = this.pendingInvitesRepository.findAllByEmail(user.getEmail());
+
+        var projects = pendingInvites.stream()
+                .map(PendingInvitesDAO::getProject)
+                .map(this.projectRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+
+        user.setProjects(projects);
+
+        // Clean pending invites
+        projects.forEach(project -> {
+            this.pendingInvitesRepository.deleteAllByEmailAndProject(user.getEmail(), project.getProjectId());
+        });
 
         UserDAO createdUser = this.userRepository.save(user);
         this.mailConfirmService.createConfirmation(createdUser);

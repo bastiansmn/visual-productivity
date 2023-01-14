@@ -7,6 +7,7 @@ import {take} from "rxjs";
 import {TaskService} from "../../../../../services/task/task.service";
 import Task from "../../../../../model/task.model";
 import {AlertService, AlertType} from "../../../../../services/alert/alert.service";
+import {GoalService} from "../../../../../services/goal/goal.service";
 
 @Component({
   selector: 'app-edit-goal',
@@ -18,12 +19,15 @@ export class EditGoalComponent {
   @Input() goal!: Goal | null;
   @Input() project!: Project | null;
   @Output() closed = new EventEmitter();
+  @Output() updated = new EventEmitter();
+  @Output() deleted = new EventEmitter<number>();
 
   GoalStatus = GoalStatus;
 
   constructor(
     private dialog: MatDialog,
     private taskService: TaskService,
+    private goalService: GoalService,
     private alertService: AlertService
   ) {  }
 
@@ -90,5 +94,27 @@ export class EditGoalComponent {
     // TODO: Permettre de configurer le nombre de jours avant la date limite
     // Return true if the deadline is in less than 5 days
     return new Date(deadline).getTime() - new Date().getTime() < 5 * 24 * 60 * 60 * 1000;
+  }
+
+  checkGoalCompleteness() {
+    if (!this.goal) return;
+    if (this.goal.tasks.every(t => t.completed)) {
+      this.goalService.updateStatus(this.goal.goal_id, GoalStatus.DONE)
+        .pipe(take(1))
+        .subscribe(goal => {
+          this.updated.emit(goal);
+        });
+    }
+  }
+
+  delete() {
+    if (!this.goal) return;
+    // TODO: l'appel se fait 2 fois, pq ??
+    this.goalService.deleteGoal(this.goal.goal_id)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.deleted.emit(this.goal?.goal_id ?? -1);
+        this.closed.emit();
+      });
   }
 }

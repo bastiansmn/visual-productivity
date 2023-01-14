@@ -7,7 +7,7 @@
       {{ task.date_start | date: 'dd/MM/yyyy' }} - {{ task.date_end | date: 'dd/MM/yyyy' }}
     </small>
   </p>
-  <div class="controls">
+  <div class="controls" *ngIf="goal?.status !== GoalStatus.DONE">
     <button (click)="delete()" role="button">
       <mat-icon color="warn">delete</mat-icon>
     </button>

@@ -5,6 +5,14 @@
     >
       Fermer
     </vp-button>
+
+    <vp-button
+      (click)="delete()"
+      background="red"
+      hoverColor="red"
+    >
+      Supprimer
+    </vp-button>
   </div>
 
   <div class="goal__header">
@@ -44,7 +52,7 @@
     </div>
     <div class="tasks">
       <div class="task" *ngFor="let task of getSortedTasks(goal?.tasks)">
-        <app-task-preview (done)="resort()" (deleted)="handleDeletedTask($event)" [task]="task"></app-task-preview>
+        <app-task-preview (done)="resort()" (deleted)="handleDeletedTask($event)" [goal]="goal" [task]="task"></app-task-preview>
       </div>
       <vp-button
         *ngIf="goal?.status !== GoalStatus.DONE"

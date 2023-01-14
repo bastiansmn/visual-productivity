@@ -1,0 +1,45 @@
+<body style="font-family: Helvetica, sans-serif;
+            font-size: 14px;
+            color: #333333;
+            margin: 0;
+            padding: 0;">
+<header style="background: #7d70ff;
+            color: white;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;">
+    <h1>Bienvenue sur VisualProductivity !</h1>
+</header>
+<main style=" width: 80%;
+            margin: 5% auto auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;">
+    <h1 class="text-gradient"
+        style="
+            background: #22c2fb;
+            background: -moz-linear-gradient(124deg, #22c2fb 0%, #7d70ff 100%);
+            background: -webkit-linear-gradient(124deg, #22c2fb 0%, #7d70ff 100%);
+            background: linear-gradient(124deg, #22c2fb 0%, #7d70ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            width: max-content;"
+    >Vous avez été invité sur un projet !</h1>
+    <p style="text-align: center;">
+        Cette invitation vous a été envoyé pour rejoindre le projet <em th:text="${projectName}">Projet Static</em>.
+    </p>
+    <p>
+        Veuillez tout d'abord créer votre compte à l'adresse suivante :
+        <a href="https://vp.bastian-somon.fr/register">https://vp.bastian-somon.fr/register</a>
+    </p>
+    <p>
+        Ensuite, pour rejoindre le projet, veuillez cliquer sur le lien ci-dessous :
+        <a th:href="@{${url}}" style="color: #7d70ff;" th:text="${url}">Url Static</a>
+    </p>
+    <p>
+        Cette invitation n'a pas de date de validité. Vous retrouverez le projet dans votre liste de projets lors de la création de votre compte.
+    </p>
+</main>
+</body>

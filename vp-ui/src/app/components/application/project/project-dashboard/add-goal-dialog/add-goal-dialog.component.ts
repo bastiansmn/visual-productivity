@@ -20,8 +20,7 @@ export class AddGoalDialogComponent implements OnInit {
 
   options = [
     {value: GoalStatus.TODO, label: 'A faire'},
-    {value: GoalStatus.IN_PROGRESS, label: 'En cours'},
-    {value: GoalStatus.DONE, label: 'Terminé'},
+    {value: GoalStatus.IN_PROGRESS, label: 'En cours'}
   ]
 
   constructor(

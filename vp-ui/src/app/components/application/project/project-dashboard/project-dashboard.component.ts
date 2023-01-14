@@ -10,7 +10,7 @@ import {LoaderService} from "../../../../services/loader/loader.service";
 import Goal, {GoalStatus} from "../../../../model/goal.model";
 import {AddGoalDialogComponent} from "./add-goal-dialog/add-goal-dialog.component";
 import {GoalService} from "../../../../services/goal/goal.service";
-import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, CdkDragEnd, CdkDragStart, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -79,6 +79,13 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         )
         .subscribe(user => {
           this.loaderService.hide();
+          if (!user) {
+            this.alertService.show(
+              "L'utilisateur n'a pas de compte, un mail lui a quand même été envoyé",
+              { type: AlertType.WARNING, duration: 5000 }
+            );
+            return;
+          }
           this.alertService.show(
             "L'invitation a été envoyé à l'utilisateur",
             { type: AlertType.SUCCESS, duration: 5000 }
@@ -105,7 +112,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.projectService.projects.find(p => p.projectId === this.project?.projectId)?.allGoals.push(goal);
           this.goalsGrouped$.next({
             ...this.goalsGrouped,
-            [status]: [...this.goalsGrouped[status], goal]
+            [goal.status]: [...this.goalsGrouped[status], goal]
           });
         });
     })
@@ -147,6 +154,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.componentDestroyed$.complete();
   }
 
+  stringToGoalStatus(status: string): GoalStatus {
+    if (status === '') return GoalStatus.TODO;
+    return GoalStatus[status as keyof typeof GoalStatus];
+  }
+
   handleDrop($event: CdkDragDrop<Goal[]>) {
     if ($event.previousContainer.id === $event.container.id) return;
 
@@ -166,6 +178,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.goalService.updateStatus(goal.goal_id, $event.container.id as GoalStatus)
       .pipe(take(1))
       .subscribe(() => {
+        goal.status = this.stringToGoalStatus($event.container.id);
         this.alertService.show(
           "Le statut de la tâche a été mis à jour",
           { type: AlertType.SUCCESS, duration: 5000 }
@@ -177,5 +190,26 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     // TODO: Permettre de configurer le nombre de jours avant la date limite
     // Return true if the deadline is in less than 5 days
     return new Date(deadline).getTime() - new Date().getTime() < 5 * 24 * 60 * 60 * 1000;
+  }
+
+  updateGoal($event: Goal) {
+    this.goalsGrouped$.next({
+      [GoalStatus.TODO]: this.goalsGrouped[GoalStatus.TODO].filter(g => g.goal_id !== $event.goal_id) ?? [],
+      [GoalStatus.IN_PROGRESS]: this.goalsGrouped[GoalStatus.IN_PROGRESS].filter(g => g.goal_id !== $event.goal_id) ?? [],
+      [GoalStatus.DONE]: this.goalsGrouped[GoalStatus.DONE].filter(g => g.goal_id !== $event.goal_id) ?? []
+    })
+    this.goalsGrouped$.next({
+      ...this.goalsGrouped,
+      [$event.status]: [...this.goalsGrouped[$event.status], $event]
+    });
+  }
+
+  deleteGoal($event: number) {
+    console.log($event);
+    this.goalsGrouped$.next({
+      [GoalStatus.TODO]: this.goalsGrouped[GoalStatus.TODO].filter(g => g.goal_id !== $event) ?? [],
+      [GoalStatus.IN_PROGRESS]: this.goalsGrouped[GoalStatus.IN_PROGRESS].filter(g => g.goal_id !== $event) ?? [],
+      [GoalStatus.DONE]: this.goalsGrouped[GoalStatus.DONE].filter(g => g.goal_id !== $event) ?? []
+    })
   }
 }

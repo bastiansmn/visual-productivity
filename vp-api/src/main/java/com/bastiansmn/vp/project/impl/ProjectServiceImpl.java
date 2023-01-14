@@ -5,6 +5,10 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.exception.TechnicalRule;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesCreationDTO;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesDAO;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesRepository;
+import com.bastiansmn.vp.pendingUserInvites.PendingInvitesService;
 import com.bastiansmn.vp.project.ProjectCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
@@ -35,6 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserService userService;
+    private final PendingInvitesRepository pendingInvitesRepository;
     private final SpringTemplateEngine templateEngine;
     private final JavaMailSender mailSender;
     private final CorsProperties corsProperties;
@@ -136,10 +141,11 @@ public class ProjectServiceImpl implements ProjectService {
         if (project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(user_email))
             throw new FunctionalException(FunctionalRule.PROJ_0008);
 
-        UserDAO user = this.userService.fetchByEmail(user_email);
-        project.getUsers().add(user);
 
         try {
+            UserDAO user = this.userService.fetchByEmail(user_email);
+            project.getUsers().add(user);
+
             MimeMessage message = this.mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -147,27 +153,50 @@ public class ProjectServiceImpl implements ProjectService {
             helper.setSubject("Visual Productivity - Vous avez été ajouté à un projet");
 
             Context context = new Context();
-            context.setVariables(
-                    Map.of(
-                            "firstName", user.getName(),
-                            "projectName", project.getName(),
-                            "url", "%s/app/projects/%s/dashboard".formatted(this.corsProperties.getCurrentOrigin(), project.getProjectId())
-                    )
-            );
+            context.setVariables(Map.of("firstName", user.getName(), "projectName", project.getName(), "url",
+                    "%s/app/projects/%s/dashboard".formatted(this.corsProperties.getCurrentOrigin(), project.getProjectId())));
             helper.setText(templateEngine.process("addUserToProject", context), true);
             this.mailSender.send(message);
+
+            project.setUpdated_at(Date.from(Instant.now()));
+            this.projectRepository.save(project);
+
+            return user;
+
+        } catch (FunctionalException e) {
+            // User not found, send him an email to create an account
+            MimeMessage message = this.mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            try {
+                helper.setTo(user_email);
+                helper.setSubject("Visual Productivity - Vous avez été invités à rejoindre un projet");
+
+                Context context = new Context();
+                context.setVariables(Map.of("projectName", project.getName(), "url",
+                        "%s/app/projects/%s/dashboard".formatted(this.corsProperties.getCurrentOrigin(), project.getProjectId())));
+                helper.setText(templateEngine.process("newUserToProject", context), true);
+                this.mailSender.send(message);
+
+                this.pendingInvitesRepository.save(
+                    PendingInvitesDAO.builder()
+                        .email(user_email)
+                        .project(project.getProjectId())
+                        .build()
+                );
+
+            } catch (MessagingException e1) {
+                throw new TechnicalException(TechnicalRule.MAIL_0001);
+            }
+
+            return null;
         } catch (MessagingException e) {
-            log.error("Impossible d'envoyer le mail pour ajouter un utilisateur au projet: {}", user.getEmail());
+            log.error("Impossible d'envoyer le mail pour ajouter un utilisateur au projet: {}", project.getProjectId());
             throw new TechnicalException(
                     TechnicalRule.MAIL_0001,
                     HttpStatus.SERVICE_UNAVAILABLE
             );
         }
-
-        project.setUpdated_at(Date.from(Instant.now()));
-        this.projectRepository.save(project);
-
-        return user;
     }
 
     @Override
