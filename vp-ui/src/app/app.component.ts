@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from "./services/responsive/responsive.service";
 import {AuthService} from "./services/auth/auth.service";
-import {AlertService, AlertType} from "./services/alert/alert.service";
+import {AlertService} from "./services/alert/alert.service";
 import {LoaderService} from "./services/loader/loader.service";
-import {Subject, takeUntil} from "rxjs";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-root',
