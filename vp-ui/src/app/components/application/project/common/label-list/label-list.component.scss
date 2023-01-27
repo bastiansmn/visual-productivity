@@ -1,0 +1,102 @@
+@import "src/variables";
+
+div.label__list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: .5rem;
+
+  div.input__wrapper {
+    position: relative;
+
+    input[list='labelName'] {
+      height: 18px;
+      max-width: calc(100% - 2px);
+      padding: 0;
+      margin: 0;
+      background: $light;
+      border: $light-grey 1px solid;
+      display: inline-block;
+      padding-inline: .3rem;
+      border-radius: 7px;
+    }
+
+    .autocomplete {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: max-content;
+      max-height: 200px;
+      overflow-y: auto;
+      background: $light;
+      border: $light-grey 1px solid;
+      border-radius: 7px;
+
+      display: flex;
+      flex-direction: column;
+
+      & span {
+        cursor: pointer;
+        padding: .2rem;
+        height: 20px;
+
+        & app-label {
+          margin: 0;
+        }
+
+        &::ng-deep span.label {
+          margin: 0;
+        }
+
+        &:hover {
+          background: $light-grey;
+        }
+      }
+    }
+  }
+
+  app-label {
+    height: 20px;
+    margin-block-end: .2rem;
+    display: inline-block;
+  }
+
+  .label {
+    display: inline-grid;
+    place-items: center;
+    padding-inline: .15rem;
+    height: 20px;
+    width: 20px;
+    background: $rly-light-grey;
+
+    border-radius: 4px;
+    user-select: none;
+  }
+
+  button {
+    height: 20px;
+    width: 20px;
+    aspect-ratio: 1/1;
+    border-radius: 7px;
+    background: $dark;
+    color: $light;
+    display: inline-block;
+
+    &:nth-last-child(1) {
+      margin-left: .2rem;
+    }
+
+    mat-icon {
+      height: 20px;
+      width: 20px;
+      aspect-ratio: 1/1;
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+    }
+  }
+
+  app-label {
+    margin-right: .2rem;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,26 @@
+@import "src/variables";
+
+.primary {
+  color: $purple;
+}
+
+section {
+  margin-bottom: 1.5rem;
+}
+
+.label__list {
+  display: flex;
+
+  vp-button {
+    height: 20px;
+    width: 20px;
+
+    & mat-icon {
+      height: 20px;
+      width: 20px;
+      font-size: 1rem;
+      display: grid;
+      place-items: center;
+    }
+  }
+}

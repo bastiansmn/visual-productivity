@@ -202,18 +202,15 @@ $ui-warn: $md-red;
 $font-name: "Mukta";
 
 $ui-typography: mat.define-typography-config(
-  $headline: mat.define-typography-level(36px, 48px, 700, $font-name),
-  $title: mat.define-typography-level(24px, 32px, 700, $font-name),
-  $subheading-2: mat.define-typography-level(22px, 1.2em, 400, $font-name),
-  $subheading-1: mat.define-typography-level(18px, 1.2em, 400, $font-name),
-  $body-2: mat.define-typography-level(14px, 1.25em, 700, $font-name),
+  $headline-1: mat.define-typography-level(36px, 48px, 700, $font-name),
+  $headline-2: mat.define-typography-level(24px, 32px, 700, $font-name),
+  $subtitle-1: mat.define-typography-level(22px, 1.2em, 400, $font-name),
+  $subtitle-2: mat.define-typography-level(18px, 1.2em, 400, $font-name),
   $body-1: mat.define-typography-level(16px, 1.25em, 400, $font-name),
+  $body-2: mat.define-typography-level(14px, 1.25em, 700, $font-name),
   $caption: mat.define-typography-level(12px, 16px, 400, $font-name),
   $button: mat.define-typography-level(15px, 1.25em, 500, $font-name),
-  $input: mat.define-typography-level(15px, 1.25em, 400, $font-name),
 );
-
-@include mat.core($ui-typography);
 
 $ui-theme: mat.define-light-theme((
   color: (
@@ -227,7 +224,10 @@ $ui-theme: mat.define-light-theme((
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($ui-theme);
+@include mat.core-theme($ui-theme);
+@include mat.icon-theme($ui-theme);
+@include mat.progress-spinner-theme($ui-theme);
+@include mat.menu-theme($ui-theme);
 
 // App specific themes:
 @include discover.theme($ui-theme);
@@ -243,6 +243,7 @@ html, body { height: 100%; }
 body { margin: 0; overflow-x: hidden }
 
 vp-button {
+  display: inline-block;
   height: 36px;
 
   & button:active {
@@ -284,4 +285,8 @@ h1, h2, h3, h4, h5, h6, p, span, li, ul, ol, button, input, textarea {
 
 .text-red {
   color: $red !important;
+}
+
+.mat-mdc-dialog-surface {
+  padding: 1.7rem;
 }

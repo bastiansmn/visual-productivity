@@ -9,9 +9,9 @@ public enum TechnicalRule {
     MAIL_0002("MAIL_0002", "Impossible de trouver le code de confirmation"),
     ;
 
-    private String name;
+    private final String name;
 
-    private String message;
+    private final String message;
 
     TechnicalRule(final String name, final String message) {
         this.name = name;

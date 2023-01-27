@@ -63,6 +63,8 @@ export class AddGoalDialogComponent implements OnInit {
           return "La date de fin doit être après la date actuelle"
         if (this.form.controls[formControlName].errors?.['setDates'])
           return "Veuillez saisir une date de début et une date de fin"
+        if (this.form.controls[formControlName].errors?.['projectDateEnd'])
+          return `La date de fin doit être avant la date de fin du projet (${new Date(this.project?.deadline).toLocaleDateString()})`
         return "Une erreur inconnue est survenue";
       case 'goalStatus':
         if (this.form.controls[formControlName].errors?.['required'])
@@ -81,8 +83,14 @@ export class AddGoalDialogComponent implements OnInit {
       description: this.fb.control('', [Validators.required]),
       date_start: this.fb.control<Date | null>(null, [Validators.required, dateIsAfterToday]),
       goalStatus: this.fb.control<GoalStatus | null>(this.data.type, [Validators.required, validateStatus]),
-      deadline: this.fb.control<Date | null>(null, [Validators.required, dateIsAfterToday]),
+      deadline: this.fb.control<Date | null>(null, [Validators.required, dateIsAfterToday, this.beforeProjectEnd.bind(this)]),
     }, {validators: [isBeforeDeadline, isAfterDateStart]});
+  }
+
+  private beforeProjectEnd(control: any) {
+    const date = new Date(control.value);
+    const projectDateEnd = new Date(this.project?.deadline);
+    return date.getTime() <= projectDateEnd.getTime() ? null : {projectDateEnd: true};
   }
 
   close() {

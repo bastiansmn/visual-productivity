@@ -1,5 +1,22 @@
 <div class="project__header">
-  <h1 class="mat-subheading-2">{{ project?.name }}</h1>
+  <div class="top">
+    <h1 class="mat-subheading-2">
+      {{ project?.name }}
+    </h1>
+    <vp-button
+      background="light"
+      color="grey"
+      hoverBgColor="grey"
+      hoverColor="light"
+      [border]="true"
+      [hoverBorder]="false"
+      [rounded]="true"
+      [padding]="false"
+      [matMenuTriggerFor]="projectMenu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </vp-button>
+  </div>
   <small class="mat-caption">Dernière mise à jour: {{ project?.updated_at | date: 'medium' }}</small>
 </div>
 
@@ -19,3 +36,8 @@
 
   <router-outlet></router-outlet>
 </div>
+
+<mat-menu #projectMenu="matMenu">
+  <button class="menu__button" routerLink="settings" mat-menu-item>Paramètres du projet</button>
+<!--  TODO  -->
+</mat-menu>

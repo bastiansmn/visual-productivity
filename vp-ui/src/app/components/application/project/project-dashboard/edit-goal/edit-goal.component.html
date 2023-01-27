@@ -1,13 +1,13 @@
-<aside class="edit__goal">
+<aside #editGoal class="edit__goal">
   <div class="close">
     <vp-button
-      (click)="close()"
+      (clicked)="close()"
     >
       Fermer
     </vp-button>
 
     <vp-button
-      (click)="delete()"
+      (clicked)="delete()"
       background="red"
       hoverColor="red"
     >
@@ -17,26 +17,30 @@
 
   <div class="goal__header">
     <div class="goal__title">
-      <h1 class="mat-body">{{ goal?.name }}</h1>
+      <h1 class="mat-body">{{ goal.name }}</h1>
     </div>
     <p>
       <small class="goal__description">
-        {{ goal?.description }}
+        {{ goal.description }}
       </small>
     </p>
     <p>
       <small class="goal__description">
-        Commence le: {{ goal?.date_start | date: 'dd/MM/yyyy' }}
+        Commence le: {{ goal.date_start | date: 'dd/MM/yyyy' }}
       </small>
     </p>
     <p>
-      <small class="goal__description" [class.text-red]="deadlineIsSoon(goal?.deadline)">
-        <mat-icon [class.warning]="deadlineIsSoon(goal?.deadline)" *ngIf="deadlineIsSoon(goal?.deadline)">
+      <small class="goal__description" [class.text-red]="deadlineIsSoon(goal.deadline)">
+        <mat-icon [class.warning]="deadlineIsSoon(goal.deadline)" *ngIf="deadlineIsSoon(goal.deadline)">
           warning
         </mat-icon>
         Fini le:
-        {{ goal?.deadline | date: 'dd/MM/yyyy' }}
+        {{ goal.deadline | date: 'dd/MM/yyyy' }}
       </small>
+    </p>
+    <p>
+      <small class="label__small">Ajouter les labels:</small>
+      <app-label-list [project]="project" [goal]="goal" [canAddLabel]="true" (labelAdded)="handleLabelAssigned($event)" (labelRemoved)="handleLabelUnassigned($event)" [labels]="goal.labels"></app-label-list>
     </p>
   </div>
 
@@ -47,22 +51,22 @@
       <h2 class="mat-body-1">Tâches:</h2>
       <div class="count">
         <mat-icon>assignment_turned_in</mat-icon>
-        <small class="mat-small">{{ getCompletedTasks() }} / {{ goal?.tasks?.length }}</small>
+        <small class="mat-small">{{ getCompletedTasks() }} / {{ goal.tasks.length }}</small>
       </div>
     </div>
     <div class="tasks">
-      <div class="task" *ngFor="let task of getSortedTasks(goal?.tasks)">
+      <div class="task" *ngFor="let task of getSortedTasks(goal.tasks)">
         <app-task-preview (done)="resort()" (deleted)="handleDeletedTask($event)" [goal]="goal" [task]="task"></app-task-preview>
       </div>
       <vp-button
-        *ngIf="goal?.status !== GoalStatus.DONE"
+        *ngIf="goal.status !== GoalStatus.DONE"
         background="light"
         color="purple"
         [border]="true"
         [hoverBorder]="false"
         hoverBgColor="purple"
         hoverColor="light"
-        (click)="openAddTaskDialog()"
+        (clicked)="openAddTaskDialog()"
       >
         Ajouter une tâche
       </vp-button>

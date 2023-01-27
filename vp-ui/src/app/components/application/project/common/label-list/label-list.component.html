@@ -1,0 +1,24 @@
+<div class="mat-small label__list" [style.height]="!limit || '20px'">
+  <ng-container *ngFor="let label of labels; let i = index;">
+    <app-label (click)="handleUnassignLabel(label)" *ngIf="!limit || i < limit" [label]="label"></app-label>
+  </ng-container>
+  <span class="label" *ngIf="limit && labels.length - limit > 0">
+    +{{labels.length - limit}}
+  </span>
+  <ng-container *ngIf="isInputLabelShown | async" [formGroup]="form">
+    <div class="input__wrapper">
+      <input #labelNameInput autocomplete="false" (focus)="handleFocus()" type="text" placeholder="Nom du label" formControlName="labelName" list="labelName">
+      <div id="labelName" class="autocomplete" *ngIf="isAutoCompleteShown | async">
+      <span role="button" (click)="addLabel(label)" *ngFor="let label of autocompleteLabels">
+        <app-label [label]="label"></app-label>
+      </span>
+      </div>
+    </div>
+  </ng-container>
+  <button *ngIf="canAddLabel && !(isInputLabelShown | async)" (click)="handleAddLabelClick()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button *ngIf="canAddLabel && (isInputLabelShown | async)" (click)="handleCloseLabelClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

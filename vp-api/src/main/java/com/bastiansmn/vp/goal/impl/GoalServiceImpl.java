@@ -8,6 +8,9 @@ import com.bastiansmn.vp.goal.GoalService;
 import com.bastiansmn.vp.goal.GoalStatus;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
 import com.bastiansmn.vp.goal.dto.StatusUpdateDTO;
+import com.bastiansmn.vp.label.LabelDAO;
+import com.bastiansmn.vp.label.LabelRepository;
+import com.bastiansmn.vp.label.LabelService;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
@@ -21,6 +24,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,9 +33,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GoalServiceImpl implements GoalService {
 
-    private final GoalRepository goalRepository;
     private final ProjectService projectService;
+    private final LabelService labelService;
+    private final GoalRepository goalRepository;
     private final ProjectRepository projectRepository;
+    private final LabelRepository labelRepository;
 
     @Override
     public GoalDAO create(GoalCreationDTO goalDTO) throws FunctionalException {
@@ -57,6 +63,9 @@ public class GoalServiceImpl implements GoalService {
             throw new FunctionalException(FunctionalRule.GOAL_0004);
 
         ProjectDAO project = this.projectService.fetchById(goalDTO.getProject_id());
+
+        if (goalDTO.getDeadline().after(project.getDeadline()))
+            throw new FunctionalException(FunctionalRule.GOAL_0005);
 
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
@@ -130,6 +139,33 @@ public class GoalServiceImpl implements GoalService {
         this.projectRepository.save(project);
 
         this.goalRepository.delete(goal);
+    }
+
+    @Override
+    public GoalDAO assignLabel(Long goal_id, Long label_id) throws FunctionalException {
+        GoalDAO goal = this.fetchById(goal_id);
+        LabelDAO label = this.labelService.fetchById(label_id);
+
+        if (!Objects.equals(label.getProject().getProjectId(), goal.getProject().getProjectId()))
+            throw new FunctionalException(FunctionalRule.LABEL_0002);
+
+        label.getGoals().add(goal);
+        this.labelRepository.save(label);
+
+        goal.getLabels().add(label);
+        return this.goalRepository.save(goal);
+    }
+
+    @Override
+    public GoalDAO unassignLabel(Long goal_id, Long label_id) throws FunctionalException {
+        GoalDAO goal = this.fetchById(goal_id);
+        LabelDAO label = this.labelService.fetchById(label_id);
+
+        label.getGoals().remove(goal);
+        this.labelRepository.save(label);
+
+        goal.getLabels().remove(label);
+        return this.goalRepository.save(goal);
     }
 
 }

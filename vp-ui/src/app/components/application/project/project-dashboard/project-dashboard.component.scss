@@ -34,7 +34,7 @@
     height: 24px;
     margin-top: .5rem;
 
-    & .tasks {
+    & :is(.tasks, .deadline) {
       display: flex;
       align-items: center;
 
@@ -179,7 +179,7 @@
         height: 24px;
         margin-top: .5rem;
 
-        & .tasks {
+        & :is(.tasks, .deadline) {
           display: flex;
           align-items: center;
 

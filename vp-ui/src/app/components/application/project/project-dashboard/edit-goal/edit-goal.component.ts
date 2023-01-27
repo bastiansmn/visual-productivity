@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import Goal, {GoalStatus} from "../../../../../model/goal.model";
 import {MatDialog} from "@angular/material/dialog";
 import {AddTaskDialogComponent} from "./add-task-dialog/add-task-dialog.component";
@@ -8,6 +8,8 @@ import {TaskService} from "../../../../../services/task/task.service";
 import Task from "../../../../../model/task.model";
 import {AlertService, AlertType} from "../../../../../services/alert/alert.service";
 import {GoalService} from "../../../../../services/goal/goal.service";
+import Label from "../../../../../model/label.model";
+import {LabelService} from "../../../../../services/label/label.service";
 
 @Component({
   selector: 'app-edit-goal',
@@ -16,8 +18,8 @@ import {GoalService} from "../../../../../services/goal/goal.service";
 })
 export class EditGoalComponent {
 
-  @Input() goal!: Goal | null;
-  @Input() project!: Project | null;
+  @Input() goal!: Goal;
+  @Input() project!: Project;
   @Output() closed = new EventEmitter();
   @Output() updated = new EventEmitter();
   @Output() deleted = new EventEmitter<number>();
@@ -28,7 +30,8 @@ export class EditGoalComponent {
     private dialog: MatDialog,
     private taskService: TaskService,
     private goalService: GoalService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private _labelService: LabelService
   ) {  }
 
   getCompletedTasks() {
@@ -40,8 +43,6 @@ export class EditGoalComponent {
   }
 
   openAddTaskDialog() {
-    if (this.dialog.openDialogs.length > 0) return;
-
     const dialogRef = this.dialog.open(AddTaskDialogComponent, {
       data: {
         project: this.project,
@@ -109,12 +110,28 @@ export class EditGoalComponent {
 
   delete() {
     if (!this.goal) return;
-    // TODO: l'appel se fait 2 fois, pq ??
+
     this.goalService.deleteGoal(this.goal.goal_id)
       .pipe(take(1))
       .subscribe(() => {
         this.deleted.emit(this.goal?.goal_id ?? -1);
         this.closed.emit();
+      });
+  }
+
+  handleLabelAssigned($event: Label) {
+    this._labelService.assignLabel({ label_id: $event.label_id, goal_id: this.goal.goal_id })
+      .pipe(take(1))
+      .subscribe(() => {
+        this.goal.labels.push($event);
+      });
+  }
+
+  handleLabelUnassigned($event: Label) {
+    this._labelService.unassignLabel({ label_id: $event.label_id, goal_id: this.goal.goal_id })
+      .pipe(take(1))
+      .subscribe(() => {
+        this.goal.labels = this.goal.labels.filter(l => l.label_id !== $event.label_id);
       });
   }
 }

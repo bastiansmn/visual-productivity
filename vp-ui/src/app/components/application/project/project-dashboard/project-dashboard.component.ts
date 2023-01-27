@@ -10,7 +10,7 @@ import {LoaderService} from "../../../../services/loader/loader.service";
 import Goal, {GoalStatus} from "../../../../model/goal.model";
 import {AddGoalDialogComponent} from "./add-goal-dialog/add-goal-dialog.component";
 import {GoalService} from "../../../../services/goal/goal.service";
-import {CdkDragDrop, CdkDragEnd, CdkDragStart, transferArrayItem} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -20,10 +20,6 @@ import {CdkDragDrop, CdkDragEnd, CdkDragStart, transferArrayItem} from "@angular
 export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   private componentDestroyed$ = new Subject<boolean>();
-  private project$ = new BehaviorSubject<Project | null>(null);
-  get project() {
-    return this.project$.getValue();
-  }
   private goalsGrouped$ = new BehaviorSubject({
     [GoalStatus.TODO]: [] as Goal[],
     [GoalStatus.IN_PROGRESS.toString()]: [] as Goal[],
@@ -37,12 +33,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
   GoalStatus = GoalStatus;
   enumIterator = Object.keys(GoalStatus);
-  goal$ = new BehaviorSubject<Goal | null>(null);
-  get goal() {
-    return this.goal$.getValue();
-  }
+  goal!: Goal;
+  project!: Project;
+  private showGoal$ = new BehaviorSubject<boolean>(false);
   get goalShown() {
-    return !!this.goal;
+    return this.showGoal$.getValue();
   }
 
   constructor(
@@ -119,11 +114,12 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
 
   showGoal(goal: Goal) {
-    this.goal$.next(goal);
+    this.goal = goal;
+    this.showGoal$.next(true);
   }
 
   closeGoal() {
-    this.goal$.next(null);
+    this.showGoal$.next(false);
   }
 
   getCompletedTasks(goal: Goal) {
@@ -139,7 +135,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         this.projectService.projects$.pipe(takeUntil(this.componentDestroyed$))
           .subscribe(projects => {
             this.loaderService.hide();
-            this.project$.next(projects.find(p => p.projectId === params['id']) ?? null);
+            this.project = projects.find(p => p.projectId === params['id']) as Project;
             this.goalsGrouped$.next({
               [GoalStatus.TODO]: this.project?.allGoals.filter(g => g.status === GoalStatus.TODO) ?? [],
               [GoalStatus.IN_PROGRESS]: this.project?.allGoals?.filter(g => g.status === GoalStatus.IN_PROGRESS) ?? [],
@@ -205,7 +201,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
 
   deleteGoal($event: number) {
-    console.log($event);
     this.goalsGrouped$.next({
       [GoalStatus.TODO]: this.goalsGrouped[GoalStatus.TODO].filter(g => g.goal_id !== $event) ?? [],
       [GoalStatus.IN_PROGRESS]: this.goalsGrouped[GoalStatus.IN_PROGRESS].filter(g => g.goal_id !== $event) ?? [],

@@ -12,6 +12,7 @@ export interface ProjectCreation {
 
 export default interface Project {
   projectId: string;
+  projectIdentifier: string;
   name: string;
   description: string;
   token: string;

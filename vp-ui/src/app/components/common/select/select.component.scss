@@ -22,7 +22,7 @@
       right: .7rem;
     }
 
-    & select.ng-touched.ng-invalid + [errorMessage] {
+    & select.ng-dirty.ng-invalid + [errorMessage] {
       height: 16px;
       visibility: visible;
     }
@@ -33,7 +33,7 @@
       margin: 0;
     }
 
-    & select.ng-touched.ng-valid + [errorMessage] {
+    & select.ng-dirty.ng-valid + [errorMessage] {
       height: 0;
       visibility: hidden;
     }
@@ -72,7 +72,7 @@
     transition: border .3s ease-in-out;
     outline: none;
 
-    &.ng-touched.ng-valid {
+    &.ng-dire.ng-valid {
       border:
         2px solid
         $green-light

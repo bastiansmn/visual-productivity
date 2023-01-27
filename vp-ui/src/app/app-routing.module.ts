@@ -15,6 +15,7 @@ import {
   ProjectDashboardComponent
 } from "./components/application/project/project-dashboard/project-dashboard.component";
 import {ProjectTasksComponent} from "./components/application/project/project-tasks/project-tasks.component";
+import {ProjectSettingsComponent} from "./components/application/project/project-settings/project-settings.component";
 
 const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
@@ -79,6 +80,10 @@ const routes: Routes = [
           {
             path: 'tasks',
             component: ProjectTasksComponent
+          },
+          {
+            path: 'settings',
+            component: ProjectSettingsComponent
           }
         ]
       },

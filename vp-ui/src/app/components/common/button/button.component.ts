@@ -21,12 +21,12 @@ export class ButtonComponent implements AfterViewInit {
 
   @ViewChild('button') button!: ElementRef
 
-  @Output() click = new EventEmitter()
+  @Output() clicked = new EventEmitter()
 
   constructor() { }
 
   handleClick() {
-    this.click.emit();
+    this.clicked.emit();
   }
 
   ngAfterViewInit(): void {

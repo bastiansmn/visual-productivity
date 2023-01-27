@@ -7,6 +7,8 @@ export const isAfterDateStart: ValidatorFn = (fg) => {
   const dateStart = new Date(fg.get('date_start')?.value);
   const deadline = new Date(fg.get('deadline')?.value);
 
+  if (deadline.getTime() === 0) return null;
+
   if (dateStart.getTime() > deadline.getTime()) {
     fg.get('date_start')?.setErrors({
       dateValidation: true,

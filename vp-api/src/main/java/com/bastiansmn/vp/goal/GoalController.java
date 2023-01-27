@@ -2,11 +2,11 @@ package com.bastiansmn.vp.goal;
 
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
+import com.bastiansmn.vp.goal.dto.LabelAssignationDTO;
 import com.bastiansmn.vp.goal.dto.StatusUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,7 +38,6 @@ public class GoalController {
     }
 
     @GetMapping("/fetchAllOfProject")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Collection<GoalDAO>> fetchAll(@RequestParam String project_id) throws FunctionalException {
         return ResponseEntity.ok(this.goalService.fetchAll(project_id));
     }
@@ -52,6 +51,26 @@ public class GoalController {
     public ResponseEntity<Void> delete(@RequestParam Long goal_id) throws FunctionalException {
         this.goalService.delete(goal_id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/assignLabel")
+    public ResponseEntity<GoalDAO> assignLabel(@RequestBody LabelAssignationDTO labelAssignationDTO) throws FunctionalException {
+        return ResponseEntity.ok(
+            this.goalService.assignLabel(
+                labelAssignationDTO.getGoal_id(),
+                labelAssignationDTO.getLabel_id()
+            )
+        );
+    }
+
+    @DeleteMapping("/unassignLabel")
+    public ResponseEntity<GoalDAO> unassignLabel(@RequestBody LabelAssignationDTO labelAssignationDTO) throws FunctionalException {
+        return ResponseEntity.ok(
+            this.goalService.unassignLabel(
+                labelAssignationDTO.getGoal_id(),
+                labelAssignationDTO.getLabel_id()
+            )
+        );
     }
 
 }

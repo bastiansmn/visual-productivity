@@ -22,7 +22,7 @@
       right: .7rem;
     }
 
-    & input.ng-touched.ng-invalid + [errorMessage] {
+    & input.ng-dirty.ng-invalid + [errorMessage] {
       height: 16px;
       visibility: visible;
     }
@@ -38,7 +38,7 @@
       -moz-appearance: textfield;
     }
 
-    & input.ng-touched.ng-valid + [errorMessage] {
+    & input.ng-dirty.ng-valid + [errorMessage] {
       height: 0;
       visibility: hidden;
     }
@@ -79,7 +79,12 @@
       height: 34px;
     }
 
-    &.ng-touched.ng-valid {
+    &[type='color'] {
+      width: 100%;
+      height: 40px;
+    }
+
+    &.ng-dirty.ng-valid {
       border:
         2px solid
         $green-light

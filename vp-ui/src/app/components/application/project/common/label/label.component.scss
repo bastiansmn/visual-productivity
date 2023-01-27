@@ -1,0 +1,23 @@
+span.label {
+  padding-inline: .4rem;
+
+  border-radius: 4px;
+  user-select: none;
+  margin-bottom: .2rem;
+  margin-block-end: .2rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 120px;
+  height: 20px;
+
+  position: relative;
+
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 9%);;
+
+  & button {
+    position: absolute;
+  }
+}

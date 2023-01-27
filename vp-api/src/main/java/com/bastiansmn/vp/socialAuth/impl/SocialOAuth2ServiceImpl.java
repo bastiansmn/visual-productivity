@@ -80,23 +80,20 @@ public class SocialOAuth2ServiceImpl implements SocialOAuth2Service {
     private boolean validateIdToken(String idToken, String provider) {
         OkHttpClient client = new OkHttpClient();
 
-        switch (provider) {
-            case "GOOGLE":
-                Request request = new Request.Builder()
-                        .url("https://oauth2.googleapis.com/tokeninfo?id_token=" + idToken)
-                        .build();
-                Call call = client.newCall(request);
-                try {
-                    Response response = call.execute();
-                    String body = Objects.requireNonNull(response.body()).string();
-                    var parsedJson = JsonParserFactory.getJsonParser().parseMap(body);
-                    return !parsedJson.containsKey("error");
-                } catch (IOException e) {
-                    return false;
-                }
-            default:
+        if (provider.equals("GOOGLE")) {
+            Request request = new Request.Builder().url("https://oauth2.googleapis.com/tokeninfo?id_token=" + idToken)
+                    .build();
+            Call call = client.newCall(request);
+            try {
+                Response response = call.execute();
+                String body = Objects.requireNonNull(response.body()).string();
+                var parsedJson = JsonParserFactory.getJsonParser().parseMap(body);
+                return !parsedJson.containsKey("error");
+            } catch (IOException e) {
                 return false;
+            }
         }
+        return false;
     }
 
 }

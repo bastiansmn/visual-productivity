@@ -62,7 +62,7 @@ public class TaskServiceImpl implements TaskService {
         GoalDAO goal = this.goalService.fetchById(taskCreationDTO.getGoal_id());
 
         if (taskCreationDTO.getDate_start().before(goal.getDate_start()))
-            throw new FunctionalException(FunctionalRule.TASK_0004);
+            throw new FunctionalException(FunctionalRule.TASK_0011);
 
         if (taskCreationDTO.getDate_end().after(goal.getDeadline()))
             throw new FunctionalException(FunctionalRule.TASK_0009);

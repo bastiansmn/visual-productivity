@@ -1,6 +1,14 @@
 <div class="add_task__dialog">
   <form class="add_task__form" [formGroup]="form" (submit)="close()">
-    <h1 class="mat-subheading-2"><span>Ajouter une tâche à l'objectif:</span> <br> <span>{{ goal.name }}</span></h1>
+    <h1 class="mat-subtitle-1">
+      Ajouter une tâche à l'objectif:
+    </h1>
+    <h1 class="mat-subtitle-2">
+      {{ goal.name }}
+    </h1>
+    <p>
+      <small>(Du {{ goal.date_start | date: 'dd/MM/yyyy' }} au {{ goal.deadline | date: 'dd/MM/yyyy' }})</small>
+    </p>
     <vp-input
       [parentForm]="form"
       label="Nom de la tâche"
@@ -65,7 +73,7 @@
         color="light"
         hoverColor="red-light"
         tabulationIndex="5"
-        (click)="close()"
+        (clicked)="close()"
       >
         Fermer
       </vp-button>

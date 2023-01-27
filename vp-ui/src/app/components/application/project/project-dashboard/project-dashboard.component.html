@@ -24,6 +24,7 @@
       <div (click)="showGoal(goal)" class="goal" cdkDrag *ngFor="let goal of goalsByStatus(status)">
         <div class="goal__content">
           <h2 class="mat-body-2">{{ goal.name }}</h2>
+          <app-label-list *ngIf="goal.labels.length > 0" [limit]="2" [labels]="goal.labels"></app-label-list>
         </div>
         <div class="goal__icons">
           <div class="tasks">

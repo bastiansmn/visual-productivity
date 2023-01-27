@@ -7,6 +7,8 @@ export const isAfterDateStartDateEnd: ValidatorFn = (fg) => {
   const dateStart = new Date(fg.get('date_start')?.value);
   const dateEnd = new Date(fg.get('date_end')?.value);
 
+  if (dateEnd.getTime() === 0) return null;
+
   if (dateStart.getTime() > dateEnd.getTime()) {
     fg.get('date_start')?.setErrors({
       dateValidation: true,

@@ -18,4 +18,8 @@ public interface GoalService {
 
     void delete(Long goalID) throws FunctionalException;
 
+    GoalDAO assignLabel(Long goal_id, Long label_id) throws FunctionalException;
+
+    GoalDAO unassignLabel(Long goal_id, Long label_id) throws FunctionalException;
+
 }

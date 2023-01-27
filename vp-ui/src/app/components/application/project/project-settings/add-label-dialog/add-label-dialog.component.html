@@ -1,0 +1,56 @@
+<div class="add_label__dialog">
+  <form class="add_label__form" [formGroup]="form" (submit)="close()">
+    <h1 class="mat-subheading-2">Ajouter un label</h1>
+    <p>
+      <small style="margin-bottom: 1rem;">Inviter un utilisateur à rejoindre votre projet. Ce dernier recevra un email pour lui notifier l'ajout.</small>
+    </p>
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="name"
+      label="Nom"
+      name="name"
+      type="text"
+      placeholder="Nom du label"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('name') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="form"
+      parentFormControlName="color"
+      label="Couleur"
+      name="color"
+      type="color"
+      placeholder="Couleur"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('color') }}
+      </small>
+    </vp-input>
+
+    <div class="controls">
+      <vp-button
+        background="red-light"
+        color="light"
+        hoverColor="red-light"
+        tabulationIndex="6"
+        (clicked)="close()"
+      >
+        Fermer
+      </vp-button>
+
+      <vp-button
+        [disabled]="form.invalid"
+        tabulationIndex="2"
+      >
+        Ajouter
+      </vp-button>
+    </div>
+  </form>
+</div>

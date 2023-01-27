@@ -18,7 +18,6 @@ export class GoalService {
   ) { }
 
   addGoalInProject(goal: GoalCreation) {
-    console.log(goal);
     return this.http.post<Goal>("/api/v1/goal/create", goal)
       .pipe(
         catchError(err => handleError(err, {

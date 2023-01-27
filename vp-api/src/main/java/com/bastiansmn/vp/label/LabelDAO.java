@@ -1,11 +1,14 @@
 package com.bastiansmn.vp.label;
 
+import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.util.Date;
+import java.util.Set;
 
 @Table(name = "labels")
 @Entity
@@ -45,6 +48,17 @@ public class LabelDAO {
     )
     @JsonIgnore
     private ProjectDAO project;
+
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "link_goal_labels",
+            joinColumns = @JoinColumn(name = "label_id"),
+            inverseJoinColumns = @JoinColumn(name = "goal_id")
+    )
+    @JsonIgnore
+    private Set<GoalDAO> goals;
 
     // For pagination :
     @Column(

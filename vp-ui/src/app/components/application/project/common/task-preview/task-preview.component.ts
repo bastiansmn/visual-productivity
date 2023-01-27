@@ -55,4 +55,8 @@ export class TaskPreviewComponent {
         });
     }
   }
+
+  dateStartPassed() {
+    return this.goal?.status !== GoalStatus.DONE && new Date(this.task.date_start) <= new Date();
+  }
 }

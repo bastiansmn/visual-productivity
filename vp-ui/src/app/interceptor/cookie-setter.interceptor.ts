@@ -5,7 +5,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-/** Pass untouched request through to the next request handler. */
+/** Pass undirty request through to the next request handler. */
 @Injectable()
 export class CookieSetterInterceptor implements HttpInterceptor {
 

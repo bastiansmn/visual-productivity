@@ -57,6 +57,11 @@ import { EditGoalComponent } from './components/application/project/project-dash
 import { AddTaskDialogComponent } from './components/application/project/project-dashboard/edit-goal/add-task-dialog/add-task-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import { TaskPreviewComponent } from './components/application/project/common/task-preview/task-preview.component';
+import { LabelListComponent } from './components/application/project/common/label-list/label-list.component';
+import { LabelComponent } from './components/application/project/common/label/label.component';
+import {MatMenuModule} from "@angular/material/menu";
+import { ProjectSettingsComponent } from './components/application/project/project-settings/project-settings.component';
+import { AddLabelDialogComponent } from './components/application/project/project-settings/add-label-dialog/add-label-dialog.component';
 
 registerLocaleData(localeFr);
 
@@ -88,7 +93,11 @@ registerLocaleData(localeFr);
     EditGoalComponent,
     EditGoalComponent,
     AddTaskDialogComponent,
-    TaskPreviewComponent
+    TaskPreviewComponent,
+    LabelListComponent,
+    LabelComponent,
+    ProjectSettingsComponent,
+    AddLabelDialogComponent
   ],
    imports: [
       BrowserModule,
@@ -112,7 +121,8 @@ registerLocaleData(localeFr);
       MatProgressSpinnerModule,
       MatTooltipModule,
       MatDialogModule,
-      DragDropModule
+      DragDropModule,
+      MatMenuModule
    ],
   providers: [
     {

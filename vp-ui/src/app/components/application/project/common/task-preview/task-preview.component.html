@@ -2,9 +2,12 @@
   <p class="mat-body-2" [matTooltip]="task.description">
     <span>
       {{ task.name }}
+      <small class="label label--green" *ngIf="dateStartPassed()">
+        En cours
+      </small>
     </span>
     <small>
-      {{ task.date_start | date: 'dd/MM/yyyy' }} - {{ task.date_end | date: 'dd/MM/yyyy' }}
+      Pour le {{ task.date_end | date: 'dd/MM/yyyy' }}
     </small>
   </p>
   <div class="controls" *ngIf="goal?.status !== GoalStatus.DONE">

@@ -1,0 +1,34 @@
+<section>
+  <h1 class="mat-subheading-2">Informations du projet</h1>
+  <p>
+    Identifiant technique du projet : <span class="primary">{{ project?.projectId }}</span>
+  </p>
+  <p>
+    Identifiant fonctionnel du projet : <span class="primary">{{ project?.projectIdentifier }}</span>
+  </p>
+  <p>
+    Nom du projet : <span class="primary">{{project?.name}}</span>
+  </p>
+  <p>
+    Description : <span class="primary">{{project?.description}}</span>
+  </p>
+  <p>
+    Date de création : <span class="primary">{{project?.created_at | date:'dd/MM/yyyy'}}</span>
+    |
+    Deadline : <span class="primary">{{project?.deadline | date:'dd/MM/yyyy'}}</span>
+  </p>
+</section>
+
+<section>
+  <h1 class="mat-subheading-2">Labels du projet</h1>
+  <p class="label__list">
+    <app-label-list [labels]="project?.allLabels ?? []"></app-label-list>
+    <vp-button
+      [rounded]="true"
+      [padding]="false"
+      (clicked)="toggleAddLabelDialog()"
+    >
+      <mat-icon>add</mat-icon>
+    </vp-button>
+  </p>
+</section>
