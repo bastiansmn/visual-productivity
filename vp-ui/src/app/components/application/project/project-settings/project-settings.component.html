@@ -22,7 +22,7 @@
 <section>
   <h1 class="mat-subheading-2">Labels du projet</h1>
   <p class="label__list">
-    <app-label-list [labels]="project?.allLabels ?? []"></app-label-list>
+    <app-label-list (labelRemoved)="handleLabelRemoved($event)" [labels]="project?.allLabels ?? []"></app-label-list>
     <vp-button
       [rounded]="true"
       [padding]="false"

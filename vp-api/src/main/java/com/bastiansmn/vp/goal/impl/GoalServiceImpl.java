@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class GoalServiceImpl implements GoalService {
 
     private final ProjectService projectService;
@@ -137,6 +139,11 @@ public class GoalServiceImpl implements GoalService {
         ProjectDAO project = goal.getProject();
         project.setUpdated_at(new Date());
         this.projectRepository.save(project);
+
+        goal.getLabels().forEach(label -> {
+            label.getGoals().remove(goal);
+            this.labelRepository.save(label);
+        });
 
         this.goalRepository.delete(goal);
     }

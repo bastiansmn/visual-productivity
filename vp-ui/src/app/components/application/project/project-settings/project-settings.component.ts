@@ -7,6 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {AddLabelDialogComponent} from "./add-label-dialog/add-label-dialog.component";
 import {LabelService} from "../../../../services/label/label.service";
+import Label from "../../../../model/label.model";
 
 @Component({
   selector: 'app-project-settings',
@@ -54,6 +55,18 @@ export class ProjectSettingsComponent implements OnInit {
           .subscribe(label => {
             this.project?.allLabels.push(label);
           });
+      });
+  }
+
+  handleLabelRemoved($event: Label) {
+    this._labelService.deleteLabel($event.label_id)
+      .pipe(take(1))
+      .subscribe(() => {
+        if (!this.project) return;
+        this.project.allLabels = this.project.allLabels.filter(l => l.label_id !== $event.label_id) as Label[];
+        this.project.allGoals.forEach(g => {
+          g.labels = g.labels.filter(l => l.label_id !== $event.label_id) as Label[];
+        });
       });
   }
 }

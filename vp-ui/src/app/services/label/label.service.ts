@@ -31,6 +31,11 @@ export class LabelService {
     return this.http.post<Label>('/api/v1/label/create', params);
   }
 
+  deleteLabel(label_id: number): Observable<null> {
+    if (!label_id) return EMPTY;
+    return this.http.delete<null>(`/api/v1/label/delete?label_id=${label_id}`);
+  }
+
   labelOfProject(project_id: string): Observable<Label[]> {
     if (!project_id) return EMPTY;
     return this.http.get<Label[]>(`/api/v1/label/allOfProject?project_id=${project_id}`);

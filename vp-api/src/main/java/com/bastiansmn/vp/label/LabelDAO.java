@@ -50,8 +50,7 @@ public class LabelDAO {
     private ProjectDAO project;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "link_goal_labels",
