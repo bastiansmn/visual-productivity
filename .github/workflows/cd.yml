@@ -52,6 +52,12 @@ jobs:
             echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" >> .env
+            echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
+            echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
+            echo "S3_TEMP_FOLDER=${{ secrets.S3_TEMP_FOLDER }}" >> .env
+            echo "S3_USER_BUCKET=${{ secrets.S3_USER_BUCKET }}" >> .env
+            echo "S3_PROJECT_BUCKET=${{ secrets.S3_PROJECT_BUCKET }}" >> .env
             echo "VP_ALLOWED_ORIGINS=${{ secrets.VP_ALLOWED_ORIGINS }}" >> .env
             echo "VP_ALLOWED_METHODS=${{ secrets.VP_ALLOWED_METHODS }}" >> .env
             echo "VP_ALLOWED_HEADERS=${{ secrets.VP_ALLOWED_HEADERS }}" >> .env
