@@ -1,6 +1,8 @@
 package com.bastiansmn.vp.user;
 
 import com.bastiansmn.vp.authorities.AuthoritiesService;
+import com.bastiansmn.vp.config.properties.CorsProperties;
+import com.bastiansmn.vp.config.properties.S3Properties;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.mail.MailConfirmService;
@@ -10,6 +12,7 @@ import com.bastiansmn.vp.role.RoleService;
 import com.bastiansmn.vp.socialAuth.UserProvider;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
 import com.bastiansmn.vp.user.impl.UserServiceImpl;
+import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -38,6 +41,9 @@ class UserServiceTest {
     @Mock private MailConfirmService mailConfirmService;
     @Mock private PendingInvitesRepository pendingInvitesRepository;
     @Mock private ProjectRepository projectRepository;
+    @Mock private MinioClient minioClient;
+    @Mock private S3Properties s3Properties;
+    @Mock private CorsProperties corsProperties;
 
     private UserService underTest;
 
@@ -49,7 +55,10 @@ class UserServiceTest {
                 new BCryptPasswordEncoder(),
                 this.mailConfirmService,
                 this.pendingInvitesRepository,
-                this.projectRepository
+                this.projectRepository,
+                this.minioClient,
+                this.s3Properties,
+                this.corsProperties
         );
     }
 
