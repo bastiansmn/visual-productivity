@@ -1,0 +1,16 @@
+<div class="calendar__header">
+  <h1 class="mat-subheading-2">
+    {{ calendarTitle | async }}
+  </h1>
+  <vp-switcher (switched)="handleSwitch($event)" [wideButtons]="true" [data]="calendarViews" [defaultIndex]="getIndexOfDefaultValue()">
+    <ng-template let-item #body>
+      {{ item.value }}
+    </ng-template>
+  </vp-switcher>
+</div>
+
+<div class="calendar__content">
+  <app-day-view *ngIf="(currentView | async) === CalendarView.DAY"></app-day-view>
+  <app-week-view (weekChanged)="changeMonth($event)" *ngIf="(currentView | async) === CalendarView.WEEK"></app-week-view>
+  <app-month-view *ngIf="(currentView | async) === CalendarView.MONTH"></app-month-view>
+</div>

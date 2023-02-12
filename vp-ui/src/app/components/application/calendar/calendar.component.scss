@@ -1,0 +1,22 @@
+@import "src/variables";
+
+$calendar-header-height: 100px;
+
+.calendar__header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  height: $calendar-header-height;Œ
+
+  & > h1 {
+    margin-bottom: 0;
+  }
+
+}
+
+.calendar__content {
+  height: calc(100% - #{$calendar-header-height});
+}

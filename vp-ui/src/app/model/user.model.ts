@@ -14,6 +14,13 @@ export interface UserRegister {
   lastname: string
 }
 
+export interface UserModification {
+  id: number,
+  name: string,
+  lastname: string,
+  email: string,
+}
+
 export enum LoginProvider {
   VP = "LOCAL",
   GOOGLE = "GOOGLE"
@@ -21,10 +28,11 @@ export enum LoginProvider {
 
 export interface User {
   user_id: Number,
-  email: String,
-  username: String,
-  name: String,
-  lastname: String,
+  email: string,
+  username: string,
+  avatar: string,
+  name: string,
+  lastname: string,
   roles: Array<Role>,
   enabled: boolean,
   notLocked: boolean

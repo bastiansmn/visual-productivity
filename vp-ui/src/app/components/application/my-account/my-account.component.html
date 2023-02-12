@@ -1,0 +1,83 @@
+<h1>
+  Votre espace:
+</h1>
+
+<section *ngIf="!(isEditing | async)">
+  <h2>
+    Mes informations:
+  </h2>
+  <p>
+    Nom: <span>{{ (user | async)?.lastname }}</span>
+  </p>
+  <p>
+    Prénom: <span>{{ (user | async)?.name }}</span>
+  </p>
+  <p>
+    Email: <span>{{ (user | async)?.email | emailPrivacy }}</span>
+  </p>
+  <p>
+    <vp-button (clicked)="editUserInformations()">
+      Modifier
+    </vp-button>
+  </p>
+</section>
+
+<section *ngIf="isEditing | async">
+  <div class="register__page">
+    <form class="register__form" [formGroup]="form" (submit)="updateUser()">
+      <vp-input
+        [parentForm]="form"
+        parentFormControlName="name"
+        type="text"
+        placeholder="Votre prénom"
+        name="name"
+        [required]="true"
+        tabulationIndex="1"
+      >
+        <small class="errorMessage mat-caption" errorMessage>
+          {{ getErrorMessage('name') }}
+        </small>
+      </vp-input>
+      <vp-input
+        [parentForm]="form"
+        parentFormControlName="lastname"
+        type="text"
+        placeholder="Votre nom"
+        name="lastname"
+        tabulationIndex="1"
+      >
+        <small class="errorMessage mat-caption" errorMessage>
+          {{ getErrorMessage('lastname') }}
+        </small>
+      </vp-input>
+      <vp-input
+        [parentForm]="form"
+        parentFormControlName="email"
+        type="email"
+        placeholder="Votre mail"
+        name="email"
+        [required]="true"
+        tabulationIndex="2"
+        [disabled]="true"
+      >
+        <small class="errorMessage mat-caption" errorMessage>
+          {{ getErrorMessage('email') }}
+        </small>
+      </vp-input>
+
+      <vp-file-upload [hasError]="form.get('avatar')?.invalid ?? false" (uploaded)="handleFileUpload($event)">
+        <small *ngIf="form.get('avatar')?.value && form.get('avatar')?.invalid" class="errorMessage mat-caption" errorMessage>
+          {{ getErrorMessage('avatar') }}
+        </small>
+      </vp-file-upload>
+
+      <div class="controls">
+        <vp-button tabulationIndex="6" [disabled]="form.invalid">
+          Modifier mes informations
+        </vp-button>
+      </div>
+    </form>
+  </div>
+
+</section>
+

@@ -15,7 +15,6 @@ import com.bastiansmn.vp.token.RefreshTokenService;
 import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserService;
-import com.bastiansmn.vp.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 

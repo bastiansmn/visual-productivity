@@ -83,7 +83,6 @@ public class GoalServiceImpl implements GoalService {
                 .deadline(goalDTO.getDeadline())
                 .status(goalDTO.getGoalStatus())
                 .labels(Set.of())
-                .events(Set.of())
                 .tasks(Set.of())
                 .project(project)
                 .created_at(Date.from(Instant.now()))

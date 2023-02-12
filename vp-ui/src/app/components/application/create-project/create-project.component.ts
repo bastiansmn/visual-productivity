@@ -34,7 +34,6 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     this.projectService.createProject(this.form.value)
       .pipe(takeUntil(this.componentDestroyed$))
       .subscribe(project => {
-        console.log(project);
         this.projectService.projects.push(project);
         this.router.navigate(['/app/projects/' + project.projectId]);
       });

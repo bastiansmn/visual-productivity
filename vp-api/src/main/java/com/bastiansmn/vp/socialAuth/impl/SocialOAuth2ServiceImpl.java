@@ -1,8 +1,5 @@
 package com.bastiansmn.vp.socialAuth.impl;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.bastiansmn.vp.config.SecurityConstant;
 import com.bastiansmn.vp.config.properties.JwtProperties;
 import com.bastiansmn.vp.config.properties.SpringProperties;
 import com.bastiansmn.vp.exception.FunctionalException;
@@ -15,23 +12,18 @@ import com.bastiansmn.vp.socialAuth.dto.SocialUserDTO;
 import com.bastiansmn.vp.token.TokenService;
 import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserRepository;
-import com.bastiansmn.vp.utils.CookieUtils;
-import com.bastiansmn.vp.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.boot.json.JsonParserFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

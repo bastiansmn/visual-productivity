@@ -61,16 +61,6 @@ public class GoalDAO {
     )
     private Set<LabelDAO> labels;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER
-    )
-    @JoinTable(
-            name = "link_goal_events",
-            joinColumns = @JoinColumn(name = "goal_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    private Set<EventDAO> events;
-
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "goal",

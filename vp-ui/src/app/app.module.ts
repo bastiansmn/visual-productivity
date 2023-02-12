@@ -37,7 +37,7 @@ import {DashboardComponent} from './components/application/dashboard/dashboard.c
 import {SettingsComponent} from './components/application/settings/settings.component';
 import {CreateProjectComponent} from './components/application/create-project/create-project.component';
 
-import {registerLocaleData} from '@angular/common';
+import {DatePipe, NgOptimizedImage, registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {
   ProjectDashboardComponent
@@ -62,6 +62,18 @@ import { LabelComponent } from './components/application/project/common/label/la
 import {MatMenuModule} from "@angular/material/menu";
 import { ProjectSettingsComponent } from './components/application/project/project-settings/project-settings.component';
 import { AddLabelDialogComponent } from './components/application/project/project-settings/add-label-dialog/add-label-dialog.component';
+import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
+import { FirstLettersPipe } from './pipes/first-letters.pipe';
+import { MyAccountComponent } from './components/application/my-account/my-account.component';
+import { EmailPrivacyPipe } from './pipes/email-privacy.pipe';
+import { FileUploadComponent } from './components/common/file-upload/file-upload.component';
+import { FileUploadDirective } from './directives/file-upload.directive';
+import { CalendarComponent } from './components/application/calendar/calendar.component';
+import { TodoComponent } from './components/application/todo/todo.component';
+import { SwitcherComponent } from './components/common/switcher/switcher.component';
+import { WeekViewComponent } from './components/application/calendar/week-view/week-view.component';
+import { DayViewComponent } from './components/application/calendar/day-view/day-view.component';
+import { MonthViewComponent } from './components/application/calendar/month-view/month-view.component';
 
 registerLocaleData(localeFr);
 
@@ -97,33 +109,46 @@ registerLocaleData(localeFr);
     LabelListComponent,
     LabelComponent,
     ProjectSettingsComponent,
-    AddLabelDialogComponent
+    AddLabelDialogComponent,
+    ConfirmDialogComponent,
+    FirstLettersPipe,
+    MyAccountComponent,
+    EmailPrivacyPipe,
+    FileUploadComponent,
+    FileUploadDirective,
+    CalendarComponent,
+    TodoComponent,
+    SwitcherComponent,
+    WeekViewComponent,
+    DayViewComponent,
+    MonthViewComponent,
   ],
-   imports: [
-      BrowserModule,
-      AppRoutingModule,
-      BrowserAnimationsModule,
-      ServiceWorkerModule.register('ngsw-worker.js', {
-         enabled: environment.production,
-         // Register the ServiceWorker as soon as the application is stable
-         // or after 30 seconds (whichever comes first).
-         registrationStrategy: 'registerWhenStable:30000'
-      }),
-      MatCardModule,
-      MatButtonModule,
-      MatIconModule,
-      MatToolbarModule,
-      MatSidenavModule,
-      MatListModule,
-      SocialLoginModule,
-      ReactiveFormsModule,
-      HttpClientModule,
-      MatProgressSpinnerModule,
-      MatTooltipModule,
-      MatDialogModule,
-      DragDropModule,
-      MatMenuModule
-   ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    SocialLoginModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatDialogModule,
+    DragDropModule,
+    MatMenuModule,
+    NgOptimizedImage
+  ],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -146,7 +171,8 @@ registerLocaleData(localeFr);
       useClass: CookieSetterInterceptor,
       multi: true
     },
-    CookieService
+    CookieService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

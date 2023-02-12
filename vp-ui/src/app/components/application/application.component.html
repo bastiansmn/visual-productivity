@@ -1,6 +1,24 @@
 <main>
   <div class="header">
+    <a routerLink="" class="app__logo">
+      <img src="favicon.ico" alt="Visual Productivity">
+    </a>
 
+    <ul class="nav__links">
+      <li *ngFor="let link of links" routerLinkActive="active">
+        <a [routerLink]="link.url">
+          <mat-icon *ngIf="link.icon">{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+      </li>
+    </ul>
+
+    <a routerLink="account" class="user__logo" [class.gradient]="(user | async)?.avatar">
+      <img *ngIf="(user | async)?.avatar" [src]="(user | async)?.avatar" [alt]="username">
+      <span *ngIf="!(user | async)?.avatar">
+        {{ user | async | firstLetters }}
+      </span>
+    </a>
   </div>
   <section>
     <nav [class.active]="navbarToggled" class="project__navigation">

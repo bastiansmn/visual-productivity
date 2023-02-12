@@ -1,0 +1,12 @@
+<div class="switcher__wrapper">
+  <ng-container *ngFor="let item of data">
+    <div role="button" [class.wide__buttons]="wideButtons" class="switcher__element" (click)="selectElement($event, item)">
+      <ng-container
+        *ngIf="bodyTemplateRef"
+        [ngTemplateOutlet]="bodyTemplateRef"
+        [ngTemplateOutletContext]="{$implicit:item}"
+      >
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

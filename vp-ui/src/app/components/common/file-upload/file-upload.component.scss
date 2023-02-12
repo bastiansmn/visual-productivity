@@ -1,0 +1,37 @@
+@import "src/variables";
+
+label {
+  width: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+
+    & .file__upload__icon {
+      margin: auto;
+      & mat-icon {
+        font-size: 100px;
+        height: fit-content;
+        width: fit-content;
+
+        &.uploaded {
+          color: $green;
+        }
+
+        &.error {
+          color: $red;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep small.errorMessage {
+  color: $red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}

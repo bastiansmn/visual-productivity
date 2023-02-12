@@ -17,6 +17,6 @@ public class UserModificationDTO {
 
     private String lastname;
 
-    private String password;
+    private String email;
 
 }

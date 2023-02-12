@@ -2,6 +2,7 @@ package com.bastiansmn.vp.event;
 
 import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
+import com.bastiansmn.vp.user.UserDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -32,10 +33,11 @@ public class EventDAO {
     )
     private String name;
 
-    @Column(
-            nullable = false
-    )
+    @Column
     private String description;
+
+    @Column
+    private String videoCallLink;
 
     @Column(
             nullable = false
@@ -52,8 +54,15 @@ public class EventDAO {
     )
     private Boolean whole_day;
 
-    @ManyToMany(mappedBy = "events", fetch = FetchType.EAGER)
-    private Set<GoalDAO> goals;
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "link_event_participants",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserDAO> participants;
 
     @ManyToOne
     @JoinColumn(

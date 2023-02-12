@@ -1,5 +1,6 @@
 package com.bastiansmn.vp.user;
 
+import com.bastiansmn.vp.event.EventDAO;
 import com.bastiansmn.vp.mail.MailConfirmDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.role.RoleDAO;
@@ -52,6 +53,9 @@ public class UserDAO {
     @Enumerated(EnumType.STRING)
     private UserProvider provider;
 
+    @Column
+    private String avatar;
+
     @ManyToMany(
             fetch = FetchType.EAGER
     )
@@ -74,6 +78,18 @@ public class UserDAO {
     @JsonIgnore
     @ToString.Exclude
     private List<ProjectDAO> projects;
+
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "link_event_participants",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<EventDAO> events;
 
     @OneToMany(
             fetch = FetchType.LAZY

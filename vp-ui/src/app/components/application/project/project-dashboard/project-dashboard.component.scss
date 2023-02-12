@@ -79,15 +79,26 @@
       .user {
         background: $purple;
         border: $light 3px solid;
-        color: $light;
-        user-select: none;
+
+        & span {
+          color: $light;
+          user-select: none;
+        }
+
+        & img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
       }
 
       .add_user {
-        background: $light;
-        margin: 2px;
+        background: white;
+        margin: 4px;
         height: 28px;
-        border: darkgray 1px solid;
+        width: 28px;
+        outline: darkgray 1px solid;
         color: darkgray;
         cursor: pointer;
       }

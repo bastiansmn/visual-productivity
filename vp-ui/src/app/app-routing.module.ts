@@ -16,6 +16,9 @@ import {
 } from "./components/application/project/project-dashboard/project-dashboard.component";
 import {ProjectTasksComponent} from "./components/application/project/project-tasks/project-tasks.component";
 import {ProjectSettingsComponent} from "./components/application/project/project-settings/project-settings.component";
+import {MyAccountComponent} from "./components/application/my-account/my-account.component";
+import {CalendarComponent} from "./components/application/calendar/calendar.component";
+import {TodoComponent} from "./components/application/todo/todo.component";
 
 const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
@@ -48,7 +51,6 @@ const routes: Routes = [
   {
     path: 'app',
     component: ApplicationComponent,
-    // TOOD: Si pas login, rediriger vers /discover, sinon continuer
     canActivate: [IsLoggedInGuard],
     children: [
       {
@@ -61,8 +63,16 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'create-project',
-        component: CreateProjectComponent
+        path: 'calendar',
+        component: CalendarComponent
+      },
+      {
+        path: 'todo',
+        component: TodoComponent
+      },
+      {
+        path: 'account',
+        component: MyAccountComponent
       },
       {
         path: 'projects/:id',
@@ -86,6 +96,10 @@ const routes: Routes = [
             component: ProjectSettingsComponent
           }
         ]
+      },
+      {
+        path: 'create-project',
+        component: CreateProjectComponent
       },
       {
         path: 'settings',

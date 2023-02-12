@@ -9,6 +9,97 @@ main {
   div.header {
     height: $navbar-size;
     width: 100%;
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+
+    & .app__logo {
+      height: 40px;
+      width: 40px;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    & .nav__links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+
+      & li {
+        padding: 0.4rem 0.6rem;
+        border-radius: 9px;
+        height: 20px;
+        margin-right: .8rem;
+
+        background: $green-light;
+        transition: all .2s ease-in-out;
+
+        &.active {
+          background: $green-light-active;
+
+          & a {
+            color: $dark;
+          }
+        }
+
+        & a {
+          text-decoration: none;
+          color: rgba($dark, 0.6);
+          transition: all .2s ease-in-out;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          height: 20px;
+
+          & mat-icon {
+            margin-right: .4rem;
+            font-size: 18px;
+            height: fit-content;
+            width: fit-content;
+          }
+        }
+      }
+    }
+
+    & .user__logo {
+      margin-left: auto;
+
+      height: 40px;
+      width: 40px;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: $purple;
+      color: $light;
+
+      & span {
+        color: $light;
+      }
+
+      &.gradient {
+        background: linear-gradient(-45deg, $purple, $indigo, $green, $red, $orange);
+      }
+
+      padding: 1px;
+      cursor: pointer;
+
+      & img {
+        box-sizing: border-box;
+        background: $green-light;
+        padding: 3px;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
   }
 
   section {
@@ -169,9 +260,7 @@ main {
 
     .project__content {
       position: relative;
-      overflow: auto;
       width: calc(100% - $project-navbar-width - 1px);
-      padding: 1.5rem;
       margin-left: calc($project-navbar-width + 2 * $project-navbar-padding);
       z-index: 50;
     }

@@ -1,0 +1,25 @@
+<label class="file__upload" vpFileUpload (fileUploaded)="handleFileDropped($event)">
+  <h1 *ngIf="title" class="mat-subheading-2">
+    {{ title }}
+  </h1>
+  <div>
+    <div class="file__upload__icon">
+      <mat-icon *ngIf="!(isFileUploaded | async)" color="primary">cloud_upload</mat-icon>
+      <mat-icon class="uploaded" *ngIf="(isFileUploaded | async) && !hasError">check_circle_outline</mat-icon>
+      <mat-icon class="error" *ngIf="hasError">highlight_off</mat-icon>
+    </div>
+    <div class="file__upload__text">
+      <p>
+        Télécharger un fichier
+      </p>
+      <p>
+        <input #input type="file" (change)="handleFileInputChange($event)" class="file__input" name="file">
+      </p>
+      <p>
+        ou le déposer dans la zone
+      </p>
+    </div>
+  </div>
+</label>
+
+<ng-content select="[errorMessage]"></ng-content>

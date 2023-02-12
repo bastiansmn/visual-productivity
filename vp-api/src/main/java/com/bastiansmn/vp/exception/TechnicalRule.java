@@ -7,6 +7,7 @@ public enum TechnicalRule {
 
     MAIL_0001("MAIL_0001", "Impossible d'envoyer le mail de confirmation"),
     MAIL_0002("MAIL_0002", "Impossible de trouver le code de confirmation"),
+    USER_0001("USER_0001", "L'URL de l'avatar est invalide"),
     ;
 
     private final String name;

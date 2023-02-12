@@ -1,0 +1,40 @@
+@import "src/variables";
+
+.switcher__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  padding: 4px;
+
+  background: $rly-light-grey;
+  border-radius: 11px;
+  height: 38px;
+
+  & .switcher__element {
+    box-sizing: border-box;
+    margin-right: 4px;
+    display: grid;
+    place-items: center;
+    padding-inline: 4px;
+    height: 100%;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease-in-out;
+
+    &.wide__buttons {
+      padding-inline: 1.5rem;
+    }
+
+    &--selected {
+      background: $light;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

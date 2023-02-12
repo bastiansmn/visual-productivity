@@ -38,6 +38,11 @@
       -moz-appearance: textfield;
     }
 
+    & input[disabled] {
+      cursor: not-allowed;
+      color: darkgray;
+    }
+
     & input.ng-dirty.ng-valid + [errorMessage] {
       height: 0;
       visibility: hidden;

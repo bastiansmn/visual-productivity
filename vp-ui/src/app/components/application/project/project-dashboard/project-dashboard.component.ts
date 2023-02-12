@@ -11,6 +11,7 @@ import Goal, {GoalStatus} from "../../../../model/goal.model";
 import {AddGoalDialogComponent} from "./add-goal-dialog/add-goal-dialog.component";
 import {GoalService} from "../../../../services/goal/goal.service";
 import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
+import {ConfirmDialogComponent} from "../../../common/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -159,6 +160,40 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     if ($event.previousContainer.id === $event.container.id) return;
 
     // TODO: Si $event.container.id === 'DONE' && goal non terminé alors demander confirmation via modal
+    const goalTemp = $event.previousContainer.data[$event.previousIndex];
+    if ($event.container.id === 'DONE' && goalTemp.tasks.some(e => !e.completed)) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Confirmation',
+          message: 'Vous êtes sur le point de marquer un objectif comme terminé alors qu\'il reste des tâches non terminées. Voulez-vous continuer ?',
+          confirmText: 'Oui',
+          cancelText: 'Annuler'
+        }
+      });
+
+      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+
+        if (!result) {
+          transferArrayItem(
+            $event.container.data,
+            $event.previousContainer.data,
+            $event.currentIndex,
+            $event.previousIndex
+          )
+
+          this.goalService.updateStatus(goalTemp.goal_id, this.stringToGoalStatus($event.previousContainer.id))
+            .pipe(take(1))
+            .subscribe(() => {
+              goal.status = this.stringToGoalStatus($event.previousContainer.id);
+              this.alertService.show(
+                'Le status à été remis à son état précédent',
+                { type: AlertType.WARNING, duration: 5000 }
+              )
+            });
+        }
+
+      });
+    }
 
     transferArrayItem(
       $event.previousContainer.data,

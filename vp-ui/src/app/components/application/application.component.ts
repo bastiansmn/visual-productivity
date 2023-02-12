@@ -1,7 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project/project.service";
-import Project from "../../model/project.model";
 import {Subject, takeUntil} from "rxjs";
+import {AuthService} from "../../services/auth/auth.service";
+
+interface Link {
+  url: string;
+  label: string;
+  icon?: string;
+}
 
 @Component({
   selector: 'app-application',
@@ -13,12 +19,26 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   navbarToggled = false;
   componentDestroyed$ = new Subject<boolean>();
 
+  readonly links: Link[] = [
+    { url: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { url: 'calendar', label: 'Calendrier', icon: 'calendar_today' },
+    { url: 'todo', label: 'Todo', icon: 'assignment_turned_in' },
+  ]
+
+  get user() {
+    return this.authService.loggedUser.asObservable();
+  }
+  get username() {
+    return this.authService.loggedUser.getValue()?.name + ' ' + this.authService.loggedUser.getValue()?.lastname;
+  }
+
   get projects() {
     return this.projectService.projects;
   }
 
   constructor(
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {

@@ -3,21 +3,26 @@ package com.bastiansmn.vp.user;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.user.dto.UserCreationDTO;
+import com.bastiansmn.vp.user.dto.UserModificationDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -68,6 +73,26 @@ public class UserController {
     public ResponseEntity<UserDAO> me() throws FunctionalException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(this.userService.fetchByEmail(email));
+    }
+
+    @GetMapping("/avatar/{avatarURL}")
+    public ResponseEntity<byte[]> getAvatar(@PathVariable String avatarURL) throws FunctionalException {
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "image/*")
+                .body(this.userService.getAvatar(URLDecoder.decode(avatarURL, StandardCharsets.UTF_8)));
+    }
+
+    @PatchMapping("/avatar")
+    public ResponseEntity<UserDAO> updateAvatar(
+            @RequestParam("avatar") MultipartFile avatar
+    ) throws FunctionalException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(this.userService.updateAvatar(email, avatar));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UserDAO> update(@RequestBody UserModificationDTO user) throws FunctionalException {
+        return ResponseEntity.ok(this.userService.update(user));
     }
 
     @GetMapping("/fetchAll")

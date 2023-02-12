@@ -49,6 +49,18 @@ public enum FunctionalRule {
     TASK_0012("TASK_0012", "La date de début de la tâche ne peut pas être avant la date de début du projet"),
     LABEL_0001("LABEL_0001", "Le label n'existe pas"),
     LABEL_0002("LABEL_0002", "La tâche doit appartenir au projet de l'objectif"),
+    FILE_0001("FILE_0001", "Le fichier est vide"),
+    FILE_0002("FILE_0002", "Impossible de supprimer l'objet du s3"),
+    FILE_0003("FILE_0003", "Impossible d'ajouter l'objet au s3"),
+    FILE_0004("FILE_0004", "Fichier invalide"),
+    FILE_0005("FILE_0005", "Le fichier n'existe pas"),
+    FILE_0006("FILE_0006", "L'extension du fichier n'est pas valide"),
+    FILE_0007("FILE_0007", "Le fichier est trop volumineux"),
+    FILE_0008("FILE_0008", "Le fichier a une taille supérieure à 1000x1000 pixels"),
+    EVENT_0001("EVENT_0001", "L'évènement n'existe pas"),
+    EVENT_0002("EVENT_0002", "Vous n'êtes pas membre du projet de l'évènement"),
+    EVENT_0003("EVENT_0003", "Vous participez déjà à cet évènement"),
+    EVENT_0004("EVENT_0004", "Vous ne participez pas à cet évènement")
     ;
 
     private final String name;

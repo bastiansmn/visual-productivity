@@ -1,0 +1,28 @@
+<h1>
+  {{ data.title }}
+</h1>
+
+<p>
+  {{ data.message }}
+</p>
+
+<div class="controls">
+  <div class="controls">
+    <vp-button
+      background="red-light"
+      color="light"
+      hoverColor="red-light"
+      tabulationIndex="6"
+      (clicked)="cancel()"
+    >
+      {{ data.cancelText }}
+    </vp-button>
+
+    <vp-button
+      tabulationIndex="6"
+      (clicked)="confirm()"
+    >
+      {{ data.confirmText }}
+    </vp-button>
+  </div>
+</div>
