@@ -84,8 +84,8 @@ public class UserDAO {
     )
     @JoinTable(
             name = "link_event_participants",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     @JsonIgnore
     @ToString.Exclude

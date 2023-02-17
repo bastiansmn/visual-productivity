@@ -1,6 +1,5 @@
 package com.bastiansmn.vp.goal;
 
-import com.bastiansmn.vp.event.EventDAO;
 import com.bastiansmn.vp.label.LabelDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.task.TaskDAO;

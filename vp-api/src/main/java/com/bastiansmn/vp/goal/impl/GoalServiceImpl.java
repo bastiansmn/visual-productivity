@@ -5,7 +5,6 @@ import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.goal.GoalRepository;
 import com.bastiansmn.vp.goal.GoalService;
-import com.bastiansmn.vp.goal.GoalStatus;
 import com.bastiansmn.vp.goal.dto.GoalCreationDTO;
 import com.bastiansmn.vp.goal.dto.StatusUpdateDTO;
 import com.bastiansmn.vp.label.LabelDAO;
@@ -15,6 +14,7 @@ import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
 import com.bastiansmn.vp.user.UserDAO;
+import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +40,7 @@ public class GoalServiceImpl implements GoalService {
     private final GoalRepository goalRepository;
     private final ProjectRepository projectRepository;
     private final LabelRepository labelRepository;
+    private final UserService userService;
 
     @Override
     public GoalDAO create(GoalCreationDTO goalDTO) throws FunctionalException {
@@ -64,12 +65,13 @@ public class GoalServiceImpl implements GoalService {
         if (goalDTO.getProject_id() == null)
             throw new FunctionalException(FunctionalRule.GOAL_0004);
 
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(goalDTO.getProject_id());
 
         if (goalDTO.getDeadline().after(project.getDeadline()))
             throw new FunctionalException(FunctionalRule.GOAL_0005);
 
-        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.GOAL_0006);
 
@@ -105,9 +107,10 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public Collection<GoalDAO> fetchAll(String project_id) throws FunctionalException {
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(project_id);
 
-        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.GOAL_0006);
 

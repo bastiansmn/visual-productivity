@@ -18,6 +18,6 @@ public class EventDto {
     private Boolean whole_day;
     private Set<UserDAO> participants;
     private Boolean participating;
-
+    private Boolean createdByMe;
 
 }

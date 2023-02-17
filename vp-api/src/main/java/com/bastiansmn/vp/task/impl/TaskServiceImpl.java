@@ -11,6 +11,7 @@ import com.bastiansmn.vp.task.TaskRepository;
 import com.bastiansmn.vp.task.TaskService;
 import com.bastiansmn.vp.task.dto.TaskCreationDTO;
 import com.bastiansmn.vp.user.UserDAO;
+import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final ProjectService projectService;
     private final GoalService goalService;
+    private final UserService userService;
 
     @Override
     public TaskDAO create(TaskCreationDTO taskCreationDTO) throws FunctionalException {
@@ -58,6 +60,8 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreationDTO.getProject_id() == null)
             throw new FunctionalException(FunctionalRule.TASK_0007);
 
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(taskCreationDTO.getProject_id());
         GoalDAO goal = this.goalService.fetchById(taskCreationDTO.getGoal_id());
 
@@ -70,7 +74,6 @@ public class TaskServiceImpl implements TaskService {
         if (!goal.getProject().getProjectId().equals(project.getProjectId()))
             throw new FunctionalException(FunctionalRule.TASK_0008);
 
-        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.TASK_0005);
 
@@ -95,8 +98,9 @@ public class TaskServiceImpl implements TaskService {
 
      @Override
     public Collection<TaskDAO> fetchAllOfProject(String project_id) throws FunctionalException {
-        ProjectDAO project = this.projectService.fetchById(project_id);
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
+        ProjectDAO project = this.projectService.fetchById(project_id);
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.TASK_0005);
 

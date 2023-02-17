@@ -1,4 +1,4 @@
-package com.bastiansmn.vp.project;
+package com.bastiansmn.vp.project.dto;
 
 import lombok.*;
 

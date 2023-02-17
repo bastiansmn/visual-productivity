@@ -1,0 +1,77 @@
+<div class="create__event">
+  <form class="event__form" [formGroup]="eventForm" (submit)="close()">
+    <h1 class="mat-subheading-2">Créer un projet</h1>
+    <vp-input
+      [parentForm]="eventForm"
+      parentFormControlName="name"
+      type="text"
+      label="Nom de l'évènement"
+      placeholder="Mon évènement"
+      name="name"
+      [required]="true"
+      tabulationIndex="1"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage('name') }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="eventForm"
+      parentFormControlName="description"
+      type="text"
+      label="Description de l'évènement"
+      placeholder="..."
+      name="description"
+      tabulationIndex="2"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage("description") }}
+      </small>
+    </vp-input>
+
+    <vp-input
+      [parentForm]="eventForm"
+      parentFormControlName="videoCallLink"
+      type="text"
+      label="Lien de réunion"
+      placeholder="https://meet.google.com/..."
+      name="videoCallLink"
+      tabulationIndex="3"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage("videoCallLink") }}
+      </small>
+    </vp-input>
+
+    <vp-select
+      [parentForm]="eventForm"
+      parentFormControlName="project"
+      label="Projet associé"
+      name="project"
+      tabulationIndex="4"
+      [options]="projectsMapped"
+    >
+      <small class="errorMessage mat-caption" errorMessage>
+        {{ getErrorMessage("project") }}
+      </small>
+    </vp-select>
+
+    <div class="controls">
+      <vp-button
+        tabulationIndex="5"
+        background="red"
+        hoverColor="red"
+        (clicked)="close()"
+      >
+        Annuler
+      </vp-button>
+      <vp-button
+        [disabled]="eventForm.invalid"
+        tabulationIndex="6"
+      >
+        Confirmer
+      </vp-button>
+    </div>
+  </form>
+</div>

@@ -74,6 +74,7 @@ import { SwitcherComponent } from './components/common/switcher/switcher.compone
 import { WeekViewComponent } from './components/application/calendar/week-view/week-view.component';
 import { DayViewComponent } from './components/application/calendar/day-view/day-view.component';
 import { MonthViewComponent } from './components/application/calendar/month-view/month-view.component';
+import { CreateEventDialogComponent } from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
 
 registerLocaleData(localeFr);
 
@@ -122,6 +123,7 @@ registerLocaleData(localeFr);
     WeekViewComponent,
     DayViewComponent,
     MonthViewComponent,
+    CreateEventDialogComponent,
   ],
   imports: [
     BrowserModule,

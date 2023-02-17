@@ -12,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Slf4j
@@ -32,21 +31,28 @@ public class EventController {
     }
 
     @GetMapping("/allOfProject")
-    public ResponseEntity<List<EventDto>> fetchAllOfProject(@RequestParam String project_id) throws FunctionalException {
+    public ResponseEntity<List<EventDto>> fetchAllOfProject(
+            @RequestParam String project_id,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to
+    ) throws FunctionalException {
         return ResponseEntity.ok(
-            this.eventService.fetchAllOfProject(project_id)
+            this.eventService.fetchAllOfProject(project_id, from, to)
                     .stream()
-                    .map(event -> EventMapper.toDto(event, this.eventService.isParticipating(event)))
+                    .map(event -> EventMapper.toDto(event, this.eventService.isParticipating(event), this.eventService.createdByMe(event)))
                     .toList()
         );
     }
 
     @GetMapping("/myEvents")
-    public ResponseEntity<List<EventDto>> fetchMyEvents() throws FunctionalException {
+    public ResponseEntity<List<EventDto>> fetchMyEvents(
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to
+    ) throws FunctionalException {
         return ResponseEntity.ok(
-            this.eventService.myEvents()
+            this.eventService.myEvents(from, to)
                     .stream()
-                    .map(event -> EventMapper.toDto(event, Boolean.TRUE))
+                    .map(event -> EventMapper.toDto(event, Boolean.TRUE, this.eventService.createdByMe(event)))
                     .toList()
         );
     }
@@ -63,6 +69,7 @@ public class EventController {
         return ResponseEntity.created(uri).body(
             EventMapper.toDto(
                 this.eventService.create(event),
+                Boolean.TRUE,
                 Boolean.TRUE
             )
         );
@@ -73,7 +80,8 @@ public class EventController {
         return ResponseEntity.ok(
             EventMapper.toDto(
                 this.eventService.participate(event_id),
-                Boolean.TRUE
+                Boolean.TRUE,
+                Boolean.FALSE
             )
         );
     }
@@ -83,6 +91,7 @@ public class EventController {
         return ResponseEntity.ok(
             EventMapper.toDto(
                 this.eventService.unparticipate(event_id),
+                Boolean.FALSE,
                 Boolean.FALSE
             )
         );

@@ -20,7 +20,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   componentDestroyed$ = new Subject<boolean>();
 
   readonly links: Link[] = [
-    { url: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { url: 'dashboard', label: 'Tableau de bord', icon: 'dashboard' },
     { url: 'calendar', label: 'Calendrier', icon: 'calendar_today' },
     { url: 'todo', label: 'Todo', icon: 'assignment_turned_in' },
   ]

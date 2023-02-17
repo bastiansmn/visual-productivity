@@ -10,4 +10,5 @@ export default interface Event {
   whole_day: boolean;
   participants: User[];
   participating: boolean;
+  createdByMe: boolean;
 }

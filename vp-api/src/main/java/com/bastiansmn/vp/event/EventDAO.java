@@ -1,6 +1,5 @@
 package com.bastiansmn.vp.event;
 
-import com.bastiansmn.vp.goal.GoalDAO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.user.UserDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -72,6 +71,15 @@ public class EventDAO {
     )
     @JsonIgnore
     private ProjectDAO project;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            updatable = false
+    )
+    @JsonIgnore
+    private UserDAO createdBy;
 
 
 }

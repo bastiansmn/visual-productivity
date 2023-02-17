@@ -3,6 +3,7 @@ package com.bastiansmn.vp.event.impl;
 import com.bastiansmn.vp.event.EventDAO;
 import com.bastiansmn.vp.event.EventRepository;
 import com.bastiansmn.vp.event.EventService;
+import com.bastiansmn.vp.event.EventSpecification;
 import com.bastiansmn.vp.event.dto.EventCreationDto;
 import com.bastiansmn.vp.event.dto.EventUpdateDto;
 import com.bastiansmn.vp.exception.FunctionalException;
@@ -17,9 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -31,6 +31,7 @@ public class EventServiceImpl implements EventService {
     private final ProjectService projectService;
     private final EventRepository eventRepository;
     private final GoalRepository goalRepository;
+    private final EventSpecification eventSpecification;
 
     @Override
     public EventDAO fetchById(Long event_id) throws FunctionalException {
@@ -65,6 +66,7 @@ public class EventServiceImpl implements EventService {
                 .videoCallLink(eventDto.getVideoCallLink())
                 .participants(Set.of(user))
                 .project(project)
+                .createdBy(user)
                 .build();
 
         event = this.eventRepository.save(event);
@@ -126,7 +128,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDAO> fetchAllOfProject(String projectId) throws FunctionalException {
+    public List<EventDAO> fetchAllOfProject(String projectId, String from, String to) throws FunctionalException {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         var project = this.projectService.fetchById(projectId);
@@ -137,21 +139,37 @@ public class EventServiceImpl implements EventService {
                     HttpStatus.UNAUTHORIZED
             );
 
-        return project.getAllEvents()
-                .stream()
-                .sorted(Comparator.comparing(EventDAO::getDate_start))
-                .toList();
+        var dateParsedFrom = LocalDateTime.parse(from);
+        var dateParsedTo = LocalDateTime.parse(to);
+
+        return this.eventRepository.findAll(
+                eventSpecification.getFilter(
+                        Map.of(
+                                "project_id", projectId,
+                                "from", dateParsedFrom.toString(),
+                                "to", dateParsedTo.toString()
+                        )
+                )
+        );
     }
 
     @Override
-    public List<EventDAO> myEvents() throws FunctionalException {
+    public List<EventDAO> myEvents(String from, String to) throws FunctionalException {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = this.userService.fetchByEmail(email);
 
-        return user.getEvents()
-                .stream()
-                .sorted(Comparator.comparing(EventDAO::getDate_start))
-                .toList();
+        var map = new HashMap<String, String>();
+        map.put("user_id", user.getUser_id().toString());
+
+        if (from != null)
+            map.put("from", from);
+
+        if (to != null)
+            map.put("to", to);
+
+        return this.eventRepository.findAll(
+                eventSpecification.getFilter(map)
+        );
     }
 
     @Override
@@ -166,5 +184,19 @@ public class EventServiceImpl implements EventService {
         var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return event.getParticipants().stream().anyMatch(u -> u.getEmail().equals(email));
+    }
+
+    @Override
+    public Boolean createdByMe(Long eventId) throws FunctionalException {
+        var event = this.fetchById(eventId);
+
+        return this.createdByMe(event);
+    }
+
+    @Override
+    public Boolean createdByMe(EventDAO event) {
+        var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return event.getCreatedBy().getEmail().equals(email);
     }
 }

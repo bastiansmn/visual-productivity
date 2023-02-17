@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         var random = new Random();
         var color = colorsArray[random.nextInt(colorsArray.length)];
         var variant = variantsArray[random.nextInt(variantsArray.length)];
-        String avatar = "https://api.dicebear.com/5.x/thumbs/png?size=32" + "&background=" + color + "&eyes=" + variant;
+        String avatar = "https://api.dicebear.com/5.x/thumbs/png?size=128" + "&background=" + color + "&eyes=" + variant;
 
 
         UserDAO user = UserDAO.builder()

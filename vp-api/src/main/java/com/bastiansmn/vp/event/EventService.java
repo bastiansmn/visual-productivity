@@ -4,7 +4,9 @@ import com.bastiansmn.vp.event.dto.EventCreationDto;
 import com.bastiansmn.vp.event.dto.EventUpdateDto;
 import com.bastiansmn.vp.exception.FunctionalException;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface EventService {
 
@@ -20,12 +22,16 @@ public interface EventService {
 
     void delete(Long event_id) throws FunctionalException;
 
-    List<EventDAO> fetchAllOfProject(String projectId) throws FunctionalException;
+    List<EventDAO> fetchAllOfProject(String projectId, String from, String to) throws FunctionalException;
 
-    List<EventDAO> myEvents() throws FunctionalException;
+    List<EventDAO> myEvents(String from, String to) throws FunctionalException;
 
     Boolean isParticipating(Long eventId) throws FunctionalException;
 
     Boolean isParticipating(EventDAO event);
+
+    Boolean createdByMe(Long eventId) throws FunctionalException;
+
+    Boolean createdByMe(EventDAO event);
 
 }

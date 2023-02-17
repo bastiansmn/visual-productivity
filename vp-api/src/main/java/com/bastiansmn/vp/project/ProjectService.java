@@ -2,12 +2,12 @@ package com.bastiansmn.vp.project;
 
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.project.dto.ProjectCreationDTO;
 import com.bastiansmn.vp.user.UserDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public interface ProjectService {

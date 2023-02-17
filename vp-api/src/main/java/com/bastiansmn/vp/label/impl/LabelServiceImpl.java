@@ -2,9 +2,6 @@ package com.bastiansmn.vp.label.impl;
 
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
-import com.bastiansmn.vp.goal.GoalDAO;
-import com.bastiansmn.vp.goal.GoalRepository;
-import com.bastiansmn.vp.goal.GoalService;
 import com.bastiansmn.vp.label.LabelDAO;
 import com.bastiansmn.vp.label.LabelRepository;
 import com.bastiansmn.vp.label.LabelService;
@@ -12,12 +9,13 @@ import com.bastiansmn.vp.label.dto.LabelCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
+import com.bastiansmn.vp.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -32,9 +30,12 @@ public class LabelServiceImpl implements LabelService {
     private final LabelRepository labelRepository;
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
+    private final UserService userService;
 
     @Override
     public LabelDAO create(LabelCreationDTO labelDTO) throws FunctionalException {
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(labelDTO.getProjectId());
 
         LabelDAO labelToAdd = LabelDAO.builder()
@@ -79,6 +80,8 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public List<LabelDAO> filterByName(String projectId, String name) throws FunctionalException {
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = this.userService.fetchByEmail(contextUser);
         var project = this.projectService.fetchById(projectId);
 
         return this.labelRepository.findAllByProjectAndNameContainingIgnoreCase(project, name);

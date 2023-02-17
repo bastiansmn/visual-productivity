@@ -2,12 +2,11 @@ package com.bastiansmn.vp.project;
 
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.TechnicalException;
+import com.bastiansmn.vp.project.dto.ProjectCreationDTO;
 import com.bastiansmn.vp.user.UserDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;

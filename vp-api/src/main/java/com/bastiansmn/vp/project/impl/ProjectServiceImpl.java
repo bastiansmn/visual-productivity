@@ -5,11 +5,9 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
 import com.bastiansmn.vp.exception.TechnicalException;
 import com.bastiansmn.vp.exception.TechnicalRule;
-import com.bastiansmn.vp.pendingUserInvites.PendingInvitesCreationDTO;
 import com.bastiansmn.vp.pendingUserInvites.PendingInvitesDAO;
 import com.bastiansmn.vp.pendingUserInvites.PendingInvitesRepository;
-import com.bastiansmn.vp.pendingUserInvites.PendingInvitesService;
-import com.bastiansmn.vp.project.ProjectCreationDTO;
+import com.bastiansmn.vp.project.dto.ProjectCreationDTO;
 import com.bastiansmn.vp.project.ProjectDAO;
 import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
@@ -111,7 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Collection<ProjectDAO> fetchAll() {
+    public List<ProjectDAO> fetchAll() {
         return this.projectRepository.findAll();
     }
 
@@ -132,9 +130,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public UserDAO addUserToProject(String project_id, String user_email)
             throws FunctionalException, TechnicalException {
+        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var currentUser = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.fetchById(project_id);
 
-        String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
             throw new FunctionalException(FunctionalRule.PROJ_0007);
 
