@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: vp-ingress
+  namespace: vp
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: vp.bastian-somon.fr
+      http:
+        paths:
+          - path: /api/v1
+            pathType: Prefix
+            backend:
+              service: 
+                name: vp-backend
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vp-frontend
+                port:
+                  number: 80
