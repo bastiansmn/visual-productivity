@@ -195,6 +195,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                                 .build()
                 );
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new FunctionalException(FunctionalRule.FILE_0002);
             }
         }
