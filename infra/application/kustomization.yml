@@ -12,3 +12,7 @@ resources:
 - database/db-deployment.yml
 - database/db-service.yml
 - database/db-pvc.yml
+- s3/s3-deployment.yml
+- s3/s3-pvc.yml
+- s3/s3-service.yml
+- s3/s3-ui-service.yml

@@ -25,6 +25,8 @@ create secret generic ${SECRET_NAME} \
 --from-literal="JWT_SECRET=$JWT_SECRET" \
 --from-literal="ORIGIN=$ORIGIN" \
 --from-literal="PORT=$PORT" \
+--from-literal="MINIO_ROOT_USER=$S3_ACCESS_KEY" \
+--from-literal="MINIO_ROOT_PASSWORD=$S3_SECRET_KEY" \
 --from-literal="S3_ACCESS_KEY=$S3_ACCESS_KEY" \
 --from-literal="S3_SECRET_KEY=$S3_SECRET_KEY" \
 --from-literal="S3_ENDPOINT=$S3_ENDPOINT" \
