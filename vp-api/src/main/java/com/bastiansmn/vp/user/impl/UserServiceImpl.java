@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final CorsProperties corsProperties;
 
     public UserDAO create(UserCreationDTO userDTO) throws FunctionalException, TechnicalException {
-        // TODO Limiter ler nombre de requêtes par IP (car route publique)
+        // TODO Limiter le nombre de requêtes par IP (car route publique)
         if (this.isSocialUser(userDTO.getEmail()))
             throw new FunctionalException(FunctionalRule.USER_0007);
 
