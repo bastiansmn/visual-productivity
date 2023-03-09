@@ -25,6 +25,8 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,6 +48,9 @@ import java.util.*;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -187,6 +192,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         var user = this.fetchByEmail(email);
         if (user.getAvatar() != null) {
+            LOGGER.info("S3Properties: {}", this.s3Properties);
             try {
                 this.minioClient.removeObject(
                         RemoveObjectArgs.builder()
