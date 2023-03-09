@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                                 .build()
                 );
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Error while deleting avatar from S3", e);
                 throw new FunctionalException(FunctionalRule.FILE_0002);
             }
         }
