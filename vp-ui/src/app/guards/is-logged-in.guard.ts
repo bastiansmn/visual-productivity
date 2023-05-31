@@ -1,14 +1,5 @@
 import {Injectable} from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate, CanActivateChild,
-  CanLoad,
-  Route,
-  Router,
-  RouterStateSnapshot,
-  UrlSegment,
-  UrlTree
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import {Observable, take} from 'rxjs';
 import {AuthService} from "../services/auth/auth.service";
 import {isValidDate} from "rxjs/internal/util/isDate";
@@ -19,7 +10,7 @@ import {AlertService, AlertType} from "../services/alert/alert.service";
 @Injectable({
   providedIn: 'root'
 })
-export class IsLoggedInGuard implements CanActivate, CanActivateChild {
+export class IsLoggedInGuard  {
 
   constructor(
     private authService: AuthService,
