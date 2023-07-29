@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Table(name = "tasks")
 @Entity
@@ -52,6 +53,16 @@ public class TaskDAO {
     )
     @JsonIgnore
     private GoalDAO goal;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<TaskDAO> dependsOn;
+
+    @ManyToMany(mappedBy = "dependsOn", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<TaskDAO> requiredBy;
 
     @ManyToOne
     @JoinColumn(
