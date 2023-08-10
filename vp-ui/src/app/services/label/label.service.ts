@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {EMPTY, Observable} from "rxjs";
 import Label, {LabelAssignation, LabelCreation} from "../../model/label.model";

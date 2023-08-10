@@ -1,4 +1,4 @@
-import { FileUploadDirective } from './file-upload.directive';
+import {FileUploadDirective} from './file-upload.directive';
 
 describe('FileUploadDirective', () => {
   it('should create an instance', () => {

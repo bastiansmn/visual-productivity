@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../base
+
+namespace: vp-sandbox
+
+patches:
+  - target:
+      kind: Ingress
+      name: vp-ingress
+    path: ingress.patch.yml

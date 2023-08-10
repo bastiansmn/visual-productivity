@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
+import {AfterViewInit, Component, ContentChild, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
 
 @Component({
   selector: 'vp-switcher',

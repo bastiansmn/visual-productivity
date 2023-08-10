@@ -2,10 +2,17 @@
 
 SECRET_NAME="vp-secret"
 
+if [ -z "$1" ]; then
+    echo "Usage: $0 <namespace>"
+    exit 1
+fi
+
+kubectl get namespace $1 > /dev/null 2>&1
+
 export $(sops -d secret.env | xargs)
 
-kubectl -n=vp delete secret ${SECRET_NAME} 2> /dev/null
-kubectl -n=vp \
+kubectl -n=$1 delete secret ${SECRET_NAME} 2> /dev/null
+kubectl -n=$1 \
 create secret generic ${SECRET_NAME} \
 --from-literal="API_PATH=$API_PATH" \
 --from-literal="DB_USERNAME=$DB_USERNAME" \
@@ -36,4 +43,7 @@ create secret generic ${SECRET_NAME} \
 --from-literal="VP_ALLOWED_HEADERS=$VP_ALLOWED_HEADERS" \
 --from-literal="VP_ALLOWED_METHODS=$VP_ALLOWED_METHODS" \
 --from-literal="VP_ALLOWED_ORIGINS=$VP_ALLOWED_ORIGINS" \
---from-literal="VP_REGISTER_PATTERN=$VP_REGISTER_PATTERN"
+--from-literal="VP_REGISTER_PATTERN=$VP_REGISTER_PATTERN" \
+--from-literal="CYPRESS_email=$CYPRESS_email" \
+--from-literal="CYPRESS_password=$CYPRESS_password" \
+--from-literal="CYPRESS_baseUrl=$CYPRESS_baseUrl"

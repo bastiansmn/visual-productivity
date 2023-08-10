@@ -1,4 +1,4 @@
-import { FirstLettersPipe } from './first-letters.pipe';
+import {FirstLettersPipe} from './first-letters.pipe';
 
 describe('FirstLettersPipe', () => {
   it('create an instance', () => {

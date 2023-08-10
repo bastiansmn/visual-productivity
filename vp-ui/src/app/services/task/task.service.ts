@@ -1,10 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import Task, {TaskCreation} from "../../model/task.model";
-import {catchError} from "rxjs";
-import {handleError} from "../../utils/http-error-handler.util";
-import {LoaderService} from "../loader/loader.service";
-import {AlertService} from "../alert/alert.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,19 +8,11 @@ import {AlertService} from "../alert/alert.service";
 export class TaskService {
 
   constructor(
-    private http: HttpClient,
-    private loaderService: LoaderService,
-    private alertService: AlertService
+    private http: HttpClient
   ) { }
 
   createTask(task: TaskCreation) {
     return this.http.post<Task>("/api/v1/task/create", task)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      );
   }
 
   markAsDone(taskID: number) {

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SwitcherComponent } from './switcher.component';
+import {SwitcherComponent} from './switcher.component';
 
 describe('SwitcherComponent', () => {
   let component: SwitcherComponent;

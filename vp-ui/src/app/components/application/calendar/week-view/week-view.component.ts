@@ -7,9 +7,7 @@ import {User} from "../../../../model/user.model";
 import {AlertService, AlertType} from "../../../../services/alert/alert.service";
 import {MatDialog} from "@angular/material/dialog";
 import {CreateEventDialogComponent} from "./create-event-dialog/create-event-dialog.component";
-import {Action} from "../../../../model/action.enum";
 import {CreateEventData} from "./create-event-dialog/create-event.data";
-import Project from "../../../../model/project.model";
 
 @Component({
   selector: 'app-week-view',

@@ -1,15 +1,14 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  namespace: vp
-  name: vp-volume
+  name: vp-volume-minio
   labels:
     type: local
-    app: db
+    app: minio
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -18,11 +17,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim # Create PVC
 metadata:
-  namespace: vp
-  name: postgres-data-claim # Sets name of PV
+  name: minio-data-claim # Sets name of PV
 spec:
   accessModes:
     - ReadWriteOnce # Sets read and write access
   resources:
     requests:
-      storage: 5Gi # Sets volume size
+      storage: 10Gi # Sets volume size

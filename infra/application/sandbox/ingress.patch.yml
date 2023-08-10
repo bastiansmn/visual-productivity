@@ -1,0 +1,8 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: vp-storage-sandbox.bastian-somon.fr
+
+- op: replace
+  path: /spec/rules/1/host
+  value: vp-sandbox.bastian-somon.fr
+

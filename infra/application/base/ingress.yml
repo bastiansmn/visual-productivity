@@ -3,7 +3,6 @@ kind: Ingress
 
 metadata:
   name: vp-ingress
-  namespace: vp
 spec:
   ingressClassName: nginx
   rules:
