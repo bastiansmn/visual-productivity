@@ -37,21 +37,8 @@ jobs:
           docker build -t registry.bastian-somon.fr/vp-frontend:latest vp-ui
           docker push registry.bastian-somon.fr/vp-frontend:latest
 
-  deploy-infra-sandbox:
-    needs: [build-server, build-client]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Trigger deploy
-        uses: Consensys/kubernetes-action@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
-        with:
-          args: apply -k infra/application/sandbox
-
   deploy-infra-production:
-    needs: [deploy-infra-sandbox ]
+    needs: [build-server, build-client]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
