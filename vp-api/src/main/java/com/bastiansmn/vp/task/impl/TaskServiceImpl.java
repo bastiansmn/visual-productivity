@@ -101,7 +101,7 @@ public class TaskServiceImpl implements TaskService {
         String contextUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(project_id);
-        if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
+        if (!project.getUsers().contains(user))
             throw new FunctionalException(FunctionalRule.TASK_0005);
 
         return this.taskRepository.findAllByProject(project);

@@ -1,0 +1,10 @@
+<ng-container *ngIf="project?.allTasks?.length === 0; else tasks">
+  <p>Aucune tâche planifiée pour le moment, vous pouvez en créer via le bouton + ci-dessus.</p>
+</ng-container>
+<ng-template #tasks>
+  <ul>
+    <li *ngFor="let tasks of project?.allTasks; trackBy: trackByFn">
+      {{ tasks | json }}
+    </li>
+  </ul>
+</ng-template>

@@ -1,1 +1,32 @@
-{{ project?.allTasks | json }}
+<div class="tasks__header">
+  <h1 class="mat-subheading-2">
+    Détail des tâches
+  </h1>
+
+  <div class="tasks__header__actions">
+    <vp-button (clicked)="toggleCreateTaskDialog()">
+      <mat-icon>add</mat-icon>
+    </vp-button>
+    <vp-switcher
+      [data]="switcherOptions"
+      [defaultIndex]="0"
+      (switched)="handleViewSwitch($event)"
+    >
+      <ng-template let-item #body>
+        <mat-icon [matTooltip]="item.tooltip" icon color="primary">{{ item.icon }}</mat-icon>
+      </ng-template>
+    </vp-switcher>
+  </div>
+</div>
+
+<div class="tasks__content">
+  <ng-container [ngSwitch]="selectedView">
+    <app-task-list-view
+      [project]="project"
+      *ngSwitchCase="'list-view'"
+    ></app-task-list-view>
+    <app-task-timeline-view
+      *ngSwitchCase="'timeline-view'"
+    ></app-task-timeline-view>
+  </ng-container>
+</div>

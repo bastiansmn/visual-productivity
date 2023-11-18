@@ -87,6 +87,9 @@ import {
   CreateEventDialogComponent
 } from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
 import {ApiResponseInterceptor} from "./interceptor/api-response.interceptor";
+import { TaskTimelineViewComponent } from './components/application/project/project-tasks/task-timeline-view/task-timeline-view.component';
+import { TaskListViewComponent } from './components/application/project/project-tasks/task-list-view/task-list-view.component';
+import { CreateTaskDialogComponent } from './components/application/project/project-tasks/create-task-dialog/create-task-dialog.component';
 
 registerLocaleData(localeFr);
 
@@ -136,6 +139,9 @@ registerLocaleData(localeFr);
     DayViewComponent,
     MonthViewComponent,
     CreateEventDialogComponent,
+    TaskTimelineViewComponent,
+    TaskListViewComponent,
+    CreateTaskDialogComponent,
   ],
   imports: [
     BrowserModule,
