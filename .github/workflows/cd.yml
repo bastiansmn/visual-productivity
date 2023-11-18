@@ -48,7 +48,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
         with:
-          args: apply -k infra/application/production
+          args: apply -k infra/application/base
 
   rollout-infra:
     needs: [deploy-infra-production]
