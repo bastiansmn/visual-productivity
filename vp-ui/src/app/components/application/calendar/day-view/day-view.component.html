@@ -1,1 +1,44 @@
-<p>day-view works!</p>
+<app-simple-calendar
+  [values]="days"
+  [hoursSubdivision]="HOURS_SUBDIVISION"
+  [cdkDragDisabled]="isBeforeNow"
+  [trackByFn]="trackById"
+  (previous)="previousDay()"
+  (next)="nextDay()"
+  (click)="createEvent($event)"
+  (drop)="handleDrop($event)"
+>
+  <ng-template let-event>
+    <button (click)="openModal(event)" [class.passed]="isBeforeNow(event)" [class.pending]="isPending(event)" class="event">
+      <div class="event__container">
+        <h1 class="mat-caption">
+          {{ event.name }}
+        </h1>
+        <p class="mat-small">
+          {{ event.date_start | date: 'HH:mm' }} - {{ event.date_end | date: 'HH:mm' }}
+        </p>
+
+        <div class="participants">
+          <div
+            *ngFor="let user of (getOtherUsers(event.participants) | async); let i = index"
+            [style.z-index]="(event.participants.length ?? 0) + 1 - i"
+            class="user"
+            [matTooltip]="user?.name + ' ' + user?.lastname"
+          >
+                        <span
+                          *ngIf="!user?.avatar"
+                        >
+                          {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
+                        </span>
+            <img
+              *ngIf="user?.avatar"
+              [ngSrc]="user?.avatar ?? ''"
+              height="36"
+              width="36"
+              [alt]="user.avatar">
+          </div>
+        </div>
+      </div>
+    </button>
+  </ng-template>
+</app-simple-calendar>

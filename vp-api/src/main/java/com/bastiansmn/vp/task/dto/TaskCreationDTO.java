@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -13,8 +14,8 @@ public class TaskCreationDTO {
 
     private String name;
     private String description;
-    private Date date_start;
-    private Date date_end;
+    private LocalDate date_start;
+    private LocalDate date_end;
     private Long goal_id;
     private String project_id;
 

@@ -1,6 +1,8 @@
 package com.bastiansmn.vp.task;
 
+import com.bastiansmn.vp.common.Task;
 import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.task.dto.ExecutionOrder;
 import com.bastiansmn.vp.task.dto.TaskCreationDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/task")
@@ -28,6 +31,11 @@ public class TaskController {
                 .toUriString()
         );
         return ResponseEntity.created(uri).body(this.taskService.create(task));
+    }
+
+    @GetMapping("/optimize")
+    public ResponseEntity<ExecutionOrder> optimize(@RequestBody List<Task> tasks, @RequestParam(required = false) Long parallelTasks) throws FunctionalException {
+        return ResponseEntity.ok(this.taskService.optimizeTasks(tasks, parallelTasks));
     }
 
     @GetMapping("/fetchByID")

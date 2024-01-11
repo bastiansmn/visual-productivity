@@ -1,7 +1,7 @@
 export interface Error {
   timestamp: Date,
-  message: String,
-  devMessage: String,
-  httpStatusString: String
+  message: string,
+  devMessage: string,
+  httpStatusString: string
   httpStatus: Number
 }

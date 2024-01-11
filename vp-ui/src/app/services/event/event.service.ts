@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import Event from "../../model/event.model";
@@ -55,5 +55,9 @@ export class EventService {
 
   delete(event: Event): Observable<void> {
     return this.http.delete<void>("/api/v1/event/delete?event_id=" + event.event_id);
+  }
+
+  update(event: Event) {
+    return this.http.put<Event>("/api/v1/event/update", event);
   }
 }

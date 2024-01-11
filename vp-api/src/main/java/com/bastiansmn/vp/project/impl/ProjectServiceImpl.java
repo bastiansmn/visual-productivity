@@ -27,6 +27,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
                     FunctionalRule.PROJ_0004
             );
 
-        if (projectDTO.getDeadline().before(Date.from(Instant.now())))
+        if (projectDTO.getDeadline().isBefore(LocalDate.now()))
             throw new FunctionalException(
                     FunctionalRule.PROJ_0005
             );
@@ -76,7 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .deadline(projectDTO.getDeadline())
                 .token(RandomStringUtils.randomAlphanumeric(8))
                 .complete_mode(projectDTO.isComplete_mode())
-                .created_at(Date.from(Instant.now()))
+                .created_at(LocalDateTime.now())
                 .allLabels(Set.of())
                 .allEvents(Set.of())
                 .allGoals(Set.of())
@@ -157,7 +159,7 @@ public class ProjectServiceImpl implements ProjectService {
             helper.setText(templateEngine.process("addUserToProject", context), true);
             this.mailSender.send(message);
 
-            project.setUpdated_at(Date.from(Instant.now()));
+            project.setUpdated_at(LocalDateTime.now());
             this.projectRepository.save(project);
 
             return user;

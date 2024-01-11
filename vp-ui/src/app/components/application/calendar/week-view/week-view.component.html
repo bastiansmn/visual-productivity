@@ -1,184 +1,128 @@
-<div class="week__calendar">
-  <div class="week__header">
-    <div class="week__controls">
-      <div class="week__control week__control--prev">
-        <button (click)="prevWeek()">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-      </div>
-      <div class="week__control week__control--next">
-        <button (click)="nextWeek()">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
+<app-simple-calendar
+  [values]="days"
+  [hoursSubdivision]="HOURS_SUBDIVISION"
+  [cdkDragDisabled]="isBeforeNow"
+  [trackByFn]="trackById"
+  (previous)="prevWeek()"
+  (next)="nextWeek()"
+  (click)="createEvent($event)"
+  (drop)="handleDrop($event)"
+>
+  <ng-template let-event>
+    <h1 class="mat-caption">
+      {{ event.name }}
+    </h1>
+    <p class="mat-small">
+      {{ event.date_start | date: 'HH:mm' }} - {{ event.date_end | date: 'HH:mm' }}
+    </p>
+
+    <div class="participants">
+      <div
+        *ngFor="let user of (getOtherUsers(event.participants) | async); let i = index"
+        [style.z-index]="(event.participants.length ?? 0) + 1 - i"
+        class="user"
+        [matTooltip]="user?.name + ' ' + user?.lastname"
+      >
+        <span
+          *ngIf="!user?.avatar"
+        >
+          {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
+        </span>
+        <img
+          *ngIf="user?.avatar"
+          [ngSrc]="user?.avatar ?? ''"
+          height="36"
+          width="36"
+          [alt]="user.avatar">
       </div>
     </div>
-    <div class="week__days">
-      <div class="week__day" [class.current__day]="day.current" *ngFor="let day of days">
-        <div class="day__container">
-          <div class="week__day-date">{{ day.date | date: 'dd' }}</div>
-          <div class="week__day-name">{{ day.name }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </ng-template>
 
-  <div class="calendar__wrapper" #calendarWrapper>
-    <!-- Whole day -->
-    <div class="whole__day--events">
-    </div>
-
-    <div class="calendar__content">
-      <div class="calendar__gridslots">
-        <table>
-          <colgroup><col></colgroup>
-          <tbody>
-            <tr *ngFor="let hour of hours">
-              <td [attr.data-time]="hour" class="hour">
-                {{ hour }}
-              </td>
-              <td (click)="createEvent($event)" [attr.data-time]="hour" class="slot__row"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="calendar__gridcols">
-        <div class="hour__cursor" #timeCursor>
-          <div class="triangle"></div>
-        </div>
-
-        <table>
-          <colgroup><col></colgroup>
-          <tbody>
-          <tr role="row">
-            <td></td>
-            <td *ngFor="let day of days; let dayIndex=index">
-              <div cdkDropList class="day-events__container">
-                <button [class.passed]="isBeforeNow(event)" cdkDragBoundary=".day-events__container" [cdkDragDisabled]="!event.createdByMe || isBeforeNow(event)" cdkDrag class="event" *ngFor="let event of day.events; let index=index" [ngStyle]="computeEventInset(event)">
-                  <div class="event__container">
-                    <h1 class="mat-caption">
-                      {{ event.name }}
-                    </h1>
-                    <p class="mat-small">
-                      {{ event.date_start | date: 'HH:mm' }} - {{ event.date_end | date: 'HH:mm' }}
-                    </p>
-
-                    <div class="participants">
-                      <div
-                        *ngFor="let user of (getOtherUsers(event.participants) | async); let i = index"
-                        [style.z-index]="(event.participants.length ?? 0) + 1 - i"
-                        class="user"
-                        [matTooltip]="user?.name + ' ' + user?.lastname"
+  <ng-template #details let-event let-index="index">
+    <h1 class="mat-body-2">
+      {{ event.name }}
+    </h1>
+    <p>
+      {{ event.date_start | date: 'HH:mm' }} - {{ event.date_end | date: 'HH:mm' }}
+    </p>
+    <div class="divider"></div>
+    <p style="
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                  }">
+      <mat-icon style="margin-right: .5rem;">person</mat-icon>
+      {{ event.participants.length }} participant(s)
+    </p>
+    <div class="participants__link">
+      <div class="participants">
+        <div
+          *ngFor="let user of event.participants; let i = index"
+          [style.z-index]="(event.participants.length ?? 0) + 1 - i"
+          class="user"
+          [matTooltip]="user?.name + ' ' + user?.lastname"
+        >
+                      <span
+                        *ngIf="!user?.avatar"
                       >
-                        <span
-                          *ngIf="!user?.avatar"
-                        >
-                          {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
-                        </span>
-                        <img
-                          *ngIf="user?.avatar"
-                          [ngSrc]="user?.avatar ?? ''"
-                          height="36"
-                          width="36"
-                          [alt]="user.avatar">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div [style]="computeEventPosition(dayIndex)" class="event__details">
-                    <h1 class="mat-body-2">
-                      {{ event.name }}
-                    </h1>
-                    <p>
-                      {{ event.date_start | date: 'HH:mm' }} - {{ event.date_end | date: 'HH:mm' }}
-                    </p>
-                    <div class="divider"></div>
-                    <p style="
-                      display: flex;
-                      align-items: center;
-                      margin-bottom: 1rem;
-                    }">
-                      <mat-icon style="margin-right: .5rem;">person</mat-icon>
-                      {{ event.participants.length }} participant(s)
-                    </p>
-                    <div class="participants__link">
-                      <div class="participants">
-                        <div
-                          *ngFor="let user of event.participants; let i = index"
-                          [style.z-index]="(event.participants.length ?? 0) + 1 - i"
-                          class="user"
-                          [matTooltip]="user?.name + ' ' + user?.lastname"
-                        >
-                        <span
-                          *ngIf="!user?.avatar"
-                        >
-                          {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
-                        </span>
-                          <img
-                            *ngIf="user?.avatar"
-                            [ngSrc]="user?.avatar ?? ''"
-                            height="36"
-                            width="36"
-                            [alt]="user.avatar">
-                        </div>
-                      </div>
-                      <div class="go_to_link" *ngIf="event.videoCallLink && !isBeforeNow(event)" (click)="handleClick(event.videoCallLink)">
-                        <mat-icon>videocam</mat-icon>
-                        <span>Rejoindre la réunion</span>
-                      </div>
-                    </div>
-                    <p *ngIf="event.description" class="event__description">
-                      <mat-icon>comment</mat-icon>
-                      <span>
-                        {{ event.description }}
+                        {{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
                       </span>
-                    </p>
-                    <div class="divider"></div>
-                    <div class="participating" *ngIf="!isBeforeNow(event)">
-                      <p class="mat-small">
-                        Participer ?
-                      </p>
-                      <div class="controls">
-                        <div class="disabled">
-                          <p>
-                            <mat-icon>check_circle</mat-icon>
-                            Oui
-                          </p>
-                        </div>
-                        <div
-                          [class.disabled]="!event.participating"
-                          (click)="unparticipate(event)"
-                        >
-                          <p>
-                            <mat-icon>cancel</mat-icon>
-                            Non
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="delete" *ngIf="event.createdByMe">
-                      <p class="mat-small">
-                        Supprimer ?
-                      </p>
-                      <div class="controls">
-                        <div
-                          (click)="deleteEvent(event)"
-                        >
-                          <p>
-                            <mat-icon>delete</mat-icon>
-                            Supprimer
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+          <img
+            *ngIf="user?.avatar"
+            [ngSrc]="user?.avatar ?? ''"
+            height="36"
+            width="36"
+            [alt]="user.avatar">
+        </div>
+      </div>
+      <div class="go_to_link" *ngIf="event.videoCallLink && !isBeforeNow(event)" (click)="handleClick(event.videoCallLink)">
+        <mat-icon>videocam</mat-icon>
+        <span>Rejoindre la réunion</span>
       </div>
     </div>
-  </div>
-</div>
+    <p *ngIf="event.description" class="event__description">
+      <mat-icon>comment</mat-icon>
+      <span>
+          {{ event.description }}
+        </span>
+    </p>
+    <div class="divider"></div>
+    <div class="participating" *ngIf="!isBeforeNow(event)">
+      <p class="mat-small">
+        Participer ?
+      </p>
+      <div class="controls">
+        <div class="disabled">
+          <p>
+            <mat-icon>check_circle</mat-icon>
+            Oui
+          </p>
+        </div>
+        <div
+          [class.disabled]="!event.participating"
+          (click)="unparticipate(event)"
+        >
+          <p>
+            <mat-icon>cancel</mat-icon>
+            Non
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="delete" *ngIf="event.createdByMe">
+      <p class="mat-small">
+        Supprimer ?
+      </p>
+      <div class="controls">
+        <div
+          (click)="deleteEvent(event)"
+        >
+          <p>
+            <mat-icon>delete</mat-icon>
+            Supprimer
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-simple-calendar>

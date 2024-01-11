@@ -5,6 +5,7 @@ import com.bastiansmn.vp.event.EventRepository;
 import com.bastiansmn.vp.event.EventService;
 import com.bastiansmn.vp.event.EventSpecification;
 import com.bastiansmn.vp.event.dto.EventCreationDto;
+import com.bastiansmn.vp.event.dto.EventDto;
 import com.bastiansmn.vp.event.dto.EventUpdateDto;
 import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.exception.FunctionalRule;
@@ -198,5 +199,22 @@ public class EventServiceImpl implements EventService {
         var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return event.getCreatedBy().getEmail().equals(email);
+    }
+
+    @Override
+    public EventDAO update(EventDto event) throws FunctionalException {
+        EventDAO eventDAO = eventRepository.findById(event.getEvent_id())
+                .orElseThrow(() -> new FunctionalException(
+                        FunctionalRule.EVENT_0001
+                ));
+
+        eventDAO.setName(event.getName());
+        eventDAO.setDescription(event.getDescription());
+        eventDAO.setVideoCallLink(event.getVideoCallLink());
+        eventDAO.setDate_start(event.getDate_start());
+        eventDAO.setDate_end(event.getDate_end());
+        eventDAO.setWhole_day(event.getWhole_day());
+
+        return eventRepository.save(eventDAO);
     }
 }

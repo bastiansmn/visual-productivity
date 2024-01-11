@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {CalendarView} from "./calendar-view.enum";
-import {BehaviorSubject} from "rxjs";
-import {DatePipe} from "@angular/common";
+import {BehaviorSubject, take} from "rxjs";
+import {DatePipe, TitleCasePipe} from "@angular/common";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
 
   private calendarTitle$ = new BehaviorSubject<string>('');
   get calendarTitle() {
@@ -23,11 +24,33 @@ export class CalendarComponent {
   }
 
   constructor(
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private titleCasePipe: TitleCasePipe,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
+
+  ngOnInit(): void {
+    this.route.queryParams
+      .pipe(take(1))
+      .subscribe(params => {
+        const view = params['view'];
+        if (!view) return;
+        this.currentView$.next(CalendarView[view as keyof typeof CalendarView]);
+      });
+  }
 
   handleSwitch($event: { value: string; key: string }) {
     this.currentView$.next(CalendarView[$event.key as keyof typeof CalendarView]);
+    const queryParams: Params = { view: $event.key };
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      }
+    );
   }
 
   getIndexOfDefaultValue() {
@@ -56,5 +79,13 @@ export class CalendarComponent {
     } else {
       this.calendarTitle$.next(`${month1Capitalized} ${year1} - ${month2Capitalized} ${year2}`);
     }
+  }
+
+  changeDay($event: Date) {
+    this.calendarTitle$.next(
+      this.titleCasePipe.transform(
+        this.datePipe.transform($event, 'fullDate')!
+      )
+    );
   }
 }

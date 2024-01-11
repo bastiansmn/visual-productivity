@@ -2,6 +2,7 @@ package com.bastiansmn.vp.project.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,7 +15,7 @@ public class ProjectCreationDTO {
 
     private String name;
     private String description;
-    private Date deadline;
+    private LocalDate deadline;
     private boolean complete_mode;
 
 }

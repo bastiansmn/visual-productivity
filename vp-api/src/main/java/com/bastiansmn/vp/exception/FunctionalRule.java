@@ -60,7 +60,8 @@ public enum FunctionalRule {
     EVENT_0001("EVENT_0001", "L'évènement n'existe pas"),
     EVENT_0002("EVENT_0002", "Vous n'êtes pas membre du projet de l'évènement"),
     EVENT_0003("EVENT_0003", "Vous participez déjà à cet évènement"),
-    EVENT_0004("EVENT_0004", "Vous ne participez pas à cet évènement")
+    EVENT_0004("EVENT_0004", "Vous ne participez pas à cet évènement"),
+    GRAPH_0001("GRAPH_0001", "Le graphe est invalide"),
     ;
 
     private final String name;

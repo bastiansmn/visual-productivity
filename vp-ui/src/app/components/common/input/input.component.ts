@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 
 @Component({
@@ -8,15 +8,15 @@ import {FormGroup} from "@angular/forms";
 })
 export class InputComponent {
 
-  @Input() type: String = "text";
-  @Input() label!: String;
-  @Input() placeholder!: String;
-  @Input() name!: String;
+  @Input() type: string = "text";
+  @Input() label!: string;
+  @Input() placeholder!: string;
+  @Input() name!: string;
   @Input() spellcheck: boolean = false;
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
   @Input() autocomplete: boolean = false;
-  @Input() datalist: Array<String> = [];
+  @Input() datalist: Array<string> = [];
   @Input() pattern: string = ".*";
   @Input() tabulationIndex: string = "-1";
 

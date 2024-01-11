@@ -128,7 +128,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             var apiError = new ApiError(
                     new Date(),
                     SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
-                    SecurityConstant.TOKEN_CANNOT_BE_VERIFIED,
+                    exception.getMessage(),
                     FORBIDDEN,
                     FORBIDDEN.value()
             );

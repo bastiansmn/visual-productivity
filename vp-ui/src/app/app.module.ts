@@ -21,7 +21,12 @@ import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 
 // Google auth
-import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  GoogleSigninButtonModule,
+  SocialAuthServiceConfig,
+  SocialLoginModule
+} from '@abacritt/angularx-social-login';
 import {InputComponent} from './components/common/input/input.component';
 import {CheckComponent} from './components/common/check/check.component';
 import {ButtonComponent} from './components/common/button/button.component';
@@ -37,7 +42,7 @@ import {DashboardComponent} from './components/application/dashboard/dashboard.c
 import {SettingsComponent} from './components/application/settings/settings.component';
 import {CreateProjectComponent} from './components/application/create-project/create-project.component';
 
-import {DatePipe, NgOptimizedImage, registerLocaleData} from '@angular/common';
+import {DatePipe, NgOptimizedImage, registerLocaleData, TitleCasePipe} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {
   ProjectDashboardComponent
@@ -52,29 +57,39 @@ import {StatusPipe} from './pipes/status.pipe';
 import {
   AddGoalDialogComponent
 } from './components/application/project/project-dashboard/add-goal-dialog/add-goal-dialog.component';
-import { SelectComponent } from './components/common/select/select.component';
-import { EditGoalComponent } from './components/application/project/project-dashboard/edit-goal/edit-goal.component';
-import { AddTaskDialogComponent } from './components/application/project/project-dashboard/edit-goal/add-task-dialog/add-task-dialog.component';
+import {SelectComponent} from './components/common/select/select.component';
+import {EditGoalComponent} from './components/application/project/project-dashboard/edit-goal/edit-goal.component';
+import {
+  AddTaskDialogComponent
+} from './components/application/project/project-dashboard/edit-goal/add-task-dialog/add-task-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import { TaskPreviewComponent } from './components/application/project/common/task-preview/task-preview.component';
-import { LabelListComponent } from './components/application/project/common/label-list/label-list.component';
-import { LabelComponent } from './components/application/project/common/label/label.component';
+import {TaskPreviewComponent} from './components/application/project/common/task-preview/task-preview.component';
+import {LabelListComponent} from './components/application/project/common/label-list/label-list.component';
+import {LabelComponent} from './components/application/project/common/label/label.component';
 import {MatMenuModule} from "@angular/material/menu";
-import { ProjectSettingsComponent } from './components/application/project/project-settings/project-settings.component';
-import { AddLabelDialogComponent } from './components/application/project/project-settings/add-label-dialog/add-label-dialog.component';
-import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
-import { FirstLettersPipe } from './pipes/first-letters.pipe';
-import { MyAccountComponent } from './components/application/my-account/my-account.component';
-import { EmailPrivacyPipe } from './pipes/email-privacy.pipe';
-import { FileUploadComponent } from './components/common/file-upload/file-upload.component';
-import { FileUploadDirective } from './directives/file-upload.directive';
-import { CalendarComponent } from './components/application/calendar/calendar.component';
-import { TodoComponent } from './components/application/todo/todo.component';
-import { SwitcherComponent } from './components/common/switcher/switcher.component';
-import { WeekViewComponent } from './components/application/calendar/week-view/week-view.component';
-import { DayViewComponent } from './components/application/calendar/day-view/day-view.component';
-import { MonthViewComponent } from './components/application/calendar/month-view/month-view.component';
-import { CreateEventDialogComponent } from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
+import {ProjectSettingsComponent} from './components/application/project/project-settings/project-settings.component';
+import {
+  AddLabelDialogComponent
+} from './components/application/project/project-settings/add-label-dialog/add-label-dialog.component';
+import {ConfirmDialogComponent} from './components/common/confirm-dialog/confirm-dialog.component';
+import {FirstLettersPipe} from './pipes/first-letters.pipe';
+import {MyAccountComponent} from './components/application/my-account/my-account.component';
+import {EmailPrivacyPipe} from './pipes/email-privacy.pipe';
+import {FileUploadComponent} from './components/common/file-upload/file-upload.component';
+import {FileUploadDirective} from './directives/file-upload.directive';
+import {CalendarComponent} from './components/application/calendar/calendar.component';
+import {TodoComponent} from './components/application/todo/todo.component';
+import {SwitcherComponent} from './components/common/switcher/switcher.component';
+import {WeekViewComponent} from './components/application/calendar/week-view/week-view.component';
+import {DayViewComponent} from './components/application/calendar/day-view/day-view.component';
+import {MonthViewComponent} from './components/application/calendar/month-view/month-view.component';
+import {
+  CreateEventDialogComponent
+} from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
+import {SimpleCalendarComponent} from './components/common/simple-calendar/simple-calendar.component';
+import {
+  EventInformationsComponent
+} from './components/application/calendar/event-informations/event-informations.component';
 
 registerLocaleData(localeFr);
 
@@ -124,6 +139,8 @@ registerLocaleData(localeFr);
     DayViewComponent,
     MonthViewComponent,
     CreateEventDialogComponent,
+    SimpleCalendarComponent,
+    EventInformationsComponent
   ],
   imports: [
     BrowserModule,
@@ -149,7 +166,8 @@ registerLocaleData(localeFr);
     MatDialogModule,
     DragDropModule,
     MatMenuModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    GoogleSigninButtonModule
   ],
   providers: [
     {
@@ -174,7 +192,8 @@ registerLocaleData(localeFr);
       multi: true
     },
     CookieService,
-    DatePipe
+    DatePipe,
+    TitleCasePipe
   ],
   bootstrap: [AppComponent]
 })

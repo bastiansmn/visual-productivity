@@ -1,4 +1,4 @@
-import {ElementRef, Injectable, ViewChild} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 
 export enum AlertType {
@@ -20,7 +20,7 @@ export type AlertOptions = {
 export class AlertService {
 
   private shown: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private message: BehaviorSubject<String> = new BehaviorSubject<String>("");
+  private message: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   // Default options
   private options: BehaviorSubject<AlertOptions> = new BehaviorSubject<AlertOptions>({
@@ -36,7 +36,7 @@ export class AlertService {
     this.message.next("");
   }
 
-  show(message: String, options?: AlertOptions): void {
+  show(message: string, options?: AlertOptions): void {
     this.message.next(message);
     this.shown.next(true);
     this.options.next({

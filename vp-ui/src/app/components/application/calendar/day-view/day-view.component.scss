@@ -1,0 +1,12 @@
+@import "src/variables";
+@import "src/keyframes";
+
+.day__calendar {
+  width: 100%;
+  height: 100%;
+
+  & > h1 {
+    margin-bottom: 0;
+  }
+
+}

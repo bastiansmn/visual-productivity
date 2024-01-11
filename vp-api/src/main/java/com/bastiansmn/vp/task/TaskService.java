@@ -1,9 +1,14 @@
 package com.bastiansmn.vp.task;
 
+import com.bastiansmn.vp.common.Task;
+import com.bastiansmn.vp.common.graph.Graph;
 import com.bastiansmn.vp.exception.FunctionalException;
+import com.bastiansmn.vp.task.dto.ExecutionOrder;
 import com.bastiansmn.vp.task.dto.TaskCreationDTO;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 
 public interface TaskService {
 
@@ -20,4 +25,8 @@ public interface TaskService {
     TaskDAO markAsDone(Long taskId) throws FunctionalException;
 
     TaskDAO markAsUndone(Long taskId) throws FunctionalException;
+
+    ExecutionOrder optimizeTasks(List<Task> tasks, @Nullable Long parallelTasks) throws FunctionalException;
+
+    Graph<Long> getGraph(List<Task> tasks) throws FunctionalException;
 }

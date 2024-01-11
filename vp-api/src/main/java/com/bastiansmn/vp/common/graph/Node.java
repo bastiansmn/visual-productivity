@@ -23,8 +23,20 @@ public class Node<T extends Comparable<T>> {
         this.readableID = String.valueOf((char) (instanceCount + 64));
     }
 
+    private Node(String uuid) {
+        this.randomUUID = uuid;
+        instanceCount++;
+        // Alphabetical ID
+        this.readableID = String.valueOf((char) (instanceCount + 64));
+    }
+
     public Node(T value) {
         this();
+        this.value = value;
+    }
+
+    public Node(String uuid, T value) {
+        this(uuid);
         this.value = value;
     }
 

@@ -27,18 +27,6 @@ services:
     volumes:
       - smtp_data:/maildir
 
-  # Service for pg-admin
-  pg_admin:
-    container_name: pg-admin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@vp.fr
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "${PG_PORT:-16543}:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   vp-minio:
     image: minio/minio
     container_name: vp-minio
