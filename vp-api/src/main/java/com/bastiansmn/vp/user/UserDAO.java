@@ -112,4 +112,16 @@ public class UserDAO {
 
     private boolean isNotLocked;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UserDAO user) {
+            return this.user_id.equals(user.getUser_id());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.user_id.hashCode();
+    }
 }

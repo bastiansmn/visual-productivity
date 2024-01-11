@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AddGoalDialogComponent } from './add-goal-dialog.component';
+import {AddGoalDialogComponent} from './add-goal-dialog.component';
 
 describe('AddGoalDialogComponent', () => {
   let component: AddGoalDialogComponent;

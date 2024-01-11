@@ -21,12 +21,7 @@ import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 
 // Google auth
-import {
-  GoogleLoginProvider,
-  GoogleSigninButtonModule,
-  SocialAuthServiceConfig,
-  SocialLoginModule
-} from '@abacritt/angularx-social-login';
+import {GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {InputComponent} from './components/common/input/input.component';
 import {CheckComponent} from './components/common/check/check.component';
 import {ButtonComponent} from './components/common/button/button.component';
@@ -86,10 +81,20 @@ import {MonthViewComponent} from './components/application/calendar/month-view/m
 import {
   CreateEventDialogComponent
 } from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
-import {SimpleCalendarComponent} from './components/common/simple-calendar/simple-calendar.component';
+import {ApiResponseInterceptor} from "./interceptor/api-response.interceptor";
 import {
   EventInformationsComponent
-} from './components/application/calendar/event-informations/event-informations.component';
+} from "./components/application/calendar/event-informations/event-informations.component";
+import {SimpleCalendarComponent} from "./components/common/simple-calendar/simple-calendar.component";
+import {
+  TaskTimelineViewComponent
+} from "./components/application/project/project-tasks/task-timeline-view/task-timeline-view.component";
+import {
+  TaskListViewComponent
+} from "./components/application/project/project-tasks/task-list-view/task-list-view.component";
+import {
+  CreateTaskDialogComponent
+} from "./components/application/project/project-tasks/create-task-dialog/create-task-dialog.component";
 
 registerLocaleData(localeFr);
 
@@ -140,7 +145,10 @@ registerLocaleData(localeFr);
     MonthViewComponent,
     CreateEventDialogComponent,
     SimpleCalendarComponent,
-    EventInformationsComponent
+    EventInformationsComponent,
+    TaskTimelineViewComponent,
+    TaskListViewComponent,
+    CreateTaskDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -189,6 +197,11 @@ registerLocaleData(localeFr);
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CookieSetterInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiResponseInterceptor,
       multi: true
     },
     CookieService,

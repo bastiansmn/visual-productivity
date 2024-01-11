@@ -1,8 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ProjectService} from "../../../../services/project/project.service";
-import {BehaviorSubject, Subject, takeUntil} from "rxjs";
+import {BehaviorSubject, Subject, take, takeUntil} from "rxjs";
 import Project from "../../../../model/project.model";
+import {MatDialog} from "@angular/material/dialog";
+import {TaskService} from "../../../../services/task/task.service";
+import {CreateTaskDialogComponent} from "./create-task-dialog/create-task-dialog.component";
 
 @Component({
   selector: 'app-project-tasks',
@@ -17,9 +20,17 @@ export class ProjectTasksComponent implements OnInit, OnDestroy {
     return this.project$.getValue();
   }
 
+  switcherOptions = [
+    { icon: 'dns', value: 'list-view', tooltip: 'Vue liste' },
+    { icon: 'view_quilt', value: 'timeline-view', tooltip: 'Vue timeline' }
+  ]
+  selectedView = 'list-view';
+
   constructor(
     private route: ActivatedRoute,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private taskService: TaskService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -37,4 +48,22 @@ export class ProjectTasksComponent implements OnInit, OnDestroy {
     this.componentDestroyed$.complete();
   }
 
+  handleViewSwitch($event: { icon: string; value: string }) {
+    this.selectedView = $event.value;
+  }
+
+  toggleCreateTaskDialog() {
+    const dialogRef = this.dialog.open(CreateTaskDialogComponent, {
+      data: this.project,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (!this.project?.projectId) return;
+
+      console.log(result);
+
+      this.taskService.createTask(result);
+    });
+  }
 }

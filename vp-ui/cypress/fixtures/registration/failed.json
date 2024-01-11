@@ -1,0 +1,7 @@
+{
+  "timestamp": "2023-06-02T16:44:28.356+00:00",
+  "message": "Un utilisateur avec cet email existe déjà",
+  "devMessage": "com.bastiansmn.vp.exception.FunctionalException: USER_0001 - Un utilisateur avec cet email existe déjà",
+  "httpStatusString": "BAD_REQUEST",
+  "httpStatus": 400
+}

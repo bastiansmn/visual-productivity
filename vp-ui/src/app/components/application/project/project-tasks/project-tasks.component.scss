@@ -1,0 +1,22 @@
+.tasks__header {
+  display: flex;
+
+  & > &__actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+
+    & vp-button {
+      height: 32px;
+      width: 32px;
+      aspect-ratio: 1/1;
+      margin-right: 1rem;
+
+      & mat-icon {
+        font-size: 1.3rem;
+        height: fit-content;
+        width: fit-content;
+      }
+    }
+  }
+}

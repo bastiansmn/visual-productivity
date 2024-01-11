@@ -1,13 +1,8 @@
 import {Injectable} from '@angular/core';
 import {LoginProvider, User, UserLogin, UserRegister} from "../../model/user.model";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BehaviorSubject, catchError} from "rxjs";
-import {CookieService} from "ngx-cookie-service";
-import {AlertService} from "../alert/alert.service";
-import {LoaderService} from "../loader/loader.service";
+import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject} from "rxjs";
 import {SocialUser} from "@abacritt/angularx-social-login";
-import {handleError} from "../../utils/http-error-handler.util";
-import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +13,7 @@ export class AuthService {
   isLoggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private http: HttpClient,
-    private cookieService: CookieService,
-    private alertService: AlertService,
-    private loaderService: LoaderService,
-    private router: Router
+    private http: HttpClient
   ) { }
 
   loginWithVP(user: UserLogin) {
@@ -31,13 +22,6 @@ export class AuthService {
     formData.append("password", user.password);
 
     return this.http.post<User>("/api/v1/login", formData)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService,
-          cookieService: this.cookieService
-        }))
-      )
   }
 
   register(user: UserRegister) {
@@ -48,13 +32,6 @@ export class AuthService {
     }
 
     return this.http.post<User>("/api/v1/user/register", userWithProvider)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService,
-          cookieService: this.cookieService
-        }))
-      )
   }
 
   confirmMail(confirmationCode: string) {
@@ -64,64 +41,26 @@ export class AuthService {
     }
 
     return this.http.put("/api/v1/mail/confirm", body)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   revalidateEmail() {
     return this.http.post("/api/v1/mail/revalidate", this.loggedUser.value)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   refreshTokens() {
     return this.http.get<User>("/api/v1/token/refresh")
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService,
-          cookieService: this.cookieService
-        }))
-      )
   }
 
   validateTokens() {
     return this.http.get<boolean>("/api/v1/token/validate")
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          cookieService: this.cookieService,
-          router: this.router
-        }))
-      )
   }
 
   getUserInfos() {
     return this.http.get<User>("/api/v1/user/me")
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   loginWithSocial(user: SocialUser) {
     return this.http.post<User>("/api/v1/oauth2/login", user)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
 

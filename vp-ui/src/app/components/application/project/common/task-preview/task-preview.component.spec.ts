@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TaskPreviewComponent } from './task-preview.component';
+import {TaskPreviewComponent} from './task-preview.component';
 
 describe('TaskPreviewComponent', () => {
   let component: TaskPreviewComponent;

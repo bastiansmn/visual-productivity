@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DayViewComponent } from './day-view.component';
+import {DayViewComponent} from './day-view.component';
 
 describe('DayViewComponent', () => {
   let component: DayViewComponent;

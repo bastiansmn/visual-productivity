@@ -3,7 +3,6 @@ kind: Ingress
 
 metadata:
   name: vp-ingress
-  namespace: vp
 spec:
   ingressClassName: nginx
   rules:
@@ -23,7 +22,7 @@ spec:
           - path: /api/v1/
             pathType: Prefix
             backend:
-              service: 
+              service:
                 name: vp-backend
                 port:
                   number: 8080

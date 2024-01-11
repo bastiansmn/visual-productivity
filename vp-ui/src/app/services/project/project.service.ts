@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, catchError, of} from "rxjs";
-import {AlertService} from "../alert/alert.service";
-import {LoaderService} from "../loader/loader.service";
+import {BehaviorSubject, of} from "rxjs";
 import Project, {ProjectCreation} from "../../model/project.model";
-import {handleError} from "../../utils/http-error-handler.util";
 import {User} from "../../model/user.model";
 
 @Injectable({
@@ -19,9 +16,7 @@ export class ProjectService {
   }
 
   constructor(
-    private http: HttpClient,
-    private alertService: AlertService,
-    private loaderService: LoaderService
+    private http: HttpClient
   ) { }
 
   fetchProjectById(_id: string) {
@@ -29,42 +24,18 @@ export class ProjectService {
     if (optProject)
       return of(optProject);
     return this.http.get<Project>(`/api/v1/project/fetchById?project_id=${_id}`)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   fetchProjects() {
     return this.http.get<Project[]>("/api/v1/project/myProjects")
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   createProject(project: ProjectCreation) {
     return this.http.post<Project>("/api/v1/project/create", project)
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        }))
-      )
   }
 
   addUserInProject(email: string, projectId: string) {
     return this.http.post<User | null>(`/api/v1/project/addUserToProject?user_email=${email}&project_id=${projectId}`, {})
-      .pipe(
-        catchError(err => handleError(err, {
-          loaderService: this.loaderService,
-          alertService: this.alertService
-        })
-      ));
   }
 
 }

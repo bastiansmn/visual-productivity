@@ -1,4 +1,4 @@
-import { EmailPrivacyPipe } from './email-privacy.pipe';
+import {EmailPrivacyPipe} from './email-privacy.pipe';
 
 describe('EmailPrivacyPipe', () => {
   it('create an instance', () => {

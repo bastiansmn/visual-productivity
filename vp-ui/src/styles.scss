@@ -4,9 +4,9 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 @use './app/components/discover/discover-theme.component.scss' as discover;
-@use 'src/app/components/common/input/input-theme.component' as login;
-@use 'src/app/components/common/select/select-theme.component' as select;
-@use 'src/app/components/application/application-theme.component' as application;
+@use './app/components/common/input/input-theme.component' as login;
+@use './app/components/common/select/select-theme.component' as select;
+@use './app/components/application/application-theme.component' as application;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.

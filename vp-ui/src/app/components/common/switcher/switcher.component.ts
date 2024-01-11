@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
+import {AfterViewInit, Component, ContentChild, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
 
 @Component({
   selector: 'vp-switcher',
@@ -19,8 +19,19 @@ export class SwitcherComponent<T> implements AfterViewInit {
     document.querySelectorAll(".switcher__element").forEach((element) => {
       element.classList.remove("switcher__element--selected");
     });
-    ($event.target as HTMLElement).classList.add("switcher__element--selected");
+
+    const switcherElement = this.findSwitcherElement($event.target as HTMLElement);
+    // Recursively search for the switcher element
+    switcherElement?.classList.add("switcher__element--selected");
     this.switched.emit(item);
+  }
+
+  private findSwitcherElement(element: HTMLElement): HTMLElement | null {
+    if (element.classList.contains("switcher__element")) {
+      return element;
+    } else {
+      return this.findSwitcherElement(element.parentElement!);
+    }
   }
 
   ngAfterViewInit(): void {

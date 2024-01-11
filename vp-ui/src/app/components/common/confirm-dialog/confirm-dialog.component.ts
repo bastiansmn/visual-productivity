@@ -1,8 +1,5 @@
-import {Component, Inject, Input} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import Project from "../../../model/project.model";
-import {GoalStatus} from "../../../model/goal.model";
-import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-confirm-dialog',
