@@ -1,5 +1,5 @@
-@import "src/variables";
-@import "src/keyframes";
+@import "src/variables.scss";
+@import "src/keyframes.scss";
 
 .week__calendar {
   width: 100%;
@@ -292,13 +292,16 @@
                     }
 
                     & > .data-tooltip {
+                      position: absolute;
+                      z-index: 9999;
                       display: none;
                       cursor: auto;
                       transition: all .2s ease-in-out;
-                      box-shadow: 0 0 3px 0 rgba($dark, .2);
+                      box-shadow: 0 0 8px 0 rgb(56 56 56 / 33%);
                       animation: scale-up .2s ease-in-out;
                       background: $light;
                       width: 30vw;
+                      max-width: 400px;
                       border-radius: 7px;
                       padding: 1.5rem;
                       box-sizing: border-box;
@@ -322,7 +325,6 @@
           width: calc(100% - $cursor-padding);
           margin-left: $cursor-padding;
           height: 2px;
-          z-index: 999;
           pointer-events: none;
           background: $purple;
 

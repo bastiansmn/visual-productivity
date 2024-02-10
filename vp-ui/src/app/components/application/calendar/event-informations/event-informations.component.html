@@ -19,7 +19,7 @@
   <div class="participants">
     <div
       *ngFor="let user of event.participants; let i = index"
-      [style.z-index]="(event.participants.length ?? 0) + 1 - i"
+      [style.z-index]="event.participants.length + 1 - i"
       class="user"
       [matTooltip]="user?.name + ' ' + user?.lastname"
     >

@@ -4,7 +4,7 @@
 
     <!-- Project users -->
     <div class="project__users">
-      <div *ngFor="let user of project?.users; let i = index" [style.z-index]="(project?.users?.length ?? 0) + 1 - i" class="user" [matTooltip]="user?.name + ' ' + user?.lastname">
+      <div *ngFor="let user of project?.users; let i = index" [style.z-index]="project.users.length + 1 - i" class="user" [matTooltip]="user?.name + ' ' + user?.lastname">
         <span *ngIf="!user?.avatar">{{ user?.name?.charAt(0) }}{{ user?.lastname?.charAt(0) }}</span>
         <img *ngIf="user?.avatar" [ngSrc]="user?.avatar ?? ''" height="36" width="36" [alt]="user.avatar">
       </div>

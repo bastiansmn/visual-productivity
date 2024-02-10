@@ -5,7 +5,7 @@
   [trackByFn]="trackById"
   (previous)="prevWeek()"
   (next)="nextWeek()"
-  (click)="createEvent($event)"
+  (calendarClick)="createEvent($event)"
   (drop)="handleDrop($event)"
 >
   <ng-template let-event>
@@ -38,6 +38,7 @@
     </div>
   </ng-template>
 
+  <!-- Details tooltip -->
   <ng-template #details let-event let-index="index">
     <h1 class="mat-body-2">
       {{ event.name }}

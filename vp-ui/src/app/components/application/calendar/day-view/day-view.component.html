@@ -5,7 +5,7 @@
   [trackByFn]="trackById"
   (previous)="previousDay()"
   (next)="nextDay()"
-  (click)="createEvent($event)"
+  (calendarClick)="createEvent($event)"
   (drop)="handleDrop($event)"
 >
   <ng-template let-event>

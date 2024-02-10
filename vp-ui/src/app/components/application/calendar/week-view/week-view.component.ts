@@ -7,11 +7,11 @@ import {User} from "../../../../model/user.model";
 import {AlertService, AlertType} from "../../../../services/alert/alert.service";
 import {MatDialog} from "@angular/material/dialog";
 import {CreateEventDialogComponent} from "./create-event-dialog/create-event-dialog.component";
-import {CreateEventData} from "./create-event-dialog/create-event.data";
 import {isBeforeNow, isDateBeforeNow, isPending, sameDay} from "../../../../utils/date.utils";
 import {trackByEventId} from "../../../../model/time-bound-event.model";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 import {DateTime} from "luxon";
+import CalendarClick from "../../../common/simple-calendar/model/calendar-click.model";
 
 @Component({
   selector: 'app-week-view',
@@ -19,6 +19,9 @@ import {DateTime} from "luxon";
   styleUrls: ['./week-view.component.scss']
 })
 export class WeekViewComponent implements OnInit, OnDestroy {
+
+  // Time in hours
+  readonly DEFAULT_EVENT_DURATION = 2;
 
   @Output() weekChanged = new EventEmitter<{
     firstDate: Date,
@@ -127,12 +130,6 @@ export class WeekViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  computeEventPosition(index: number) {
-    if (index >= 4)
-      return "right: 105%"
-    return "left: 105%"
-  }
-
   private assignEventsToDays(events: Event[]) {
     events.forEach(event => {
       if (event.whole_day) {
@@ -150,34 +147,23 @@ export class WeekViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  createEvent($event: MouseEvent) {
-    const target = $event.target as HTMLElement;
-    if (!target) return;
-    // Get the bounding rectangle of target
-    const rect = target.getBoundingClientRect();
-    // Mouse position
-    const x = $event.clientX - rect.left;
-    const y = Math.round(($event.clientY - rect.top) / 15) * 15;
-    const dayIndex = Math.floor((x / rect.width) * 7);
-    const timeStart = Math.floor((y / rect.height) * 24 * 60 / this.HOURS_SUBDIVISION) * this.HOURS_SUBDIVISION + '';
-    if (!timeStart) return;
+  createEvent($event: CalendarClick) {
+    // Round the date to the nearest 15 minutes
+    const dateStart = $event.date
+      .minus({ minutes: $event.date.get('minute') % 15 })
+      .toJSDate();
+    const dateEnd = DateTime.fromJSDate(dateStart).plus({hours: this.DEFAULT_EVENT_DURATION}).toJSDate();
 
-    // Create a new Date with day.date (the day) and timeStart (the time)
+    const jsDayNumber = $event.date.toJSDate().getDay();
+    const dayIndex = jsDayNumber > 0 ? jsDayNumber - 1 : 6;
+
     const day = this.days[dayIndex];
 
-    let dateStart = DateTime.fromJSDate(new Date(day.date));
-    dateStart = dateStart.plus({minutes: parseInt(timeStart)});
-    const dateEnd = dateStart.plus({hours: 2});
-
-    if (isDateBeforeNow(dateStart.toJSDate())) return;
+    if (isDateBeforeNow(dateStart)) return;
 
     const dialogRef = this.dialog.open(CreateEventDialogComponent, {
-      data: {
-        date: day.date,
-        timeStart: timeStart,
-      } as CreateEventData
-    })
-
+       width: '400px',
+    });
 
     let tempEvent: Event = {
       event_id: -1,
@@ -187,8 +173,8 @@ export class WeekViewComponent implements OnInit, OnDestroy {
       videoCallLink: "",
       whole_day: false,
       participants: [],
-      date_start: dateStart.toJSDate(),
-      date_end: dateEnd.toJSDate(),
+      date_start: dateStart,
+      date_end: dateEnd,
       createdByMe: true,
     }
     day.data.push(tempEvent);
@@ -224,7 +210,6 @@ export class WeekViewComponent implements OnInit, OnDestroy {
   }
 
   protected readonly isBeforeNow = isBeforeNow;
-  protected readonly isPending = isPending;
   protected readonly trackById = trackByEventId;
 
   handleDrop($event: CdkDragDrop<any, any>) {

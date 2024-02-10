@@ -36,7 +36,7 @@
             <td [attr.data-time]="hour" class="hour">
               {{ hour }}
             </td>
-            <td (click)="_click($event)" [attr.data-time]="hour" class="slot__row"></td>
+            <td [attr.data-time]="hour" class="slot__row"></td>
           </tr>
           </tbody>
         </table>
@@ -52,7 +52,11 @@
           <tbody>
           <tr role="row" cdkDropListGroup class="calendar__drop-group">
             <td></td>
-            <td *ngFor="let day of values; let dayIndex=index">
+            <td
+              *ngFor="let day of values; let dayIndex=index"
+              [attr.data-date]="day.date.toISOString()"
+              (click)="_click($event)"
+            >
               <div
                 cdkDropList
                 [id]="getDropListId(dayIndex)"
@@ -69,10 +73,11 @@
                   [cdkDragData]="data"
                   [cdkDragDisabled]="cdkDragDisabled(data, index)"
                   [ngStyle]="computeStyle(data, index)"
+                  (click)="_eventClick(data)"
                   class="calendar__data"
                 >
-                  <div class="container" (click)="toggleDetails(detailsRefContainer, $event)">
-                    <div class="data" [class.passed]="isBeforeNow(data)" [class.pending]="isPending(data)">
+                  <div class="container">
+                    <div class="data" (click)="toggleDetails(detailsRefContainer, $event)" [class.passed]="isBeforeNow(data)" [class.pending]="isPending(data)">
                       <ng-template
                         [ngTemplateOutlet]="contentRef"
                         [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"
@@ -80,7 +85,7 @@
                     </div>
                   </div>
 
-                  <div #detailsRefContainer class="data-tooltip">
+                  <div #detailsRefContainer class="data-tooltip" [ngStyle]="computeDetailsPosition(data, dayIndex)" (click)="$event.stopPropagation()">
                     <ng-template
                       [ngTemplateOutlet]="detailsRef"
                       [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"

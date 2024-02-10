@@ -10,7 +10,8 @@ import {isBeforeNow, isDateBeforeNow, isPending, sameDay} from "../../../../util
 import {trackByEventId} from "../../../../model/time-bound-event.model";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 import {CreateEventDialogComponent} from "../week-view/create-event-dialog/create-event-dialog.component";
-import {CreateEventData} from "../week-view/create-event-dialog/create-event.data";
+import CalendarClick from "../../../common/simple-calendar/model/calendar-click.model";
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-day-view',
@@ -18,6 +19,9 @@ import {CreateEventData} from "../week-view/create-event-dialog/create-event.dat
   styleUrls: ['./day-view.component.scss']
 })
 export class DayViewComponent implements OnInit {
+
+  // Time in hours
+  readonly DEFAULT_EVENT_DURATION = 2;
 
   private componentDestroyed$ = new Subject<boolean>();
 
@@ -35,10 +39,8 @@ export class DayViewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const from = new Date();
-    from.setHours(0, 0, 0, 0);
-    const to = new Date();
-    to.setHours(23, 59, 59, 999);
+    const from = DateTime.now().startOf("day").toJSDate();
+    const to = DateTime.now().endOf("day").toJSDate();
 
     this.days = [ { date: from, data: [] } ];
 
@@ -118,35 +120,20 @@ export class DayViewComponent implements OnInit {
   protected readonly isPending = isPending;
   protected readonly trackById = trackByEventId;
 
-  createEvent($event: MouseEvent) {
-    const target = $event.target as HTMLElement;
-    if (!target) return;
-    // Get the bounding rectangle of target
-    const rect = target.getBoundingClientRect();
-    // Mouse position
-    const x = $event.clientX - rect.left;
-    const timeStart = target.getAttribute("data-time");
-    if (!timeStart) return;
+  createEvent($event: CalendarClick) {
+    // Round the date to the nearest 15 minutes
+    const dateStart = $event.date
+      .minus({ minutes: $event.date.get('minute') % 15 })
+      .toJSDate();
+    const dateEnd = DateTime.fromJSDate(dateStart).plus({hours: this.DEFAULT_EVENT_DURATION}).toJSDate();
 
-    // Create a new Date with day.date (the day) and timeStart (the time)
     const day = this.days[0];
-
-    const dateStart = new Date(day.date);
-    const timeStartSplit = timeStart.split(":");
-    dateStart.setHours(+timeStartSplit[0]);
-    dateStart.setMinutes(+timeStartSplit[1]);
-    dateStart.setSeconds(0);
-    const dateEnd = new Date(dateStart);
-    dateEnd.setHours(dateEnd.getHours() + 2);
 
     if (isDateBeforeNow(dateStart)) return;
 
     const dialogRef = this.dialog.open(CreateEventDialogComponent, {
-      data: {
-        date: day.date,
-        timeStart: timeStart,
-      } as CreateEventData
-    })
+      width: '400px',
+    });
 
 
     let tempEvent: Event = {

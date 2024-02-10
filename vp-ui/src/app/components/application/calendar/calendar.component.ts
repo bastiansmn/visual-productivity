@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CalendarView} from "./calendar-view.enum";
 import {BehaviorSubject, take} from "rxjs";
 import {DatePipe, TitleCasePipe} from "@angular/common";
