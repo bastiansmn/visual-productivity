@@ -31,8 +31,8 @@ export class AddTaskDialogComponent implements OnInit {
     this.form = this.fb.group({
       name: this.fb.control('', [Validators.required]),
       description: this.fb.control('', [Validators.required]),
-      date_start: this.fb.control<Date | null>(null, [Validators.required, dateIsAfterToday, this.isAfterGoalStart.bind(this)]),
-      date_end: this.fb.control<Date | null>(null, [Validators.required, dateIsAfterToday, this.beforeGoalEnd.bind(this)]),
+      date_start: this.fb.control<Date | null>(null, [dateIsAfterToday, this.isAfterGoalStart.bind(this)]),
+      date_end: this.fb.control<Date | null>(null, [dateIsAfterToday, this.beforeGoalEnd.bind(this)]),
     }, {validators: [isBeforeDateEnd, isAfterDateStartDateEnd]})
   }
 

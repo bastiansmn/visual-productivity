@@ -1,2 +1,113 @@
 <ng-container [formGroup]="form">
+  <h1 class="mat-subheading-2">Créer une tâche</h1>
+
+  <p>
+    Une tâche est un élément d'un projet qui doit être soit contenir une date de début et une date de fin, soit une durée.
+    Les tâches pourront être optimisées par l'algorithme pour terminer le plus rapidement possible.
+  </p>
+
+  <vp-input
+    [parentForm]="form"
+    [required]="true"
+    label="Nom de la tâche"
+    name="name"
+    parentFormControlName="name"
+    tabulationIndex="1"
+    type="text"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage('name') }}
+    </small>
+  </vp-input>
+
+  <vp-input
+    [parentForm]="form"
+    label="Description de la tâche"
+    name="description"
+    parentFormControlName="description"
+    tabulationIndex="2"
+    type="text"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage('description') }}
+    </small>
+  </vp-input>
+
+  <vp-input
+    [parentForm]="form"
+    [required]="true"
+    label="Date de début"
+    name="date_start"
+    parentFormControlName="date_start"
+    tabulationIndex="3"
+    type="date"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage('date_start') }}
+    </small>
+  </vp-input>
+
+  <vp-input
+    [parentForm]="form"
+    [required]="true"
+    label="Date de fin"
+    name="date_end"
+    parentFormControlName="date_end"
+    tabulationIndex="4"
+    type="date"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage('date_end') }}
+    </small>
+  </vp-input>
+
+  <vp-input
+    [parentForm]="form"
+    label="Duréee/complexité"
+    name="duration"
+    parentFormControlName="duration"
+    tabulationIndex="5"
+    type="number"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage('duration') }}
+    </small>
+  </vp-input>
+
+  <vp-select
+    [parentForm]="form"
+    parentFormControlName="goal"
+    label="Objectif associé"
+    name="project"
+    tabulationIndex="6"
+    [options]="goals"
+  >
+    <small class="errorMessage mat-caption" errorMessage>
+      {{ getErrorMessage("goal") }}
+    </small>
+  </vp-select>
+
+  <p *ngIf="hasDurationErrors()">
+    Vous devez spécifier soit une durée, soit une date de début et une date de fin.
+    Ceci est nécessaire pour que l'algorithme puisse optimiser les tâches.
+  </p>
+
+  <div class="controls">
+    <vp-button
+      background="red-light"
+      color="light"
+      hoverColor="red-light"
+      (clicked)="close()"
+      tabulationIndex="7"
+    >
+      Annuler
+    </vp-button>
+
+    <vp-button
+      (clicked)="save()"
+      tabulationIndex="8"
+    >
+      Créer
+    </vp-button>
+  </div>
 </ng-container>

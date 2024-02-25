@@ -50,16 +50,15 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreationDTO.getDescription() == null)
             throw new FunctionalException(FunctionalRule.TASK_0003);
 
-        if (taskCreationDTO.getDate_start() == null)
+        if (taskCreationDTO.getDuration() == null
+                && (taskCreationDTO.getDate_start() == null || taskCreationDTO.getDate_end() == null)) {
             throw new FunctionalException(FunctionalRule.TASK_0004);
-
-        if (taskCreationDTO.getDate_end() == null)
-            throw new FunctionalException(FunctionalRule.TASK_0004);
+        }
 
         if (taskCreationDTO.getDate_start().isAfter(taskCreationDTO.getDate_end()))
             throw new FunctionalException(FunctionalRule.TASK_0004);
 
-        if (taskCreationDTO.getDate_start().isBefore(LocalDate.now().minus(1, ChronoUnit.DAYS)))
+        if (taskCreationDTO.getDate_start().isBefore(LocalDate.now().minusDays(1)))
             throw new FunctionalException(FunctionalRule.TASK_0004);
 
         if (taskCreationDTO.getProject_id() == null)
@@ -85,13 +84,17 @@ public class TaskServiceImpl implements TaskService {
         if (!project.getUsers().contains(user))
             throw new FunctionalException(FunctionalRule.TASK_0005);
 
+        Long duration = taskCreationDTO.getDuration() == null
+                ? ChronoUnit.DAYS.between(taskCreationDTO.getDate_start(), taskCreationDTO.getDate_end())
+                : taskCreationDTO.getDuration();
+
 
         TaskDAO task = TaskDAO.builder()
                 .name(taskCreationDTO.getName())
                 .description(taskCreationDTO.getDescription())
                 .date_start(taskCreationDTO.getDate_start())
                 .date_end(taskCreationDTO.getDate_end())
-                .duration(ChronoUnit.DAYS.between(taskCreationDTO.getDate_start(), taskCreationDTO.getDate_end()))
+                .duration(duration)
                 .goal(goal)
                 .project(project)
                 .completed(false)

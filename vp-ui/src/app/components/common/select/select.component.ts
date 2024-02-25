@@ -11,7 +11,7 @@ export class SelectComponent {
   @Input() name!: string;
   @Input() label!: string;
   @Input() placeholder!: string;
-  @Input() options!: { value: string, label: string }[];
+  @Input() options!: { value: any, label: string }[];
   @Input() parentForm!: FormGroup;
   @Input() parentFormControlName!: string;
 
