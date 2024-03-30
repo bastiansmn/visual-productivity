@@ -1,6 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CreateEventData} from "./create-event.data";
+import {Component, OnInit} from '@angular/core';
+import {MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import Project from "../../../../../model/project.model";
 import {ProjectService} from "../../../../../services/project/project.service";
@@ -14,13 +13,10 @@ import {take} from "rxjs";
 export class CreateEventDialogComponent implements OnInit {
 
   eventForm!: FormGroup
-  // Time in hours
-  readonly DEFAULT_EVENT_DURATION = 2;
   projects!: Project[];
 
   constructor(
     private dialogRef: MatDialogRef<CreateEventDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateEventData,
     private fb: FormBuilder,
     private projectService: ProjectService
   ) { }
@@ -69,10 +65,10 @@ export class CreateEventDialogComponent implements OnInit {
   close() {
     if (this.eventForm.invalid) return this.dialogRef.close();
 
-    this.dialogRef.close(this.eventForm.value);
+    this.createEvent();
   }
 
   get projectsMapped() {
-    return this.projects?.map(p => ({value: p.projectId, label: p.name}))
+    return this.projects?.map(p => ({value: p.projectId, label: p.name})) ?? [];
   }
 }

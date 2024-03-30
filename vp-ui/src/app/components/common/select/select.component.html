@@ -10,7 +10,7 @@
     [tabindex]="tabulationIndex"
   >
     <option disabled selected value="null">{{ placeholder }}</option>
-    <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+    <option *ngFor="let option of options" [ngValue]="option.value">{{ option.label }}</option>
   </select>
   <ng-content select="[errorMessage]"></ng-content>
   <ng-content></ng-content>

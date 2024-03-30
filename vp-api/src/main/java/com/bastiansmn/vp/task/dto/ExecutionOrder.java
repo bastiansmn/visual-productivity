@@ -1,5 +1,7 @@
-package com.bastiansmn.vp.common;
+package com.bastiansmn.vp.task.dto;
 
+
+import com.bastiansmn.vp.common.Task;
 
 import java.util.List;
 

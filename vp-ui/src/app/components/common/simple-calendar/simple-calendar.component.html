@@ -1,0 +1,115 @@
+<div class="week__calendar">
+  <div class="week__header">
+    <div class="week__controls">
+      <div class="week__control week__control--prev">
+        <button (click)="_previous()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+      </div>
+      <div class="week__control week__control--next">
+        <button (click)="_next()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="week__days">
+      <div class="week__day" [class.current__day]="isCurrentDay(day.date)" *ngFor="let day of values">
+        <div class="day__container">
+          <div class="week__day-date">{{ day.date | date: 'dd' }}</div>
+          <div class="week__day-name">{{ getDayName(day.date.getDay()) }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar__wrapper" #calendarWrapper>
+    <!-- Whole day -->
+    <div class="whole__day--events">
+    </div>
+
+    <div class="calendar__content">
+      <div class="calendar__gridslots">
+        <table>
+          <colgroup><col></colgroup>
+          <tbody>
+          <tr *ngFor="let hour of hours">
+            <td [attr.data-time]="hour" class="hour">
+              {{ hour }}
+            </td>
+            <td [attr.data-time]="hour" class="slot__row"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="calendar__gridcols">
+        <div class="hour__cursor" #timeCursor>
+          <div class="triangle"></div>
+        </div>
+
+        <table>
+          <colgroup><col></colgroup>
+          <tbody>
+          <tr role="row" cdkDropListGroup class="calendar__drop-group">
+            <td></td>
+            <td
+              *ngFor="let day of values; let dayIndex=index"
+              [attr.data-date]="day.date.toISOString()"
+              (click)="_click($event)"
+            >
+              <div
+                cdkDropList
+                [id]="getDropListId(dayIndex)"
+                [cdkDropListData]="dayIndex"
+                [cdkDropListConnectedTo]="getConnectedDropLists(dayIndex)"
+                [cdkDropListAutoScrollDisabled]="false"
+                (cdkDropListDropped)="handleDrop($event)"
+                class="day-events__container"
+              >
+                <div
+                  *ngFor="let data of day.data; let index=index; trackBy: _trackByFn"
+                  cdkDrag
+                  cdkDragBoundary=".calendar__drop-group"
+                  [cdkDragData]="data"
+                  [cdkDragDisabled]="cdkDragDisabled(data, index)"
+                  [ngStyle]="computeStyle(data, index)"
+                  (click)="_eventClick(data)"
+                  class="calendar__data"
+                >
+                  <div class="container">
+                    <div class="data" (click)="toggleDetails(detailsRefContainer, $event)" [class.passed]="isBeforeNow(data)" [class.pending]="isPending(data)">
+                      <ng-template
+                        [ngTemplateOutlet]="contentRef"
+                        [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"
+                      ></ng-template>
+                    </div>
+                  </div>
+
+                  <div #detailsRefContainer class="data-tooltip" [ngStyle]="computeDetailsPosition(data, dayIndex)" (click)="$event.stopPropagation()">
+                    <ng-template
+                      [ngTemplateOutlet]="detailsRef"
+                      [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"
+                    ></ng-template>
+                  </div>
+
+<!--                  <ng-template-->
+<!--                    *cdkDragPlaceholder-->
+<!--                    [ngTemplateOutlet]="placeholderRef"-->
+<!--                    [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"-->
+<!--                  ></ng-template>-->
+
+<!--                  <ng-template-->
+<!--                    *cdkDragPreview-->
+<!--                    [ngTemplateOutlet]="previewRef"-->
+<!--                    [ngTemplateOutletContext]="{$implicit: data, index: dayIndex}"-->
+<!--                  ></ng-template>-->
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

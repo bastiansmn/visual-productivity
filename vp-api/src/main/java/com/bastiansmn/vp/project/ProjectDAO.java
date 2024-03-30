@@ -9,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -61,7 +63,7 @@ public class ProjectDAO {
             updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
-    private Date deadline;
+    private LocalDate deadline;
 
     @Column(
             nullable = false
@@ -112,18 +114,16 @@ public class ProjectDAO {
             nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT now()"
     )
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private LocalDateTime created_at;
 
     @Column(
             nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT now()"
     )
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updated_at;
+    private LocalDateTime updated_at;
 
     @PrePersist
     protected void onCreate() {
-        updated_at = created_at = new Date();
+        updated_at = created_at = LocalDateTime.now();
     }
 }

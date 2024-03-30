@@ -57,6 +57,19 @@ public class EventController {
         );
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<EventDto> updateEvent(
+            @RequestBody EventDto event
+    ) throws FunctionalException {
+        return ResponseEntity.ok(
+            EventMapper.toDto(
+                this.eventService.update(event),
+                Boolean.TRUE,
+                Boolean.TRUE
+            )
+        );
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<EventDto> create(@RequestBody EventCreationDto event) throws FunctionalException {

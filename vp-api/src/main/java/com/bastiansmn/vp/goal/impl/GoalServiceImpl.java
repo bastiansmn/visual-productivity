@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
@@ -56,10 +58,10 @@ public class GoalServiceImpl implements GoalService {
         if (goalDTO.getDeadline() == null)
             throw new FunctionalException(FunctionalRule.GOAL_0005);
 
-        if (goalDTO.getDate_start().after(goalDTO.getDeadline()))
+        if (goalDTO.getDate_start().isAfter(goalDTO.getDeadline()))
             throw new FunctionalException(FunctionalRule.GOAL_0005);
 
-        if (goalDTO.getDate_start().before(Date.from(Instant.now().minus(1, ChronoUnit.DAYS))))
+        if (goalDTO.getDate_start().isBefore(LocalDate.now()))
             throw new FunctionalException(FunctionalRule.GOAL_0005);
 
         if (goalDTO.getProject_id() == null)
@@ -69,13 +71,13 @@ public class GoalServiceImpl implements GoalService {
         var user = this.userService.fetchByEmail(contextUser);
         ProjectDAO project = this.projectService.fetchById(goalDTO.getProject_id());
 
-        if (goalDTO.getDeadline().after(project.getDeadline()))
+        if (goalDTO.getDeadline().isAfter(project.getDeadline()))
             throw new FunctionalException(FunctionalRule.GOAL_0005);
 
-        if (!project.getUsers().stream().map(UserDAO::getEmail).collect(Collectors.toSet()).contains(contextUser))
+        if (!project.getUsers().contains(user))
             throw new FunctionalException(FunctionalRule.GOAL_0006);
 
-        project.setUpdated_at(new Date());
+        project.setUpdated_at(LocalDateTime.now());
         this.projectRepository.save(project);
 
         GoalDAO goal = GoalDAO.builder()
@@ -139,7 +141,7 @@ public class GoalServiceImpl implements GoalService {
             throw new FunctionalException(FunctionalRule.GOAL_0006);
 
         ProjectDAO project = goal.getProject();
-        project.setUpdated_at(new Date());
+        project.setUpdated_at(LocalDateTime.now());
         this.projectRepository.save(project);
 
         goal.getLabels().forEach(label -> {

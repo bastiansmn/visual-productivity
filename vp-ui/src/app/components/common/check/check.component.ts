@@ -8,7 +8,7 @@ import {FormGroup} from "@angular/forms";
 })
 export class CheckComponent implements OnInit {
 
-  @Input() name!: String;
+  @Input() name!: string;
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
   @Input() tabulationIndex: string =" -1";

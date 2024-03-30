@@ -1,6 +1,7 @@
 package com.bastiansmn.vp.event;
 
 import com.bastiansmn.vp.event.dto.EventCreationDto;
+import com.bastiansmn.vp.event.dto.EventDto;
 import com.bastiansmn.vp.event.dto.EventUpdateDto;
 import com.bastiansmn.vp.exception.FunctionalException;
 
@@ -34,4 +35,5 @@ public interface EventService {
 
     Boolean createdByMe(EventDAO event);
 
+    EventDAO update(EventDto event) throws FunctionalException;
 }

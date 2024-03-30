@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
@@ -16,9 +16,9 @@ public class GoalCreationDTO {
 
     private String name;
     private String description;
-    private Date date_start;
+    private LocalDate date_start;
+    private LocalDate deadline;
     private GoalStatus goalStatus;
-    private Date deadline;
     private String project_id;
 
 }

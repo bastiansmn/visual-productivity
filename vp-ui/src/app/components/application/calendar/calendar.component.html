@@ -10,7 +10,7 @@
 </div>
 
 <div class="calendar__content">
-  <app-day-view *ngIf="(currentView | async) === CalendarView.DAY"></app-day-view>
+  <app-day-view (dayLoaded)="changeDay($event)" *ngIf="(currentView | async) === CalendarView.DAY"></app-day-view>
   <app-week-view (weekChanged)="changeMonth($event)" *ngIf="(currentView | async) === CalendarView.WEEK"></app-week-view>
   <app-month-view *ngIf="(currentView | async) === CalendarView.MONTH"></app-month-view>
 </div>

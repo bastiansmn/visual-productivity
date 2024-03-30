@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -41,12 +42,12 @@ public class GoalDAO {
     @Column(
             nullable = false
     )
-    private Date date_start;
+    private LocalDate date_start;
 
     @Column(
             nullable = false
     )
-    private Date deadline;
+    private LocalDate deadline;
 
     @Column(
             nullable = false

@@ -21,12 +21,7 @@ import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 
 // Google auth
-import {
-  GoogleLoginProvider,
-  GoogleSigninButtonModule,
-  SocialAuthServiceConfig,
-  SocialLoginModule
-} from '@abacritt/angularx-social-login';
+import {GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {InputComponent} from './components/common/input/input.component';
 import {CheckComponent} from './components/common/check/check.component';
 import {ButtonComponent} from './components/common/button/button.component';
@@ -42,7 +37,7 @@ import {DashboardComponent} from './components/application/dashboard/dashboard.c
 import {SettingsComponent} from './components/application/settings/settings.component';
 import {CreateProjectComponent} from './components/application/create-project/create-project.component';
 
-import {DatePipe, NgOptimizedImage, registerLocaleData} from '@angular/common';
+import {DatePipe, NgOptimizedImage, registerLocaleData, TitleCasePipe} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {
   ProjectDashboardComponent
@@ -87,9 +82,19 @@ import {
   CreateEventDialogComponent
 } from './components/application/calendar/week-view/create-event-dialog/create-event-dialog.component';
 import {ApiResponseInterceptor} from "./interceptor/api-response.interceptor";
-import { TaskTimelineViewComponent } from './components/application/project/project-tasks/task-timeline-view/task-timeline-view.component';
-import { TaskListViewComponent } from './components/application/project/project-tasks/task-list-view/task-list-view.component';
-import { CreateTaskDialogComponent } from './components/application/project/project-tasks/create-task-dialog/create-task-dialog.component';
+import {
+  EventInformationsComponent
+} from "./components/application/calendar/event-informations/event-informations.component";
+import {SimpleCalendarComponent} from "./components/common/simple-calendar/simple-calendar.component";
+import {
+  TaskTimelineViewComponent
+} from "./components/application/project/project-tasks/task-timeline-view/task-timeline-view.component";
+import {
+  TaskListViewComponent
+} from "./components/application/project/project-tasks/task-list-view/task-list-view.component";
+import {
+  CreateTaskDialogComponent
+} from "./components/application/project/project-tasks/create-task-dialog/create-task-dialog.component";
 
 registerLocaleData(localeFr);
 
@@ -139,6 +144,8 @@ registerLocaleData(localeFr);
     DayViewComponent,
     MonthViewComponent,
     CreateEventDialogComponent,
+    SimpleCalendarComponent,
+    EventInformationsComponent,
     TaskTimelineViewComponent,
     TaskListViewComponent,
     CreateTaskDialogComponent,
@@ -198,7 +205,8 @@ registerLocaleData(localeFr);
       multi: true
     },
     CookieService,
-    DatePipe
+    DatePipe,
+    TitleCasePipe
   ],
   bootstrap: [AppComponent]
 })
