@@ -12,15 +12,15 @@ spec:
       labels:
         app: spring
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: workload
-                operator: In
-                values:
-                - application
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: workload
+      #           operator: In
+      #           values:
+      #           - application
       containers:
         - name: spring
           image: registry.bastian-somon.fr/vp-backend:latest

@@ -12,15 +12,15 @@ spec:
       labels:
         app: nginx
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: workload
-                operator: In
-                values:
-                - application
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: workload
+      #           operator: In
+      #           values:
+      #           - application
       containers:
         - name: nginx
           image: registry.bastian-somon.fr/vp-frontend:latest
