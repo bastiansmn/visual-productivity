@@ -10,12 +10,15 @@ import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.utils.CookieUtils;
 import lombok.RequiredArgsConstructor;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Service;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 

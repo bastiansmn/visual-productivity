@@ -2,9 +2,9 @@ package com.bastiansmn.vp.authorities;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = "authorities")
 @Entity

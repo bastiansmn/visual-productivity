@@ -3,11 +3,11 @@ package com.bastiansmn.vp.mail;
 import com.bastiansmn.vp.user.UserDAO;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = "mail_confirm")
 @Entity

@@ -3,7 +3,7 @@ package com.bastiansmn.vp.token;
 import com.bastiansmn.vp.user.UserDAO;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service

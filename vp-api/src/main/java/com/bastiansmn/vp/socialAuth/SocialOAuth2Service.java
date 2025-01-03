@@ -4,7 +4,7 @@ import com.bastiansmn.vp.exception.FunctionalException;
 import com.bastiansmn.vp.socialAuth.dto.SocialUserDTO;
 import com.bastiansmn.vp.user.UserDAO;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface SocialOAuth2Service {

@@ -6,7 +6,6 @@ import com.bastiansmn.vp.user.dto.UserCreationDTO;
 import com.bastiansmn.vp.user.dto.UserModificationDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
 import java.util.List;
 
 public interface UserService {

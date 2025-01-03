@@ -8,11 +8,14 @@ import com.bastiansmn.vp.user.UserDAO;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 @Table(name = "projects")
 @Entity
@@ -25,14 +28,13 @@ import java.util.Set;
 public class ProjectDAO {
 
     @Id
-    @GenericGenerator(name = "project_id", strategy = "com.bastiansmn.vp.project.ProjectIdGenerator")
-    @GeneratedValue(generator = "project_id")
+    @UuidGenerator
     @Column(
             name = "project_id",
             nullable = false,
             updatable = false
     )
-    private String projectId;
+    private UUID projectId;
 
     @Column(
             nullable = false

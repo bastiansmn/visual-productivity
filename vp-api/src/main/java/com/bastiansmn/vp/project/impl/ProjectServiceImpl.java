@@ -13,6 +13,8 @@ import com.bastiansmn.vp.project.ProjectRepository;
 import com.bastiansmn.vp.project.ProjectService;
 import com.bastiansmn.vp.user.UserDAO;
 import com.bastiansmn.vp.user.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,10 +24,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -182,7 +181,7 @@ public class ProjectServiceImpl implements ProjectService {
                 this.pendingInvitesRepository.save(
                     PendingInvitesDAO.builder()
                         .email(user_email)
-                        .project(project.getProjectId())
+                        .project(project.getProjectId().toString())
                         .build()
                 );
 

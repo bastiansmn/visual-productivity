@@ -5,7 +5,7 @@ import com.bastiansmn.vp.project.ProjectDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.awt.*;
 import java.util.Date;
 import java.util.Set;

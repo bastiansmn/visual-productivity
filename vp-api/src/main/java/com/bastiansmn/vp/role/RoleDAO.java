@@ -1,14 +1,12 @@
 package com.bastiansmn.vp.role;
 
 import com.bastiansmn.vp.authorities.AuthoritiesDAO;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = "role")
 @Entity

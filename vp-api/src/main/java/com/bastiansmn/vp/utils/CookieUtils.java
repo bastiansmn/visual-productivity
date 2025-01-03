@@ -3,7 +3,7 @@ package com.bastiansmn.vp.utils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class CookieUtils {
 

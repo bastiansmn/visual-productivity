@@ -6,7 +6,7 @@ import com.bastiansmn.vp.user.UserDAO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Join;
+import jakarta.persistence.criteria.Join;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
