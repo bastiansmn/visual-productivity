@@ -24,15 +24,18 @@ spec:
           ports:
             - containerPort: 9000
             - containerPort: 9001
+          env:
+            - name: MINIO_BROWSER_REDIRECT_URL
+              value: https://vp.bastian-somon.fr/storage
           envFrom:
             - secretRef:
                 name: vp-secret
           volumeMounts:
             - mountPath: /data
-              subPath: data
+              subPath: vp-s3
               name: minio-data
       volumes:
         - name: minio-data
           persistentVolumeClaim:
-            claimName: minio-data-claim
+            claimName: vp-s3-pvc
 

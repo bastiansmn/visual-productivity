@@ -20,7 +20,7 @@ create secret generic ${SECRET_NAME} \
 --from-literal="DB_URL=$DB_URL" \
 --from-literal="DB_NAME=$DB_NAME" \
 --from-literal="POSTGRES_PASSWORD=$DB_PASSWORD" \
---from-literal="POSTGRES_USER=$DB_USER" \
+--from-literal="POSTGRES_USER=$DB_USERNAME" \
 --from-literal="POSTGRES_DB=$DB_NAME" \
 --from-literal="GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" \
 --from-literal="GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" \
